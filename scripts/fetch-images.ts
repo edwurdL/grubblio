@@ -309,6 +309,9 @@ async function restore() {
   // restored just falls back to its emoji, so this never fails the build.
   if (!process.env.PIXABAY_API_KEY) {
     console.warn('PIXABAY_API_KEY not set — skipping photo restore; those dishes will show their emoji.');
+    // Names only, never values: helps spot a typo'd variable name in the host's settings.
+    const similar = Object.keys(process.env).filter((k) => /pixabay|pexels|api.?key/i.test(k));
+    console.warn(`Similar environment variable names: ${similar.length ? similar.map((k) => JSON.stringify(k)).join(', ') : 'none'}`);
     return;
   }
   const todo = Object.entries(credits).filter(([, c]) => c.source === 'pixabay' && !existsSync(IMAGE_DIR + c.file));
