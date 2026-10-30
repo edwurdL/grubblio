@@ -311,14 +311,29 @@ async function restore() {
     console.warn('PIXABAY_API_KEY not set — skipping photo restore; those dishes will show their emoji.');
     return;
   }
-  for (const [id, c] of Object.entries(credits)) {
-    if (c.source !== 'pixabay' || existsSync(IMAGE_DIR + c.file)) continue;
+  const todo = Object.entries(credits).filter(([, c]) => c.source === 'pixabay' && !existsSync(IMAGE_DIR + c.file));
+  console.log(`Restoring ${todo.length} Pixabay photos…`);
+  let restored = 0;
+  const reasons = new Map<string, number>();
+  for (const [id, c] of todo) {
     const pixabayId = Number(c.creditUrl?.match(/-(\d+)\/?$/)?.[1]);
-    const hit = pixabayId ? (await searchPixabay('', pixabayId).catch(() => []))[0] : undefined;
-    if (hit && (await download(hit.url, IMAGE_DIR + c.file))) console.log(`✓ ${id}`);
-    else console.warn(`✗ ${id}: could not restore ${c.creditUrl}`);
+    let why = '';
+    try {
+      const hit = pixabayId ? (await searchPixabay('', pixabayId))[0] : undefined;
+      if (!hit) why = pixabayId ? `Pixabay returned no photo for id ${pixabayId}` : `no Pixabay id in ${c.creditUrl}`;
+      else if (await download(hit.url, IMAGE_DIR + c.file)) restored++;
+      else why = 'image download failed';
+    } catch (e) {
+      why = (e as Error).message;
+    }
+    if (why) {
+      console.warn(`✗ ${id}: ${why}`);
+      reasons.set(why, (reasons.get(why) ?? 0) + 1);
+    }
     await sleep(PAUSE.pixabay);
   }
+  console.log(`Restored ${restored} of ${todo.length} photos.`);
+  for (const [why, n] of reasons) console.warn(`  ${n}× ${why}`);
 }
 
 async function fetchAll() {
