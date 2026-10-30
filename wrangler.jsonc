@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "grubblio",
+  "main": "server/index.ts",
+  "compatibility_date": "2026-10-23",
+  // The built client and /images/* are static assets; only the API runs the Worker.
+  "assets": {
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    // Dish id for the fixed test puzzle. Override locally in .dev.vars.
+    "ANSWER": "buffalo-chicken-pizza"
+  },
+  // PUZZLE_SECRET is a secret: `npx wrangler secret put PUZZLE_SECRET`.
+  "routes": [
+    { "pattern": "grubbl.io", "custom_domain": true },
+    { "pattern": "www.grubbl.io", "custom_domain": true }
+  ],
+  "observability": { "enabled": true }
+}

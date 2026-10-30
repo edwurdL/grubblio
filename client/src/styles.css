@@ -1,0 +1,345 @@
+:root {
+  --bg: #fbf3e6;
+  --surface: #fffaf2;
+  --surface-2: #f6e8d3;
+  --text: #4a3b35;
+  --muted: #8f7d73;
+  --border: #e3cfb8;
+  --ink: #6b4f45;
+  --accent: #f2a39c;
+  --accent-ink: #4a3b35;
+  --accent-strong: #d9706a;
+  --exact: #a9d9b2;
+  --partial: #fbd98d;
+  --miss: #f5b1aa;
+  --exact-ink: #2f4a35;
+  --partial-ink: #5a4317;
+  --miss-ink: #5c2e2a;
+  --cold: #a9c8e8;
+  --warm: #fbd98d;
+  --hot: #f7b98f;
+  --scorching: #ef8f87;
+  --heart: #ef8f87;
+  --heart-empty: #e3cfb8;
+  --font: 'Playfair Display', Georgia, serif;
+  --radius: 16px;
+  --lift: 0 3px 0 0 var(--ink);
+  --shadow: 0 2px 0 rgb(107 79 69 / 12%), 0 12px 28px rgb(107 79 69 / 12%);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #2b2230;
+    --surface: #382d3d;
+    --surface-2: #45384b;
+    --text: #f6ece2;
+    --muted: #bfaeb8;
+    --border: #5a4a5e;
+    --ink: #1c1520;
+    --accent: #f0a39c;
+    --accent-ink: #2b2230;
+    --accent-strong: #f0a39c;
+    --exact: #86b892;
+    --partial: #e3be6c;
+    --miss: #e08f88;
+    --exact-ink: #1d2e21;
+    --partial-ink: #3a2a0b;
+    --miss-ink: #3a1a17;
+    --heart-empty: #5a4a5e;
+    --shadow: 0 2px 0 rgb(0 0 0 / 25%), 0 12px 28px rgb(0 0 0 / 30%);
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 17px/1.5 var(--font);
+  /* Playfair defaults to old-style figures; lining ones read better in counters and scores. */
+  font-variant-numeric: lining-nums;
+}
+
+h1, h2 { font-style: italic; font-weight: 600; margin: 0; line-height: 1.2; }
+strong { font-weight: 700; }
+
+/* Small-caps menu labels */
+.label, .board-row.head span, .puzzle-label, .result-kicker, .tries .muted, .panel-head .muted {
+  font-style: normal; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.14em;
+}
+
+button {
+  font: 600 16px/1.3 var(--font);
+  cursor: pointer;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 9px 16px;
+  box-shadow: var(--lift);
+  transition: transform 80ms ease, box-shadow 80ms ease, background 120ms ease;
+}
+button:not(:disabled):hover { transform: translateY(-1px); box-shadow: 0 4px 0 0 var(--ink); }
+button:not(:disabled):active { transform: translateY(3px); box-shadow: 0 0 0 0 var(--ink); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.primary { background: var(--accent); color: var(--accent-ink); }
+button.ghost { background: var(--surface); color: var(--text); }
+button.ghost:hover { background: var(--surface-2); }
+button.icon { width: 40px; height: 40px; padding: 0; border-radius: 50%; background: var(--partial); color: var(--partial-ink); }
+:focus-visible { outline: 3px solid var(--accent-strong); outline-offset: 3px; }
+
+.muted { color: var(--muted); }
+
+.app {
+  max-width: 1120px; margin: 0 auto; padding: 0 16px 48px;
+  min-height: 100dvh; display: flex; flex-direction: column;
+}
+
+/* ── Kitchen background ──────────────────────────────── */
+.kitchen-bg {
+  position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+  background: #ebcba6;
+}
+.kitchen-bg canvas { display: block; image-rendering: pixelated; }
+/* Veil so text stays readable: light over the bustling sides, heavier behind
+   the content column (which covers everything on narrow screens). */
+.kitchen-bg::after {
+  content: ''; position: absolute; inset: 0;
+  --veil-side: color-mix(in srgb, var(--bg) 15%, transparent);
+  --veil-mid: color-mix(in srgb, var(--bg) 78%, transparent);
+  background: linear-gradient(90deg,
+    var(--veil-side) calc(50% - 660px), var(--veil-mid) calc(50% - 560px),
+    var(--veil-mid) calc(50% + 560px), var(--veil-side) calc(50% + 660px));
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .kitchen-bg { background: #3a2c2a; }
+  :root:not([data-theme='light']) .kitchen-bg canvas { filter: brightness(0.5) saturate(0.8); }
+}
+
+/* ── Top bar ─────────────────────────────────────────── */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 20px 0; flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark { font-size: 1.8rem; }
+.brand h1 { font-size: 2.1rem; font-weight: 800; color: var(--accent-strong); letter-spacing: -0.01em; }
+.puzzle-label {
+  font-size: 0.68rem; color: var(--muted); background: var(--surface);
+  border: 1.5px solid var(--border); padding: 4px 10px; border-radius: 99px;
+}
+.topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+/* The guessing column sits in the middle of the screen, vertically too while
+   it's short; once guesses pile up it simply scrolls. */
+main {
+  display: flex; flex-direction: column; align-items: center; gap: 22px;
+  width: 100%; margin-block: auto; padding: 16px 0;
+}
+main > :not(.board-wrap) { width: min(100%, 760px); }
+.loading { color: var(--muted); text-align: center; padding: 48px 0; font-style: italic; }
+.error {
+  background: color-mix(in srgb, var(--miss) 45%, var(--surface)); color: var(--text);
+  border: 2px solid var(--ink); border-radius: 12px; padding: 10px 14px; margin: 0; text-align: center;
+}
+
+/* ── Panels: menu cards with a double rule ───────────── */
+.panel {
+  background: var(--surface); padding: 22px 24px 24px; text-align: center;
+  border: 2px solid var(--ink); border-radius: var(--radius);
+  outline: 1.5px solid var(--border); outline-offset: -9px;
+  box-shadow: var(--shadow);
+}
+.panel-head { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 16px; }
+.panel-head h2 { font-size: 1.6rem; display: flex; align-items: center; gap: 14px; }
+.panel-head h2::before, .panel-head h2::after {
+  content: ''; width: 40px; height: 6px;
+  border-block: 1.5px solid var(--accent-strong);
+}
+.panel-head .muted { font-size: 0.7rem; }
+
+/* Ingredients */
+.ingredients { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--surface-2); border: 1.5px solid var(--ink); border-radius: 99px;
+  padding: 3px 12px 3px 3px; font-weight: 500;
+}
+.chip-num {
+  display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 5px; border-radius: 99px;
+  background: var(--exact); color: var(--exact-ink); font-size: 0.8rem; font-weight: 700;
+}
+.chip.locked { color: var(--muted); background: transparent; border-style: dashed; border-color: var(--border); }
+.chip.locked .chip-num { background: var(--surface-2); color: var(--muted); }
+.chip.new { animation: pop 450ms cubic-bezier(.2, 1.4, .4, 1); background: var(--partial); color: var(--partial-ink); }
+.chip.new .chip-num { background: var(--surface); color: var(--text); }
+
+/* ── Guess input ─────────────────────────────────────── */
+.guess-area { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.guess-input { position: relative; width: 100%; }
+.input-row { display: flex; gap: 10px; }
+.input-row input {
+  flex: 1; min-width: 0; font: inherit; font-size: 20px;
+  padding: 11px 16px; border: 2px solid var(--ink); border-radius: 14px;
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow);
+}
+.input-row input::placeholder { color: var(--muted); }
+.input-row input:focus { outline: none; box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 55%, transparent); }
+.input-row button { padding: 0 22px; font-size: 18px; border-radius: 14px; }
+.shake { animation: shake 320ms; }
+.input-message { margin: 10px 2px 0; color: var(--accent-strong); text-align: center; }
+
+/* "Did you mean" dropdown, hanging off the input */
+.input-wrap { position: relative; flex: 1; min-width: 0; display: flex; }
+.dym-list {
+  position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 20;
+  list-style: none; margin: 0; padding: 6px;
+  background: var(--surface); border: 2px solid var(--ink); border-radius: 14px;
+  box-shadow: var(--shadow); animation: drop 140ms ease-out;
+}
+.dym-head {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+  padding: 4px 10px 6px; color: var(--muted); font-size: 0.68rem;
+  text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600;
+}
+.dym-hint { letter-spacing: 0.06em; }
+.dym-option {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+  border-radius: 10px; cursor: pointer; font-weight: 500;
+}
+.dym-option + .dym-option { border-top: 1px dashed var(--border); }
+.dym-option.active { background: color-mix(in srgb, var(--partial) 55%, var(--surface)); border-color: transparent; }
+.dym-option.active + .dym-option { border-color: transparent; }
+.dym-option .emoji { font-size: 1.3rem; }
+.dym-name { flex: 1; }
+
+/* Remaining guesses as hearts. */
+.tries { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 5px; }
+.pip {
+  width: 20px; height: 18px; background: var(--heart);
+  clip-path: path('M10 17.5C4.5 13 0 9.6 0 5.4 0 2.4 2.3 0 5.2 0 7.3 0 9 1.2 10 3 11 1.2 12.7 0 14.8 0 17.7 0 20 2.4 20 5.4 20 9.6 15.5 13 10 17.5Z');
+  transition: background 300ms ease;
+}
+.pip.used { background: var(--heart-empty); }
+.tries .muted { margin-left: 8px; font-size: 0.7rem; }
+
+/* ── Board ───────────────────────────────────────────── */
+.board-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; max-width: 100%; }
+.board { overflow-x: auto; max-width: 100%; padding: 4px 4px 8px; }
+.board-row {
+  display: grid;
+  grid-template-columns: minmax(170px, 1.6fr) repeat(8, minmax(84px, 1fr)) minmax(120px, 1.2fr);
+  gap: 8px; min-width: 1000px; margin-bottom: 8px;
+}
+.board-row.head span { font-size: 0.62rem; text-align: center; color: var(--muted); padding: 0 4px; }
+.board-row.head span:first-child { text-align: left; padding-left: 12px; }
+.cell {
+  min-height: 58px; padding: 6px 8px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  font-size: 15px; font-weight: 600; line-height: 1.2;
+  border: 2px solid var(--ink); box-shadow: 0 3px 0 0 color-mix(in srgb, var(--ink) 35%, transparent);
+}
+.cell.dish { justify-content: flex-start; text-align: left; gap: 8px; background: var(--surface); font-size: 16px; }
+.cell.dish.exact { background: color-mix(in srgb, var(--exact) 40%, var(--surface)); }
+.cell.dish .emoji { font-size: 1.5rem; }
+.guess-no { display: block; font-size: 0.72rem; color: var(--muted); font-weight: 500; }
+
+.tile {
+  animation: flip 500ms ease-out both; position: relative; flex-direction: column; gap: 2px;
+  padding: 6px 3px; font-size: 13px; font-weight: 600; hyphens: auto;
+}
+.tile.exact { background: var(--exact); color: var(--exact-ink); }
+.tile.partial { background: var(--partial); color: var(--partial-ink); }
+.tile.miss { background: var(--miss); color: var(--miss-ink); }
+.tile[title] { cursor: help; }
+.arrow { font-size: 0.75rem; opacity: 0.9; }
+
+.closeness { flex-direction: column; align-items: stretch; gap: 6px; background: var(--surface); animation: flip 500ms ease-out both; }
+.meter { height: 10px; border-radius: 99px; background: var(--surface-2); border: 1.5px solid var(--ink); overflow: hidden; }
+.meter span { display: block; height: 100%; border-radius: 99px; background: var(--cold); transition: width 600ms ease-out; }
+.closeness.warm .meter span { background: var(--warm); }
+.closeness.hot .meter span { background: var(--hot); }
+.closeness.scorching .meter span { background: var(--scorching); }
+.closeness.exact .meter span { background: var(--exact); }
+.closeness-text { font-size: 14px; }
+
+.legend {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 16px; margin: 0;
+  background: var(--surface); padding: 6px 16px; border: 1.5px solid var(--border); border-radius: 16px;
+}
+.swatch { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: -10px; border: 1.5px solid var(--ink); vertical-align: -2px; }
+.swatch.exact { background: var(--exact); }
+.swatch.partial { background: var(--partial); }
+.swatch.miss { background: var(--miss); }
+
+/* ── Result ──────────────────────────────────────────── */
+.result {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  background: var(--surface); border: 2px solid var(--ink); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow); animation: pop 500ms ease-out;
+}
+.result.won { background: color-mix(in srgb, var(--exact) 22%, var(--surface)); }
+.result-photo { background: var(--surface-2); min-height: 260px; display: grid; place-items: center; border-right: 2px solid var(--ink); }
+.result-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-fallback { font-size: 6rem; }
+.result-body { padding: 24px 26px; display: flex; flex-direction: column; gap: 10px; }
+.result-body p { margin: 0; }
+.result-kicker { font-size: 0.68rem; color: var(--accent-strong); }
+.result.won .result-kicker { color: color-mix(in srgb, var(--exact-ink) 70%, var(--exact)); }
+.result-body h2 { font-size: 1.3rem; }
+.answer-name { display: block; font-size: 2.2rem; font-weight: 800; color: var(--accent-strong); margin-top: 4px; }
+.result-ings { font-size: 15px; color: var(--muted); }
+.result-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.credit a { color: inherit; }
+.credit { font-size: 13px; color: var(--muted); margin-top: auto !important; word-break: break-word; }
+
+/* ── Modal ───────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed; inset: 0; display: grid; place-items: center; padding: 16px; z-index: 50;
+  background: rgb(74 59 53 / 40%); backdrop-filter: blur(3px);
+}
+.modal {
+  background: var(--surface); padding: 28px; max-width: 500px; width: 100%;
+  max-height: calc(100vh - 48px); overflow-y: auto;
+  border: 2px solid var(--ink); border-radius: var(--radius);
+  outline: 1.5px solid var(--border); outline-offset: -9px;
+  box-shadow: var(--shadow); animation: pop 300ms ease-out;
+}
+.modal h2 { margin-bottom: 10px; font-size: 1.7rem; color: var(--accent-strong); }
+.modal ul { padding-left: 1.2rem; }
+.modal li { margin-bottom: 4px; }
+.help-tiles { display: grid; grid-template-columns: 120px 1fr; gap: 10px 14px; align-items: center; margin: 14px 0; }
+.help-tiles .cell { min-height: 40px; animation: none; flex-direction: row; gap: 4px; }
+
+/* ── Motion ──────────────────────────────────────────── */
+@keyframes flip {
+  from { transform: rotateX(90deg); opacity: 0; }
+  to { transform: rotateX(0); opacity: 1; }
+}
+@keyframes pop {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+@keyframes drop {
+  from { transform: translateY(-4px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes shake {
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media (max-width: 720px) {
+  body { font-size: 16px; }
+  .brand h1 { font-size: 1.6rem; }
+  .result { grid-template-columns: 1fr; }
+  .result-photo { min-height: 200px; max-height: 280px; border-right: 0; border-bottom: 2px solid var(--ink); }
+  .answer-name { font-size: 1.7rem; }
+  .topbar-actions button.ghost { padding: 7px 10px; font-size: 14px; }
+  .input-row button { padding: 0 16px; }
+}
