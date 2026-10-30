@@ -6,6 +6,7 @@ import GuessInput from './components/GuessInput';
 import HelpModal from './components/HelpModal';
 import IngredientList from './components/IngredientList';
 import KitchenBackground from './components/KitchenBackground';
+import Plate from './components/Plate';
 import ResultCard from './components/ResultCard';
 
 const SAVE_KEY = 'grubblio:current';
@@ -119,7 +120,7 @@ export default function App() {
                 <GuessInput guessed={guessedIds} disabled={busy} onGuess={guess} />
                 <div className="tries" aria-label={`${remaining} guesses left`}>
                   {Array.from({ length: game.maxGuesses }, (_, i) => (
-                    <span key={i} className={`pip ${i < game.guesses.length ? 'used' : ''}`} />
+                    <Plate key={i} broken={i < game.guesses.length} fresh={i === game.guesses.length - 1} />
                   ))}
                   <span className="muted">{remaining} left</span>
                 </div>

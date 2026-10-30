@@ -306,6 +306,13 @@ export const DISHES: Dish[] = [
     ingredients: ['butter', 'flour', 'black pepper', 'beef stock', 'gravy', 'cheese curds', 'potato'],
   },
   {
+    id: 'french-fries', name: 'French Fries', aliases: ['Fries', 'Chips', 'Frites', 'Pommes Frites'], emoji: '🍟',
+    family: 'Fries', country: 'Belgium', diet: 'Vegan', palate: ['Savory'],
+    course: 'Side', method: 'Fried', spice: 0,
+    ingredients: ['malt vinegar', 'sea salt', 'vegetable oil', 'ketchup', 'potato'],
+    blurb: 'Potato batons fried twice, once to cook through and once to crisp, then salted while hot. Belgium and France both claim them; the rest of the world just orders a side.',
+  },
+  {
     id: 'kung-pao-chicken', name: 'Kung Pao Chicken', emoji: '🥡',
     family: 'Stir-fry', country: 'China', diet: 'Omnivore', palate: ['Spicy', 'Savory', 'Sweet'],
     course: 'Main', method: 'Stir-fried', spice: 2,

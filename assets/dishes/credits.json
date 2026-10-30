@@ -1604,5 +1604,12 @@
     "creditUrl": "https://commons.wikimedia.org/wiki/File:Vindaloo_goa.jpg",
     "source": "commons",
     "description": "Vindaloo goa.jpg"
+  },
+  "french-fries": {
+    "file": "french-fries.jpg",
+    "credit": "Pexels on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/bowl-french-fries-food-fries-1842294/",
+    "source": "pixabay",
+    "description": "bowl, french fries, food, fries, potato fries, fast food, deep fried, fried food, eat, savory, food photography, french fries, french fries, french fries, food, food, fries, fries, fries, fries, fries, fast food, fast food"
   }
 }

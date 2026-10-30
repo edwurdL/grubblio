@@ -11,7 +11,7 @@
   },
   "vars": {
     // Dish id for the fixed test puzzle. Override locally in .dev.vars.
-    "ANSWER": "buffalo-chicken-pizza"
+    "ANSWER": "french-fries"
   },
   // PUZZLE_SECRET is a secret: `npx wrangler secret put PUZZLE_SECRET`.
   "routes": [

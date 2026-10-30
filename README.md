@@ -28,7 +28,7 @@ npm run dev          # http://localhost:5173 — site + API Worker in one proces
 
 The API is a Cloudflare Worker ([server/index.ts](server/index.ts)). `npm run dev` runs it locally inside Vite via `@cloudflare/vite-plugin`, so no Cloudflare account is needed for development.
 
-The **test puzzle's** answer is Buffalo Chicken Pizza. To test a different answer, create `.dev.vars` containing `ANSWER=<dish-id>` (ids are in `server/dishes.ts`). Use **New practice** in the header to play a random dish.
+The **test puzzle's** answer is French Fries. To test a different answer, create `.dev.vars` containing `ANSWER=<dish-id>` (ids are in `server/dishes.ts`). Use **New practice** in the header to play a random dish.
 
 Production-style build: `npm run preview` builds, then serves the built site and Worker locally.
 
