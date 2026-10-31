@@ -2,13 +2,14 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties } from 're
 import type { DishSummary, GameState } from '../../shared/types';
 import { ApiError, fetchPuzzle, fetchState } from './api';
 import { celebrate, takeDamage } from './screenFx';
-import GuessBoard from './components/GuessBoard';
+import GuessBoard, { Legend } from './components/GuessBoard';
 import GuessInput from './components/GuessInput';
 import CreditsModal from './components/CreditsModal';
 import HelpModal from './components/HelpModal';
 import KitchenBackground from './components/KitchenBackground';
 import OrderTicket from './components/OrderTicket';
 import { ChefHat, Speaker } from './components/Pixel';
+import SideCharacters from './components/SideCharacters';
 import Plate from './components/Plate';
 import ResultCard from './components/ResultCard';
 import { useFitToViewport } from './useFitToViewport';
@@ -74,7 +75,7 @@ export default function App() {
         sound.play('bite');
         celebrate();
       } else {
-        sound.play('plateBreak');
+        sound.play(next.status === 'lost' ? 'gameOver' : 'plateBreak');
         takeDamage(flashRef.current);
       }
     } catch (e) {
@@ -100,7 +101,8 @@ export default function App() {
 
   const stageRef = useRef<HTMLDivElement>(null);
   const flashRef = useRef<HTMLDivElement>(null);
-  useFitToViewport(stageRef, 16);
+  // Leave room under the page for the pinned legend once there are guesses.
+  useFitToViewport(stageRef, game?.guesses.length ? 60 : 16);
 
   // Every guess while playing is a miss (a right one ends the game), so the
   // music speeds up with each, hitting 2× on the last plate.
@@ -169,6 +171,7 @@ export default function App() {
           ) : (
             <>
               <div className={`order-col ${game.status === 'playing' ? '' : 'over'}`}>
+                <SideCharacters game={game} />
                 {/* Once the game is over the result card lists every ingredient, so it takes the ticket's spot. */}
                 <div className="rail">
                   {game.status === 'playing'
@@ -199,6 +202,7 @@ export default function App() {
         </main>
       </div>
 
+      {game && game.guesses.length > 0 && <Legend />}
       <div className="damage-flash" ref={flashRef} aria-hidden />
       {showHelp && <HelpModal onClose={() => setShowHelp(false)} onCredits={openCredits} />}
       {showCredits && <CreditsModal onClose={() => setShowCredits(false)} />}

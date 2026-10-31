@@ -157,7 +157,8 @@ export default function GuessInput({ guessed, disabled, onGuess, aside }: Props)
         </button>
       </form>
 
-      {message && <p className="input-message" role="status">{message}</p>}
+      {/* Always rendered, so a message fills reserved space instead of pushing the page down. */}
+      <p className="input-message" role="status">{message}</p>
     </div>
   );
 }

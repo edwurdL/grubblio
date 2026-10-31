@@ -93,15 +93,19 @@ export default function GuessBoard({ guesses }: { guesses: GuessResult[] }) {
           ))}
         </ol>
       )}
-      {guesses.length > 0 && (
-        <p className="legend">
-          <span className="swatch exact" /> Match
-          <span className="swatch partial" /> Close
-          <span className="swatch miss" /> Miss
-          <span>▲▼ spicier / milder</span>
-          <span className="muted hover-hint">Hover a tile for details</span>
-        </p>
-      )}
     </section>
+  );
+}
+
+/** What the tile colours mean; pinned to the bottom of the screen once there are guesses. */
+export function Legend() {
+  return (
+    <p className="legend">
+      <span className="swatch exact" /> Match
+      <span className="swatch partial" /> Close
+      <span className="swatch miss" /> Miss
+      <span>▲▼ spicier / milder</span>
+      <span className="muted hover-hint">Hover a tile for details</span>
+    </p>
   );
 }

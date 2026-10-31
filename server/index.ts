@@ -7,6 +7,9 @@ import { buildState, GuessError, summarize } from './game';
 import { openPracticeId, sealPracticeId } from './practice';
 import { resolve } from './resolve';
 
+/** Shown next to the title for random (practice) puzzles. */
+const PRACTICE_LABEL = 'Rush hour';
+
 interface Env {
   ASSETS: { fetch(request: Request): Promise<Response> };
   /** Dish id for the fixed test puzzle. */
@@ -49,7 +52,7 @@ async function api(request: Request, url: URL, env: Env): Promise<Response> {
   if (route === 'GET /api/puzzle') {
     if (url.searchParams.get('mode') === 'practice') {
       const answer = DISHES[Math.floor(Math.random() * DISHES.length)];
-      return json(buildState(await sealPracticeId(answer.id, secret), 'Practice', answer, []));
+      return json(buildState(await sealPracticeId(answer.id, secret), PRACTICE_LABEL, answer, []));
     }
     return json(buildState('test', 'Test puzzle', test, []));
   }
@@ -63,7 +66,7 @@ async function api(request: Request, url: URL, env: Env): Promise<Response> {
     if (!Array.isArray(guesses) || !guesses.every((g) => typeof g === 'string')) {
       return json({ error: 'guesses must be an array of dish ids' }, 400);
     }
-    return json(buildState(puzzleId, puzzleId === 'test' ? 'Test puzzle' : 'Practice', answer, guesses));
+    return json(buildState(puzzleId, puzzleId === 'test' ? 'Test puzzle' : PRACTICE_LABEL, answer, guesses));
   }
 
   return json({ error: 'Not found' }, 404);

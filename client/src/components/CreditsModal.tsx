@@ -11,6 +11,7 @@ const SOUNDS = [
   { use: 'Plate breaking', title: 'Plate-5', id: 381264, author: 'edwar64896', license: 'CC BY 4.0' },
   { use: 'Page turn', title: 'Page Turn - Please Turn Over (PTO)', id: 63318, author: 'flag2', license: 'CC BY 4.0' },
   { use: 'Right answer', title: 'Bite (Cartoon Style)', id: 353067, author: 'Jofae', license: 'CC0' },
+  { use: 'Last plate broken', title: 'Glass', id: 536763, author: 'egomassive', license: 'CC0' },
 ];
 
 const PHOTO_SOURCES = [

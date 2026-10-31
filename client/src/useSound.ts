@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-// All from freesound.org (CC BY 4.0, or CC0 for the bite), credited in CreditsModal and the README.
+// All from freesound.org (CC BY 4.0, or CC0 for the bite and glass), credited in CreditsModal and the README.
 const TRACK = '/audio/456797__nikosardas__jazz_music_loop.mp3';
 // Mix levels at full master volume.
 const MUSIC_LEVEL = 0.35;
@@ -8,6 +8,7 @@ const EFFECTS = {
   plateBreak: { src: '/audio/381264__edwar64896__plate-5_1.mp3', level: 0.6 },
   pageTurn: { src: '/audio/63318__flag2__page-turn-please-turn-over-pto-paper_turn_over.wav', level: 0.7 },
   bite: { src: '/audio/353067__jofae__bite-cartoon-style.mp3', level: 0.8 },
+  gameOver: { src: '/audio/536763__egomassive__glass.mp3', level: 0.7 },
 };
 export type Effect = keyof typeof EFFECTS;
 const MUTE_KEY = 'grubblio:muted';

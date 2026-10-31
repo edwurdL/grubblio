@@ -122,9 +122,11 @@ button.icon.sound { background: var(--paper); }
 .kitchen-bg::before {
   content: ''; position: absolute; inset: 0; z-index: 1;
   background: repeating-conic-gradient(var(--bg-tile) 0 25%, var(--bg) 0 50%) 0 0 / 64px 64px;
+  /* --gutter (set by useFitToViewport) is the free space beside the play area. */
+  --g: var(--gutter, calc(50% - 680px));
   --fade: linear-gradient(90deg,
-    rgb(0 0 0 / 0%) calc(50% - 760px), rgb(0 0 0 / 72%) calc(50% - 680px),
-    rgb(0 0 0 / 72%) calc(50% + 680px), rgb(0 0 0 / 0%) calc(50% + 760px));
+    rgb(0 0 0 / 0%) calc(var(--g) - 60px), rgb(0 0 0 / 72%) calc(var(--g) + 10px),
+    rgb(0 0 0 / 72%) calc(100% - var(--g) - 10px), rgb(0 0 0 / 0%) calc(100% - var(--g) + 60px));
   mask-image: var(--fade);
   -webkit-mask-image: var(--fade);
 }
@@ -142,6 +144,57 @@ button.icon.sound { background: var(--paper); }
   position: fixed; inset: 0; z-index: 45; width: 100%; height: 100%;
   pointer-events: none; image-rendering: pixelated;
 }
+
+/* ── Chef and customer either side of the order slip ── */
+/* --side is the room between the slip and the edge of the page (main is the
+   container). Each character shrinks to fit it and the slip's height. */
+.side-characters { position: absolute; inset: 0; pointer-events: none; --side: calc((100cqw - var(--col)) / 2 - 28px); }
+.side-char {
+  position: absolute; top: 0; bottom: 0; display: flex; align-items: center; gap: 12px;
+  --cw: min(calc(var(--side) * 0.24), 100px); --px: calc(var(--cw) / 40);
+}
+.side-char .portrait {
+  display: block; width: var(--cw); height: 50%; flex: none; object-fit: contain;
+  image-rendering: pixelated; filter: drop-shadow(var(--px) var(--px) 0 rgb(0 0 0 / 35%));
+}
+/* The chef's box spans the whole space left of the slip, out to where the
+   shading ends, and the chef stands in the middle of it. */
+.chef { right: calc(100% + 28px); width: var(--side); justify-content: center; }
+.customer { left: calc(100% + 28px); }
+.customer .portrait { object-position: left center; }
+@container page (max-width: 1000px) { .side-characters { display: none; } }
+@container page (max-width: 1280px) { .order-col.over .side-characters { display: none; } }
+
+/* Idle bob, and more fidgety as things get worse. */
+.side-char .portrait { animation: bob 1.4s steps(2) infinite; }
+.chef.mood-worried .portrait { animation-duration: 0.8s; }
+.chef.mood-panicked .portrait { animation: tremble 0.24s steps(2) infinite; }
+.chef.reacting .portrait { animation: startle 0.5s ease-out, tremble 0.12s steps(2) 0.5s infinite; }
+.chef.mood-happy .portrait, .customer.mood-excited .portrait { animation: cheer 0.5s steps(2) infinite; }
+.chef.mood-defeated .portrait { animation: none; transform: translateY(calc(var(--px) * 1)); }
+
+/* Customer's speech bubbles, beside them; older ones fade. */
+.bubbles {
+  width: calc(var(--side) - var(--cw) - 12px); max-width: 240px; margin: 0; padding: 0; list-style: none;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+}
+.bubbles li {
+  position: relative; padding: 6px 10px; max-width: 100%;
+  background: var(--paper); color: var(--text); border: 3px solid var(--ink); box-shadow: 4px 4px 0 0 var(--ink);
+  font: 19px/1.05 var(--font-mono); opacity: 0.5; transform: scale(0.92); transform-origin: left center;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+.bubbles li.latest { opacity: 1; transform: none; animation: bubble-in 220ms cubic-bezier(.2, 1.4, .4, 1); }
+/* Tail pointing back at the customer. */
+.bubbles li.latest::before, .bubbles li.latest::after {
+  content: ''; position: absolute; clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+.bubbles li.latest::before { right: calc(100% + 3px); top: calc(50% - 9px); width: 11px; height: 18px; background: var(--ink); }
+.bubbles li.latest::after { right: calc(100% - 1px); top: calc(50% - 6px); width: 8px; height: 12px; background: var(--paper); }
+.bubbles .typing { display: flex; gap: 5px; padding: 10px 12px; }
+.bubbles .typing span { width: 6px; height: 6px; background: var(--ink); animation: typing 0.6s steps(2) infinite; }
+.bubbles .typing span:nth-child(2) { animation-delay: 0.15s; }
+.bubbles .typing span:nth-child(3) { animation-delay: 0.3s; }
 
 /* ── Top bar ─────────────────────────────────────────── */
 .topbar {
@@ -162,12 +215,15 @@ button.icon.sound { background: var(--paper); }
 
 /* Ticket and input stay centred; the guesses hang on a rail underneath.
    useFitToViewport zooms the whole page out so it all fits on one screen. */
-main { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; }
-main > * { width: min(100%, 580px); }
+main {
+  display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%;
+  container: page / inline-size; --col: 580px;
+}
+main:has(> .order-col.over) { --col: 820px; }
+main > * { width: min(100%, var(--col)); }
 main > .board-wrap { width: 100%; }
-/* The result card is wider than the ticket, so its text wraps less and it stays short. */
-main > .order-col.over { width: min(100%, 820px); }
-.order-col { display: flex; flex-direction: column; gap: 16px; }
+/* The result card (.over) is wider than the ticket, so its text wraps less and it stays short. */
+.order-col { position: relative; display: flex; flex-direction: column; gap: 16px; }
 .loading { color: var(--cream-muted); text-align: center; padding: 48px 0; font-family: var(--font-display); }
 .error {
   background: var(--miss); color: var(--miss-ink); font-weight: 500;
@@ -232,7 +288,10 @@ main > .order-col.over { width: min(100%, 820px); }
 .input-row input:focus { outline: none; box-shadow: 4px 4px 0 0 var(--yellow); }
 .input-row button { padding: 0 22px; font-size: 18px; }
 .shake { animation: shake 320ms steps(4); }
-.input-message { margin: 14px 2px 0; color: var(--partial); text-align: center; }
+.input-message {
+  height: 1.4em; margin: 8px 2px 0; color: var(--partial); text-align: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 
 /* "Did you mean" dropdown, hanging off the input */
 .input-wrap { position: relative; flex: 1; min-width: 0; display: flex; }
@@ -280,19 +339,14 @@ main > .order-col.over { width: min(100%, 820px); }
   display: flex; gap: 16px; overflow-x: auto; overflow-anchor: none; scroll-snap-type: x mandatory; scrollbar-width: thin;
 }
 .mini-ticket { flex: 0 0 min(86%, 330px); scroll-snap-align: start; }
-/* Column counts follow the board's own width, which grows as the page zooms
-   out, so a zoomed-out laptop gets the full two rows of four. */
+/* Wide screens: always two rows of four, laid out at a fixed width and
+   zoomed as a whole (by useFitToViewport) to fit the width and height left. */
 @container (min-width: 880px) {
   .board {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 16px;
-    overflow: visible; padding-bottom: 14px;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 16px;
+    width: 1160px; max-width: none; overflow: visible; padding-bottom: 14px;
   }
   .mini-ticket { flex: none; }
-}
-@container (min-width: 1160px) {
-  .board { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  /* Tuck the legend into the empty space left of the ticket, above the rail. */
-  .legend { position: absolute; left: 0; bottom: calc(100% + 10px); max-width: 250px; }
 }
 .mini-ticket {
   position: relative; background: var(--paper); color: var(--text); container-type: inline-size;
@@ -311,22 +365,22 @@ main > .order-col.over { width: min(100%, 820px); }
   border-bottom: 2px dashed var(--paper-blank);
 }
 .mini-head .emoji { font-size: 1.1rem; }
-.mini-name { font: 20px/1 var(--font-mono); overflow-wrap: anywhere; }
+.mini-name { font: 23px/1 var(--font-mono); overflow-wrap: anywhere; }
 .guess-no { font: 0.62rem/1 var(--font-display); color: var(--muted); }
 /* Columns grow to fit their longest word, so "Pescatarian" takes room from shorter neighbours instead of splitting. */
 .mini-tiles { display: grid; grid-template-columns: repeat(4, minmax(min-content, 1fr)); gap: 4px; margin: 6px 0; }
 .mini-tiles .tile { min-height: 32px; padding: 4px 2px; border: 2px solid var(--ink); box-shadow: inset -2px -2px 0 rgb(0 0 0 / 14%), 2px 2px 0 0 var(--ink); }
-.tile-label { font: 8px/1 var(--font-display); text-transform: uppercase; opacity: 0.75; }
-.tile-value { font: 500 11.5px/1.1 var(--font-body); max-width: 100%; overflow-wrap: break-word; }
-.tile-value.long { font-size: 9.5px; }
+.tile-label { font: 9px/1 var(--font-display); text-transform: uppercase; opacity: 0.75; }
+.tile-value { font: 500 13px/1.1 var(--font-body); max-width: 100%; overflow-wrap: break-word; }
+.tile-value.long { font-size: 10.5px; }
 @container (max-width: 270px) {
-  .tile-value { font-size: 10.5px; }
-  .tile-value.long { font-size: 8.5px; }
+  .tile-value { font-size: 11.5px; }
+  .tile-value.long { font-size: 9px; }
 }
 @container (min-width: 310px) {
-  .tile-label { font-size: 9px; }
-  .tile-value { font-size: 13px; }
-  .tile-value.long { font-size: 11px; }
+  .tile-label { font-size: 10px; }
+  .tile-value { font-size: 14px; }
+  .tile-value.long { font-size: 12px; }
 }
 
 /* Help-modal tiles reuse the board colours at a larger size. */
@@ -356,9 +410,10 @@ main > .order-col.over { width: min(100%, 820px); }
 .closeness.hot .meter span { background: var(--hot); }
 .closeness.scorching .meter span { background: var(--scorching); }
 .closeness.exact .meter span { background: var(--exact); }
-.closeness-text { font: 16px/1 var(--font-mono); white-space: nowrap; }
+.closeness-text { font: 18px/1 var(--font-mono); white-space: nowrap; }
 
 .legend {
+  position: fixed; left: 50%; bottom: 10px; z-index: 20; transform: translateX(-50%); max-width: calc(100% - 24px);
   display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 18px; margin: 0;
   background: var(--paper); color: var(--text); font-size: 0.6rem;
   padding: 6px 14px; border: 3px solid var(--ink); box-shadow: var(--hard);
@@ -434,6 +489,25 @@ main > .order-col.over { width: min(100%, 820px); }
 }
 @keyframes fill {
   from { width: 0; }
+}
+@keyframes bob {
+  50% { transform: translateY(calc(var(--px) * -1)); }
+}
+@keyframes tremble {
+  0% { transform: translateX(calc(var(--px) * -0.5)); }
+  100% { transform: translateX(calc(var(--px) * 0.5)); }
+}
+@keyframes startle {
+  30% { transform: translateY(calc(var(--px) * -3)) rotate(-4deg); }
+}
+@keyframes cheer {
+  50% { transform: translateY(calc(var(--px) * -2)); }
+}
+@keyframes bubble-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.8); }
+}
+@keyframes typing {
+  50% { transform: translateY(-3px); }
 }
 @keyframes modal-in {
   from { transform: translateY(10px) scale(0.96); opacity: 0; }

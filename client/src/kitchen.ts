@@ -173,10 +173,46 @@ const SPECIES = {
   koala: { fur: '#a7adb8', inner: '#f1e4e8' },
 };
 
+/** Faces for the portraits beside the game; the cast in the kitchen stays 'calm'. */
+export type Expression =
+  | 'calm' | 'uneasy' | 'worried' | 'panicked' | 'happy' | 'defeated'
+  | 'unimpressed' | 'intrigued' | 'excited' | 'angry';
+type EyeStyle = 'dot' | 'wide' | 'happy' | 'closed' | 'lidded';
+type MouthStyle = 'flat' | 'wavy' | 'open' | 'grin' | 'frown' | 'o';
+type BrowStyle = 'flat' | 'worried' | 'angry' | 'raised';
+interface Face { eyes: EyeStyle; mouth: MouthStyle; brows?: BrowStyle; sweat?: number; tear?: boolean; blush?: boolean }
+// null = the species' own face.
+const FACES: Record<Expression, Face | null> = {
+  calm: null,
+  uneasy: { eyes: 'dot', brows: 'flat', mouth: 'flat' },
+  worried: { eyes: 'dot', brows: 'worried', mouth: 'wavy', sweat: 1 },
+  panicked: { eyes: 'wide', brows: 'worried', mouth: 'open', sweat: 2 },
+  happy: { eyes: 'happy', mouth: 'grin', blush: true },
+  defeated: { eyes: 'closed', brows: 'worried', mouth: 'frown', tear: true },
+  unimpressed: { eyes: 'lidded', brows: 'flat', mouth: 'flat' },
+  intrigued: { eyes: 'dot', brows: 'raised', mouth: 'o' },
+  excited: { eyes: 'wide', mouth: 'grin', blush: true },
+  angry: { eyes: 'dot', brows: 'angry', mouth: 'frown' },
+};
+
+/** What a portrait animal looks like; see randomLook. */
+export interface Look { role: 'chef' | 'guest'; species: Species; shirt: string; hat: Hat; hatColor: string }
+
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
 const randInt = (a: number, b: number) => Math.floor(rand(a, b + 1));
 const pick = <T>(xs: readonly T[]): T => xs[Math.floor(Math.random() * xs.length)];
 const beside = (t: Tile) => (col: number, row: number) => Math.abs(col - t.col) + Math.abs(row - t.row) === 1;
+
+/** A random member of the cast, dressed for the role. */
+export function randomLook(role: Look['role']): Look {
+  return {
+    role,
+    species: pick(Object.keys(SPECIES) as Species[]),
+    shirt: pick(SHIRTS),
+    hat: role === 'chef' ? 'toque' : pick(['none', 'bow', 'cap', 'beret'] as const),
+    hatColor: pick(HAT_COLORS),
+  };
+}
 
 function weighted<T>(entries: [T, number][]): T {
   let r = Math.random() * entries.reduce((n, [, w]) => n + w, 0);
@@ -206,8 +242,46 @@ export class Kitchen {
   private actors: Actor[] = [];
   private particles: Particle[] = [];
   private time = 0;
+  private expression: Expression = 'calm';
   private nextGuest = 0;
   private nextGroup = 1;
+
+  /**
+   * Draws one front-facing animal with its feet at (x, y), wearing
+   * `expression`, for the characters beside the game. Guests sit behind a
+   * little table. Borrows the cast's drawing code without building a kitchen.
+   */
+  static portrait(ctx: CanvasRenderingContext2D, look: Look, expression: Expression, x: number, y: number, s: number) {
+    const k = Object.create(Kitchen.prototype) as Kitchen;
+    k.ctx = ctx;
+    k.s = s;
+    k.time = 0;
+    k.expression = expression;
+    const seated = look.role === 'guest';
+    k.drawActor({
+      ...look, x, y, seed: 0, path: [], dir: 'down', phase: 0, dashing: false, task: null, working: 0,
+      held: null, washNext: false, pause: 0, emote: null, timer: 0, meal: 0, load: 0,
+      mood: seated ? 'waiting' : undefined,
+    });
+    if (!seated) return;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.lineWidth = 2.2 * s;
+    ctx.strokeStyle = INK;
+    ctx.fillStyle = '#9a6a45';
+    ctx.fillRect(-19 * s, -4 * s, 3 * s, 8 * s);
+    ctx.fillRect(16 * s, -4 * s, 3 * s, 8 * s);
+    ctx.fillStyle = '#fff4e2';
+    ctx.beginPath();
+    ctx.roundRect(-22 * s, -12 * s, 44 * s, 9 * s, 2 * s);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#ffffff';
+    ellipse(ctx, 0, -12 * s, 9 * s, 2.6 * s);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
 
   constructor(canvas: HTMLCanvasElement, private w: number, private h: number, private dpr: number) {
     canvas.width = Math.round(w * dpr);
@@ -1577,16 +1651,7 @@ export class Kitchen {
         ctx.arc(ex * s, -39 * s, 5 * s, 0, Math.PI * 2);
         ctx.stroke();
         ctx.fill();
-        if (!back) {
-          ctx.fillStyle = '#fff';
-          ctx.beginPath();
-          ctx.arc(ex * s + (side ? 1.5 * s : 0), -39 * s, 3.2 * s, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = '#2b1d16';
-          ctx.beginPath();
-          ctx.arc(ex * s + (side ? 2.5 * s : 0), -38.5 * s, 1.8 * s, 0, Math.PI * 2);
-          ctx.fill();
-        }
+        if (!back) this.frogEye(ex * s + (side ? 1.5 * s : 0), -39 * s, side);
       }
     }
     if (tray) this.drawHeld(a.held!, 14 * s, -29 * s, 7 * s);
@@ -1706,6 +1771,7 @@ export class Kitchen {
 
   private drawFace(species: Species, fx: number) {
     const { ctx, s } = this;
+    const face = FACES[this.expression];
     if (species === 'penguin') {
       ctx.fillStyle = '#fff';
       ellipse(ctx, fx, -29.5 * s, 9 * s, 7.5 * s);
@@ -1717,18 +1783,9 @@ export class Kitchen {
       ctx.fill();
     }
     if (species !== 'frog') {
-      for (const ex of [-4.5, 4.5]) {
-        ctx.fillStyle = '#2b1d16';
-        ctx.beginPath();
-        ctx.arc(fx + ex * s, -32 * s, 1.9 * s, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.arc(fx + ex * s + 0.6 * s, -32.7 * s, 0.6 * s, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      for (const ex of [-4.5, 4.5]) this.eye(fx + ex * s, -32 * s, 1.9 * s, face?.eyes ?? 'dot');
     }
-    ctx.fillStyle = 'rgb(255 130 140 / 55%)';
+    ctx.fillStyle = face?.blush ? 'rgb(255 110 120 / 80%)' : 'rgb(255 130 140 / 55%)';
     ellipse(ctx, fx - 8 * s, -27.5 * s, 2.6 * s, 1.6 * s);
     ctx.fill();
     ellipse(ctx, fx + 8 * s, -27.5 * s, 2.6 * s, 1.6 * s);
@@ -1763,11 +1820,13 @@ export class Kitchen {
         ctx.fillStyle = '#2b1d16';
         ellipse(ctx, fx, -29 * s, 2 * s, 1.4 * s);
         ctx.fill();
+        if (face) break;
         ctx.beginPath();
         ctx.arc(fx, -27 * s, 2 * s, 0.2, Math.PI - 0.2);
         ctx.stroke();
         break;
       case 'frog':
+        if (face) break;
         ctx.beginPath();
         ctx.arc(fx, -31 * s, 6 * s, 0.35, Math.PI - 0.35);
         ctx.stroke();
@@ -1776,14 +1835,177 @@ export class Kitchen {
         ctx.fillStyle = '#f48fa3';
         ellipse(ctx, fx, -29 * s, 1.4 * s, 1 * s);
         ctx.fill();
+        if (face) break;
         ctx.beginPath();
         ctx.arc(fx - 1.4 * s, -27.6 * s, 1.4 * s, 0.1, Math.PI - 0.1);
         ctx.arc(fx + 1.4 * s, -27.6 * s, 1.4 * s, 0.1, Math.PI - 0.1);
         ctx.stroke();
     }
+    if (face) {
+      // The nose, snout or bill stays; the expression's mouth goes under it.
+      const below = species === 'duck' || species === 'pig' ? -22.5 * s : species === 'frog' ? -29 * s : -25.5 * s;
+      this.mouth(fx, below, face.mouth);
+      if (face.brows) {
+        const frog = species === 'frog';
+        this.brows(fx, frog ? -45.5 * s : -36 * s, frog ? 8.5 * s : 4.5 * s, face.brows);
+      }
+      if (face.sweat) this.drop(fx + 13 * s, -38 * s);
+      if (face.sweat === 2) this.drop(fx - 13.5 * s, -35 * s);
+      if (face.tear) this.drop(fx - 4.5 * s, -27 * s);
+    }
     ctx.lineWidth = 2.2 * s;
     ctx.strokeStyle = INK;
   }
+
+  // ── Expressions (portraits only) ─────────────────────
+
+  private eye(x: number, y: number, r: number, style: EyeStyle) {
+    const { ctx, s } = this;
+    ctx.fillStyle = '#2b1d16';
+    ctx.strokeStyle = '#2b1d16';
+    ctx.lineWidth = 1.2 * s;
+    ctx.beginPath();
+    switch (style) {
+      case 'wide':
+        ctx.fillStyle = '#fff';
+        ctx.arc(x, y, r * 1.7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = '#2b1d16';
+        ctx.beginPath();
+        ctx.arc(x, y, r * 0.75, 0, Math.PI * 2);
+        ctx.fill();
+        return;
+      case 'happy':
+        ctx.arc(x, y + r * 0.9, r * 1.5, Math.PI * 1.15, Math.PI * 1.85);
+        ctx.stroke();
+        return;
+      case 'closed':
+        ctx.arc(x, y - r * 0.7, r * 1.4, Math.PI * 0.2, Math.PI * 0.8);
+        ctx.stroke();
+        return;
+      case 'lidded':
+        // Half-shut: just the bottom of the pupil under a flat lid.
+        ctx.arc(x, y, r, 0, Math.PI);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(x - r * 1.4, y);
+        ctx.lineTo(x + r * 1.4, y);
+        ctx.stroke();
+        return;
+      default:
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(x + 0.6 * s, y - 0.7 * s, 0.6 * s, 0, Math.PI * 2);
+        ctx.fill();
+    }
+  }
+
+  /** Frogs' eyes sit on top of the head, white with a dark pupil. */
+  private frogEye(x: number, y: number, side: boolean) {
+    const { ctx, s } = this;
+    const style = FACES[this.expression]?.eyes ?? 'dot';
+    if (style === 'happy' || style === 'closed') return this.eye(x, y + 0.5 * s, 2.2 * s, style);
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(x, y, 3.2 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#2b1d16';
+    ctx.beginPath();
+    ctx.arc(x + (side ? 1 * s : 0), y + 0.5 * s, (style === 'wide' ? 1.1 : 1.8) * s, 0, Math.PI * 2);
+    ctx.fill();
+    if (style === 'lidded') {
+      ctx.fillStyle = SPECIES.frog.fur;
+      ctx.beginPath();
+      ctx.arc(x, y, 3.3 * s, Math.PI, 0);
+      ctx.fill();
+      ctx.strokeStyle = '#2b1d16';
+      ctx.lineWidth = 1.2 * s;
+      ctx.beginPath();
+      ctx.moveTo(x - 3.2 * s, y);
+      ctx.lineTo(x + 3.2 * s, y);
+      ctx.stroke();
+    }
+    ctx.lineWidth = 2.2 * s;
+    ctx.strokeStyle = INK;
+  }
+
+  private mouth(x: number, y: number, style: MouthStyle) {
+    const { ctx, s } = this;
+    ctx.strokeStyle = '#2b1d16';
+    ctx.fillStyle = '#2b1d16';
+    ctx.lineWidth = 1.3 * s;
+    ctx.beginPath();
+    switch (style) {
+      case 'flat':
+        ctx.moveTo(x - 3 * s, y);
+        ctx.lineTo(x + 3 * s, y);
+        ctx.stroke();
+        break;
+      case 'wavy':
+        ctx.moveTo(x - 4 * s, y);
+        for (let i = 1; i <= 4; i++) ctx.lineTo(x - 4 * s + i * 2 * s, y + (i % 2 ? -1.2 : 0) * s);
+        ctx.stroke();
+        break;
+      case 'open':
+        ctx.ellipse(x, y + 0.6 * s, 2.4 * s, 3 * s, 0, 0, Math.PI * 2);
+        ctx.fill();
+        break;
+      case 'grin':
+        ctx.arc(x, y - 1 * s, 4.5 * s, 0, Math.PI);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#f48fa3';
+        ellipse(ctx, x, y + 2 * s, 2 * s, 1.1 * s);
+        ctx.fill();
+        break;
+      case 'frown':
+        ctx.arc(x, y + 2.6 * s, 3.5 * s, Math.PI * 1.2, Math.PI * 1.8);
+        ctx.stroke();
+        break;
+      case 'o':
+        ctx.ellipse(x, y, 1.6 * s, 1.9 * s, 0, 0, Math.PI * 2);
+        ctx.fill();
+        break;
+    }
+  }
+
+  /** Two brows, `dx` either side of `fx`; "worried" lifts the inner ends. */
+  private brows(fx: number, y: number, dx: number, style: BrowStyle) {
+    const { ctx, s } = this;
+    ctx.strokeStyle = '#2b1d16';
+    ctx.lineWidth = 1.4 * s;
+    for (const m of [-1, 1]) {
+      const x = fx + m * dx;
+      const [inner, outer] = {
+        flat: [0, 0],
+        worried: [-1.6, 0.8],
+        angry: [1.2, -1.2],
+        raised: m < 0 ? [-1.8, -1.8] : [0, 0],
+      }[style];
+      ctx.beginPath();
+      ctx.moveTo(x - m * 2.2 * s, y + inner * s);
+      ctx.lineTo(x + m * 2.2 * s, y + outer * s);
+      ctx.stroke();
+    }
+  }
+
+  /** A sweat drop or tear. */
+  private drop(x: number, y: number) {
+    const { ctx, s } = this;
+    ctx.fillStyle = '#8fc3ec';
+    ctx.strokeStyle = '#2b1d16';
+    ctx.lineWidth = 0.9 * s;
+    ctx.beginPath();
+    ctx.moveTo(x, y - 3 * s);
+    ctx.quadraticCurveTo(x + 2.6 * s, y + 0.5 * s, x, y + 2.2 * s);
+    ctx.quadraticCurveTo(x - 2.6 * s, y + 0.5 * s, x, y - 3 * s);
+    ctx.fill();
+    ctx.stroke();
+  }
+
   private drawHeld(held: NonNullable<Held>, x: number, y: number, r: number) {
     const { ctx, s } = this;
     ctx.save();

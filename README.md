@@ -44,6 +44,8 @@ Page-turn sound: [Page Turn - Please Turn Over (PTO)](https://freesound.org/s/63
 
 Right-answer sound: [Bite (Cartoon Style)](https://freesound.org/s/353067/) by [Jofae](https://freesound.org/people/Jofae/), released under [CC0](https://creativecommons.org/publicdomain/zero/1.0/). No credit is required, but it's listed in the in-game Credits anyway.
 
+Game-over sound: [Glass](https://freesound.org/s/536763/) by [egomassive](https://freesound.org/people/egomassive/), released under [CC0](https://creativecommons.org/publicdomain/zero/1.0/). It plays when the last guess is wrong, and is also listed in the in-game Credits.
+
 ## Deploy (Cloudflare Workers)
 
 One Worker serves everything: the built site and dish photos as static assets, and `/api/*` from [server/index.ts](server/index.ts). It's configured in [wrangler.jsonc](wrangler.jsonc), including the `grubbl.io` and `www.grubbl.io` custom domains. Cloudflare creates their DNS records and certificates on the first deploy.
