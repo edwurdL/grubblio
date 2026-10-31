@@ -1,6 +1,6 @@
 # Grubblio (prototype)
 
-Guess the dish from its ingredients. You start with three ingredients. Each wrong guess reveals another ingredient. You get 10 guesses. When the game ends, it shows the answer with a photo.
+Guess the dish from its ingredients. You start with three ingredients. Each wrong guess reveals another ingredient. You get 8 guesses. When the game ends, it shows the answer with a photo.
 
 Each guess is compared with the answer column by column, in the style of Royaledle:
 
@@ -35,6 +35,14 @@ Production-style build: `npm run preview` builds, then serves the built site and
 Photos: `npm run fetch-images` downloads a photo for each dish and saves its credit in `assets/dishes/credits.json`. It uses free, watermark-free stock photos from **Pixabay** (or Pexels) when an API key is set. Copy `.env.example` to `.env` and add `PIXABAY_API_KEY` (or `PEXELS_API_KEY`); both keys are free. Without a key it falls back to Wikimedia Commons. Run `npm run fetch-images -- --force` to replace every photo. A dish's photo is replaced only when the stock photo's description names that dish; otherwise the dish keeps its current photo, so no dish is left without one.
 
 Pixabay and Pexels photos are **not committed**: their licences don't allow redistributing the raw files, so `assets/dishes/.gitignore` (regenerated on every `fetch-images` run) lists them, while `credits.json` stays in git. After cloning, run `npm run fetch-images -- --restore` with `PIXABAY_API_KEY` set to download exactly the recorded photos again. Wikimedia Commons photos are committed, with their credits.
+
+Music: [jazz_music_loop](https://freesound.org/s/456797/) by [NikoSardas](https://freesound.org/people/NikoSardas/), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). It's committed in `public/audio/` and credited in the in-game Credits. The game changes its playback speed: it gets faster with each wrong guess, up to 2×.
+
+Plate-breaking sound: [Plate-5](https://freesound.org/s/381264/) by [edwar64896](https://freesound.org/people/edwar64896/), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). It's also committed in `public/audio/` and credited in the in-game Credits. It plays on every wrong guess.
+
+Page-turn sound: [Page Turn - Please Turn Over (PTO)](https://freesound.org/s/63318/) by [flag2](https://freesound.org/people/flag2/), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). It's also committed in `public/audio/` and credited in the in-game Credits. It plays whenever a new order ticket is put up, and when the Help or Credits menu opens.
+
+Right-answer sound: [Bite (Cartoon Style)](https://freesound.org/s/353067/) by [Jofae](https://freesound.org/people/Jofae/), released under [CC0](https://creativecommons.org/publicdomain/zero/1.0/). No credit is required, but it's listed in the in-game Credits anyway.
 
 ## Deploy (Cloudflare Workers)
 

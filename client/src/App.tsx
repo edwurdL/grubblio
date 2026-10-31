@@ -1,13 +1,18 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { DishSummary, GameState } from '../../shared/types';
 import { ApiError, fetchPuzzle, fetchState } from './api';
+import { celebrate, takeDamage } from './screenFx';
 import GuessBoard from './components/GuessBoard';
 import GuessInput from './components/GuessInput';
+import CreditsModal from './components/CreditsModal';
 import HelpModal from './components/HelpModal';
-import IngredientList from './components/IngredientList';
 import KitchenBackground from './components/KitchenBackground';
+import OrderTicket from './components/OrderTicket';
+import { ChefHat, Speaker } from './components/Pixel';
 import Plate from './components/Plate';
 import ResultCard from './components/ResultCard';
+import { useFitToViewport } from './useFitToViewport';
+import { useSound } from './useSound';
 
 const SAVE_KEY = 'grubblio:current';
 
@@ -38,6 +43,9 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [showCredits, setShowCredits] = useState(false);
+  /** Bumped on every new game, so a fresh ticket is hung even for the same puzzle. */
+  const [round, setRound] = useState(0);
 
   const apply = useCallback((state: GameState) => {
     setGame(state);
@@ -60,7 +68,15 @@ export default function App() {
     setBusy(true);
     setError(null);
     try {
-      apply(await fetchState({ puzzleId: game.puzzleId, guesses: [...game.guesses.map((g) => g.dish.id), dish.id] }));
+      const next = await fetchState({ puzzleId: game.puzzleId, guesses: [...game.guesses.map((g) => g.dish.id), dish.id] });
+      apply(next);
+      if (next.guesses.at(-1)?.correct) {
+        sound.play('bite');
+        celebrate();
+      } else {
+        sound.play('plateBreak');
+        takeDamage(flashRef.current);
+      }
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -74,10 +90,34 @@ export default function App() {
       const state = await fetchPuzzle(mode);
       // Restarting the fixed test puzzle should clear previous guesses too.
       apply(state);
+      setRound((r) => r + 1);
+      sound.play('pageTurn');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (e) {
       setError((e as Error).message);
     }
+  };
+
+  const stageRef = useRef<HTMLDivElement>(null);
+  const flashRef = useRef<HTMLDivElement>(null);
+  useFitToViewport(stageRef, 16);
+
+  // Every guess while playing is a miss (a right one ends the game), so the
+  // music speeds up with each, hitting 2× on the last plate.
+  const playing = game?.status === 'playing';
+  const sound = useSound(playing ? 1 + game.guesses.length / (game.maxGuesses - 1) : 1);
+
+  const volumeShown = sound.muted ? 0 : sound.volume;
+
+  // Opening a menu turns a page, like the new-order ticket.
+  const openHelp = () => {
+    setShowHelp(true);
+    sound.play('pageTurn');
+  };
+  const openCredits = () => {
+    setShowHelp(false);
+    setShowCredits(true);
+    sound.play('pageTurn');
   };
 
   const guessedIds = new Set(game?.guesses.map((g) => g.dish.id));
@@ -86,53 +126,82 @@ export default function App() {
   return (
     <div className="app">
       <KitchenBackground />
-      <header className="topbar">
-        <div className="brand">
-          <span className="brand-mark" aria-hidden>🍽️</span>
-          <h1>Grubbl.io</h1>
+      <div className="stage" ref={stageRef}>
+        <header className="topbar">
+          <div className="brand">
+            <ChefHat />
+            <h1>Grubbl.io</h1>
+          </div>
           {game && <span className="puzzle-label">{game.label}</span>}
-        </div>
-        <nav className="topbar-actions">
-          <button className="ghost" onClick={() => newGame('practice')}>New practice</button>
-          {game?.puzzleId !== 'test' && <button className="ghost" onClick={() => newGame()}>Test puzzle</button>}
-          <button className="icon" aria-label="How to play" onClick={() => setShowHelp(true)}>?</button>
-        </nav>
-      </header>
-
-      <main>
-        {error && <p className="error" role="alert">{error}</p>}
-        {!game ? (
-          <p className="loading">Setting the table…</p>
-        ) : (
-          <>
-            {game.status !== 'playing' && <ResultCard game={game} onPractice={() => newGame('practice')} />}
-
-            <section className="panel">
-              <div className="panel-head">
-                <h2>Ingredients</h2>
-                <span className="muted">{game.ingredients.length} of {game.totalIngredients} revealed</span>
+          <nav className="topbar-actions">
+            <button className="ghost" onClick={() => newGame('practice')}>New order</button>
+            {game?.puzzleId !== 'test' && <button className="ghost" onClick={() => newGame()}>Test puzzle</button>}
+            <button className="ghost credits-btn" onClick={openCredits}>Credits</button>
+            {/* Click to mute; hover (or focus) for a volume slider. */}
+            <div className="sound-control">
+              <button className="icon sound" aria-label="Sound" aria-pressed={!sound.muted} onClick={sound.toggle}>
+                <Speaker on={!sound.muted} />
+              </button>
+              <div className="volume-pop">
+                <label className="volume-panel">
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={volumeShown}
+                    aria-label="Volume"
+                    style={{ '--fill': `${volumeShown * 100}%` } as CSSProperties}
+                    onChange={(e) => sound.setVolume(Number(e.target.value))}
+                  />
+                  <span className="volume-value" aria-hidden>{Math.round(volumeShown * 100)}%</span>
+                </label>
               </div>
-              <IngredientList game={game} />
-            </section>
+            </div>
+            <button className="icon" aria-label="How to play" onClick={openHelp}>?</button>
+          </nav>
+        </header>
 
-            {game.status === 'playing' && (
-              <section className="guess-area">
-                <GuessInput guessed={guessedIds} disabled={busy} onGuess={guess} />
-                <div className="tries" aria-label={`${remaining} guesses left`}>
-                  {Array.from({ length: game.maxGuesses }, (_, i) => (
-                    <Plate key={i} broken={i < game.guesses.length} fresh={i === game.guesses.length - 1} />
-                  ))}
-                  <span className="muted">{remaining} left</span>
+        <main>
+          {error && <p className="error" role="alert">{error}</p>}
+          {!game ? (
+            <p className="loading">Setting the table…</p>
+          ) : (
+            <>
+              <div className={`order-col ${game.status === 'playing' ? '' : 'over'}`}>
+                {/* Once the game is over the result card lists every ingredient, so it takes the ticket's spot. */}
+                <div className="rail">
+                  {game.status === 'playing'
+                    ? <OrderTicket key={round} game={game} />
+                    : <ResultCard game={game} onPractice={() => newGame('practice')} />}
                 </div>
-              </section>
-            )}
 
-            <GuessBoard guesses={game.guesses} />
-          </>
-        )}
-      </main>
+                {game.status === 'playing' && (
+                  <GuessInput
+                    guessed={guessedIds}
+                    disabled={busy}
+                    onGuess={guess}
+                    aside={
+                      <span className="plates" role="img" aria-label={`${remaining} guesses left`}>
+                        {Array.from({ length: game.maxGuesses }, (_, i) => (
+                          <Plate key={i} broken={i < game.guesses.length} fresh={i === game.guesses.length - 1} />
+                        ))}
+                        <span className="plates-left" aria-hidden>{remaining} left</span>
+                      </span>
+                    }
+                  />
+                )}
+              </div>
 
-      {showHelp && <HelpModal onClose={() => setShowHelp(false)} />}
+              <GuessBoard guesses={game.guesses} />
+            </>
+          )}
+        </main>
+      </div>
+
+      <div className="damage-flash" ref={flashRef} aria-hidden />
+      {showHelp && <HelpModal onClose={() => setShowHelp(false)} onCredits={openCredits} />}
+      {showCredits && <CreditsModal onClose={() => setShowCredits(false)} />}
     </div>
   );
 }

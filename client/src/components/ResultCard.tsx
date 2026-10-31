@@ -49,7 +49,7 @@ export default function ResultCard({ game, onPractice }: { game: GameState; onPr
         </p>
         <div className="result-actions">
           <button className="primary" onClick={share}>{copied ? 'Copied!' : 'Share result'}</button>
-          <button className="ghost" onClick={onPractice}>Play a practice round</button>
+          <button className="ghost" onClick={onPractice}>New order</button>
         </div>
         {answer.imageCredit && (
           <p className="credit">

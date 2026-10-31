@@ -1,15 +1,27 @@
 import { useId } from 'react';
+import { PixelArt } from './Pixel';
+
+const PLATE = [
+  '....aaaa....',
+  '..aabbbbaa..',
+  '.abbbbbbbba.',
+  '.abbccccbba.',
+  'abbccccccbba',
+  'abbccccccbba',
+  'abbccccccbba',
+  'abbccccccbba',
+  '.abbccccbba.',
+  '.abbbbbbbba.',
+  '..aabbbbaa..',
+  '....aaaa....',
+];
+const PALETTE = { a: '#cdbb9c', b: '#fbf3e3', c: '#e6d6b8' };
 
 // Jagged crack running top to bottom, shared by both halves.
-const CRACK = '16,0 19,8 14,14 18,21 15,32';
+const CRACK = '6,0 7,3 5,5 7,8 6,12';
 
 function PlateArt() {
-  return (
-    <>
-      <circle cx="16" cy="16" r="14" fill="#fffaf2" stroke="var(--ink)" strokeWidth="1.6" />
-      <circle cx="16" cy="16" r="8.5" fill="#f6e8d3" stroke="var(--border)" strokeWidth="1.4" />
-    </>
-  );
+  return <PixelArt rows={PLATE} palette={PALETTE} />;
 }
 
 /** A dinner plate that shatters in two when `broken`. `fresh` plays the break animation. */
@@ -17,16 +29,16 @@ export default function Plate({ broken, fresh }: { broken: boolean; fresh: boole
   const id = useId();
   if (!broken) {
     return (
-      <svg className="plate" viewBox="0 0 32 32" aria-hidden>
+      <svg className="plate" viewBox="0 0 12 12" shapeRendering="crispEdges" aria-hidden>
         <PlateArt />
       </svg>
     );
   }
   return (
-    <svg className={`plate broken ${fresh ? 'fresh' : ''}`} viewBox="0 0 32 32" aria-hidden>
+    <svg className={`plate broken ${fresh ? 'fresh' : ''}`} viewBox="0 0 12 12" shapeRendering="crispEdges" aria-hidden>
       <defs>
-        <clipPath id={`${id}-l`}><polygon points={`0,0 ${CRACK} 0,32`} /></clipPath>
-        <clipPath id={`${id}-r`}><polygon points={`${CRACK} 32,32 32,0`} /></clipPath>
+        <clipPath id={`${id}-l`}><polygon points={`0,0 ${CRACK} 0,12`} /></clipPath>
+        <clipPath id={`${id}-r`}><polygon points={`${CRACK} 12,12 12,0`} /></clipPath>
       </defs>
       <g className="half half-l"><g clipPath={`url(#${id}-l)`}><PlateArt /></g></g>
       <g className="half half-r"><g clipPath={`url(#${id}-r)`}><PlateArt /></g></g>

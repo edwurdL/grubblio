@@ -1,14 +1,17 @@
-import { useRef, useState, type KeyboardEvent } from 'react';
+import { useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import type { DishSummary } from '../../../shared/types';
 import { resolveGuess } from '../api';
 
 interface Props {
   guessed: Set<string>;
+  /** A guess is in flight: typing still works, submitting waits. */
   disabled: boolean;
   onGuess: (dish: DishSummary) => void;
+  /** Shown on the right of the label row (the plates). */
+  aside?: ReactNode;
 }
 
-export default function GuessInput({ guessed, disabled, onGuess }: Props) {
+export default function GuessInput({ guessed, disabled, onGuess, aside }: Props) {
   const [text, setText] = useState('');
   const [checking, setChecking] = useState(false);
   const [shake, setShake] = useState(false);
@@ -24,23 +27,41 @@ export default function GuessInput({ guessed, disabled, onGuess }: Props) {
     setShake(true);
   };
 
+  /** Sends the guess; false if it was already guessed. */
   const accept = (dish: DishSummary) => {
-    if (guessed.has(dish.id)) return reject(`You already guessed ${dish.name}.`);
+    if (guessed.has(dish.id)) {
+      reject(`You already guessed ${dish.name}.`);
+      return false;
+    }
     onGuess(dish);
-    setText('');
     setCandidates([]);
     setMessage(null);
     inputRef.current?.focus();
+    return true;
+  };
+
+  /** Confirms a "Did you mean" row. */
+  const pick = (dish: DishSummary) => {
+    if (accept(dish)) setText('');
   };
 
   const submit = async () => {
-    if (!text.trim() || checking) return;
+    const query = text.trim();
+    if (!query || checking || disabled) return;
     // Pressing Enter while the dropdown is open confirms the highlighted row.
-    if (candidates.length) return accept(candidates[active]);
+    if (candidates.length) return pick(candidates[active]);
     setChecking(true);
+    // Clear right away so the next guess can be typed while this one is
+    // checked; put the text back if it needs fixing, unless they've moved on.
+    setText('');
+    const restore = () => setText((t) => t || query);
     try {
-      const { exact, suggestions } = await resolveGuess(text);
-      if (exact) return accept(exact);
+      const { exact, suggestions } = await resolveGuess(query);
+      if (exact) {
+        if (!accept(exact)) restore();
+        return;
+      }
+      restore();
       const fresh = suggestions.filter((d) => !guessed.has(d.id));
       if (fresh.length) {
         setCandidates(fresh);
@@ -52,6 +73,7 @@ export default function GuessInput({ guessed, disabled, onGuess }: Props) {
         reject("We don't know that dish. Try another name.");
       }
     } catch (e) {
+      restore();
       reject((e as Error).message);
     } finally {
       setChecking(false);
@@ -72,6 +94,10 @@ export default function GuessInput({ guessed, disabled, onGuess }: Props) {
 
   return (
     <div className="guess-input">
+      <div className="field-label">
+        <label htmlFor="guess">Name the dish</label>
+        {aside}
+      </div>
       <form
         className={`input-row ${shake ? 'shake' : ''}`}
         onAnimationEnd={() => setShake(false)}
@@ -83,13 +109,12 @@ export default function GuessInput({ guessed, disabled, onGuess }: Props) {
         <div className="input-wrap">
           <input
             ref={inputRef}
+            id="guess"
             value={text}
-            disabled={disabled}
             autoFocus
             autoComplete="off"
             spellCheck={false}
-            placeholder="Name the dish…"
-            aria-label="Guess a dish"
+            placeholder="e.g. goulash"
             role="combobox"
             aria-expanded={open}
             aria-controls="dym-list"
@@ -118,7 +143,7 @@ export default function GuessInput({ guessed, disabled, onGuess }: Props) {
                   // Keep focus in the input so the blur handler doesn't close the list first.
                   onMouseDown={(e) => e.preventDefault()}
                   onMouseEnter={() => setActive(i)}
-                  onClick={() => accept(d)}
+                  onClick={() => pick(d)}
                 >
                   <span className="emoji" aria-hidden>{d.emoji}</span>
                   <span className="dym-name">{d.name}</span>
@@ -128,7 +153,7 @@ export default function GuessInput({ guessed, disabled, onGuess }: Props) {
           )}
         </div>
         <button className="primary" type="submit" disabled={disabled || checking || !text.trim()}>
-          Guess
+          Serve
         </button>
       </form>
 
