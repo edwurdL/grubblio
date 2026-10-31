@@ -52,7 +52,7 @@ function customerLines(game: GameState): string[] {
   return lines;
 }
 
-const SHOWN_LINES = 3;
+const SHOWN_LINES = 2;
 const TYPING_MS = 650;
 const REACT_MS = 1000;
 // Drawn small and scaled up with crisp pixels, like the kitchen; CSS sizes
@@ -107,15 +107,18 @@ export default function SideCharacters({ game }: { game: GameState }) {
         <Portrait look={chefLook} expression={chef} />
       </div>
       <div className={`side-char customer mood-${customerMood(game)}`}>
-        <Portrait look={customerLook} expression={typing ? 'intrigued' : customerMood(game)} />
-        <ol className="bubbles">
-          {visible.map((line, i) => (
-            <li key={`${lines.indexOf(line)}:${line}`} className={i === visible.length - 1 && !typing ? 'latest' : ''}>
-              {line}
-            </li>
-          ))}
-          {typing && <li className="typing latest"><span /><span /><span /></li>}
-        </ol>
+        {/* Bubbles hang above the customer's head, out of the layout. */}
+        <div className="figure">
+          <ol className="bubbles">
+            {visible.map((line, i) => (
+              <li key={`${lines.indexOf(line)}:${line}`} className={i === visible.length - 1 && !typing ? 'latest' : ''}>
+                {line}
+              </li>
+            ))}
+            {typing && <li className="typing latest"><span /><span /><span /></li>}
+          </ol>
+          <Portrait look={customerLook} expression={typing ? 'intrigued' : customerMood(game)} />
+        </div>
       </div>
     </div>
   );

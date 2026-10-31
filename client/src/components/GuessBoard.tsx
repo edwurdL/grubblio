@@ -38,10 +38,15 @@ function MiniTicket({ guess: g, n }: { guess: GuessResult; n: number }) {
       className={`mini-ticket ${g.correct ? 'exact' : ''}`}
       style={{ '--tilt': TILTS[n % TILTS.length] } as CSSProperties}
     >
+      {/* Name and closeness share the header row, so the ticket stays short. */}
       <div className="mini-head">
         <span className="guess-no">#{n}</span>
         <span className="emoji" aria-hidden>{g.dish.emoji}</span>
         <span className="mini-name">{g.dish.name}</span>
+        <span className={`closeness ${h.tone}`} style={tileDelay(COLUMNS.length)}>
+          <span className="closeness-text">{g.closeness}% · {h.label}</span>
+          <span className="meter"><span style={{ width: `${g.closeness}%` }} /></span>
+        </span>
       </div>
       <div className="mini-tiles">
         {COLUMNS.map((c, i) => {
@@ -63,10 +68,6 @@ function MiniTicket({ guess: g, n }: { guess: GuessResult; n: number }) {
           );
         })}
       </div>
-      <div className={`closeness ${h.tone}`} style={tileDelay(COLUMNS.length)}>
-        <span className="meter"><span style={{ width: `${g.closeness}%` }} /></span>
-        <span className="closeness-text">{g.closeness}% · {h.label}</span>
-      </div>
     </li>
   );
 }
@@ -76,11 +77,25 @@ export default function GuessBoard({ guesses }: { guesses: GuessResult[] }) {
   const newestFirst = [...guesses].reverse();
   const boardRef = useRef<HTMLOListElement>(null);
 
-  // On narrow screens the board is a sideways strip; bring the new guess into
-  // view (the browser would otherwise stay snapped to the previous one).
+  // On phones and laptops the board is a sideways strip; bring the new guess
+  // into view (the browser would otherwise stay snapped to the previous one).
   useEffect(() => {
     boardRef.current?.scrollTo({ left: 0, behavior: 'smooth' });
   }, [guesses.length]);
+
+  // Most mice only scroll vertically, so the wheel scrolls the strip sideways.
+  const hasBoard = guesses.length > 0;
+  useEffect(() => {
+    const board = boardRef.current;
+    if (!board) return;
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX) || board.scrollWidth <= board.clientWidth) return;
+      e.preventDefault();
+      board.scrollLeft += e.deltaY;
+    };
+    board.addEventListener('wheel', onWheel, { passive: false });
+    return () => board.removeEventListener('wheel', onWheel);
+  }, [hasBoard]);
 
   return (
     <section className="board-wrap" aria-label="Your guesses">

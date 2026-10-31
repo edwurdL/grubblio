@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import type { DishSummary, GameState } from '../../shared/types';
 import { ApiError, fetchPuzzle, fetchState } from './api';
 import { celebrate, takeDamage } from './screenFx';
@@ -45,6 +45,14 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showCredits, setShowCredits] = useState(false);
+  /** "Take a break": everything but the top bar fades away to show the restaurant. */
+  const [onBreak, setOnBreak] = useState(false);
+  useEffect(() => {
+    if (!onBreak) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOnBreak(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onBreak]);
   /** Bumped on every new game, so a fresh ticket is hung even for the same puzzle. */
   const [round, setRound] = useState(0);
 
@@ -100,9 +108,24 @@ export default function App() {
   };
 
   const stageRef = useRef<HTMLDivElement>(null);
+  const orderColRef = useRef<HTMLDivElement>(null);
+  const playingHeight = useRef(0);
+  // When the result card replaces the ticket, hold the column at its in-game
+  // height so the page zoom (and the chef and customer) don't change size.
+  useLayoutEffect(() => {
+    const col = orderColRef.current;
+    if (!col) return;
+    if (game?.status === 'playing') {
+      col.style.minHeight = '';
+      playingHeight.current = col.offsetHeight;
+    } else if (playingHeight.current) {
+      col.style.minHeight = `${playingHeight.current}px`;
+    }
+  });
   const flashRef = useRef<HTMLDivElement>(null);
-  // Leave room under the page for the pinned legend once there are guesses.
-  useFitToViewport(stageRef, game?.guesses.length ? 60 : 16);
+  // Always leave room under the page for the pinned legend, so the first
+  // guess doesn't change the zoom.
+  useFitToViewport(stageRef, 60);
 
   // Every guess while playing is a miss (a right one ends the game), so the
   // music speeds up with each, hitting 2× on the last plate.
@@ -126,7 +149,7 @@ export default function App() {
   const remaining = game ? game.maxGuesses - game.guesses.length : 0;
 
   return (
-    <div className="app">
+    <div className={`app ${onBreak ? 'on-break' : ''}`}>
       <KitchenBackground />
       <div className="stage" ref={stageRef}>
         <header className="topbar">
@@ -138,6 +161,9 @@ export default function App() {
           <nav className="topbar-actions">
             <button className="ghost" onClick={() => newGame('practice')}>New order</button>
             {game?.puzzleId !== 'test' && <button className="ghost" onClick={() => newGame()}>Test puzzle</button>}
+            <button className="ghost" aria-pressed={onBreak} onClick={() => setOnBreak(!onBreak)}>
+              {onBreak ? 'Back to it' : 'Take a break'}
+            </button>
             <button className="ghost credits-btn" onClick={openCredits}>Credits</button>
             {/* Click to mute; hover (or focus) for a volume slider. */}
             <div className="sound-control">
@@ -170,7 +196,7 @@ export default function App() {
             <p className="loading">Setting the table…</p>
           ) : (
             <>
-              <div className={`order-col ${game.status === 'playing' ? '' : 'over'}`}>
+              <div ref={orderColRef} className={`order-col ${game.status === 'playing' ? '' : 'over'}`}>
                 <SideCharacters game={game} />
                 {/* Once the game is over the result card lists every ingredient, so it takes the ticket's spot. */}
                 <div className="rail">

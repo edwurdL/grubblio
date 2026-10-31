@@ -43,7 +43,7 @@ export default function ResultCard({ game, onPractice }: { game: GameState; onPr
         </p>
         <h2>{won ? 'Bon appétit!' : 'The dish was…'} <span className="answer-name">{answer.name}</span></h2>
         <p className="muted">{answer.country} · {answer.region}</p>
-        <p>{answer.blurb}</p>
+        <p className="blurb">{answer.blurb}</p>
         <p className="result-ings">
           {answer.ingredients.map(titleCase).join(' · ')}
         </p>

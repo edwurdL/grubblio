@@ -4,7 +4,7 @@ import {
 } from './dishes';
 import { imageFor } from './images';
 
-export const MAX_GUESSES = 8;
+export const MAX_GUESSES = 9;
 export const INITIAL_INGREDIENTS = 3;
 
 export function summarize(d: Dish): DishSummary {

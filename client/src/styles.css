@@ -115,7 +115,7 @@ button.icon.sound { background: var(--paper); }
   position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
   background: #3a2c2a;
 }
-.kitchen-bg canvas { display: block; image-rendering: pixelated; filter: brightness(0.62) saturate(0.85); }
+.kitchen-bg canvas { display: block; image-rendering: pixelated; filter: brightness(0.62) saturate(0.85); transition: filter 500ms ease; }
 /* Dark checkered floor behind the content column, fading out so the kitchen
    stays visible on the sides (it covers everything on narrow screens). The
    canvas filter makes it a stacking context, hence the z-index. */
@@ -151,19 +151,19 @@ button.icon.sound { background: var(--paper); }
 .side-characters { position: absolute; inset: 0; pointer-events: none; --side: calc((100cqw - var(--col)) / 2 - 28px); }
 .side-char {
   position: absolute; top: 0; bottom: 0; display: flex; align-items: center; gap: 12px;
-  --cw: min(calc(var(--side) * 0.24), 100px); --px: calc(var(--cw) / 40);
+  --cw: min(calc(var(--side) * 0.4), 100px); --px: calc(var(--cw) / 40);
 }
 .side-char .portrait {
-  display: block; width: var(--cw); height: 50%; flex: none; object-fit: contain;
+  display: block; width: var(--cw); height: calc(var(--cw) * 1.8); flex: none; object-fit: contain;
   image-rendering: pixelated; filter: drop-shadow(var(--px) var(--px) 0 rgb(0 0 0 / 35%));
 }
-/* The chef's box spans the whole space left of the slip, out to where the
-   shading ends, and the chef stands in the middle of it. */
+/* Each character's box spans the whole space beside the slip, out to where
+   the shading ends, and they stand in the middle of it. */
 .chef { right: calc(100% + 28px); width: var(--side); justify-content: center; }
-.customer { left: calc(100% + 28px); }
-.customer .portrait { object-position: left center; }
+.customer { left: calc(100% + 28px); width: var(--side); justify-content: center; }
+.customer .figure { position: relative; }
 @container page (max-width: 1000px) { .side-characters { display: none; } }
-@container page (max-width: 1280px) { .order-col.over .side-characters { display: none; } }
+@container page (max-width: 1080px) { .order-col.over .side-characters { display: none; } }
 
 /* Idle bob, and more fidgety as things get worse. */
 .side-char .portrait { animation: bob 1.4s steps(2) infinite; }
@@ -173,28 +173,42 @@ button.icon.sound { background: var(--paper); }
 .chef.mood-happy .portrait, .customer.mood-excited .portrait { animation: cheer 0.5s steps(2) infinite; }
 .chef.mood-defeated .portrait { animation: none; transform: translateY(calc(var(--px) * 1)); }
 
-/* Customer's speech bubbles, beside them; older ones fade. */
+/* Customer's speech bubbles, stacked above their head; the older one fades. */
 .bubbles {
-  width: calc(var(--side) - var(--cw) - 12px); max-width: 240px; margin: 0; padding: 0; list-style: none;
-  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  width: min(var(--side), 190px); margin: 0; padding: 0; list-style: none;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
 }
 .bubbles li {
-  position: relative; padding: 6px 10px; max-width: 100%;
-  background: var(--paper); color: var(--text); border: 3px solid var(--ink); box-shadow: 4px 4px 0 0 var(--ink);
-  font: 19px/1.05 var(--font-mono); opacity: 0.5; transform: scale(0.92); transform-origin: left center;
+  position: relative; padding: 3px 7px; max-width: 100%;
+  background: var(--paper); color: var(--text); border: 2px solid var(--ink); box-shadow: 3px 3px 0 0 var(--ink);
+  font: 16px/1 var(--font-mono); text-align: center; opacity: 0.5; transform: scale(0.9); transform-origin: bottom center;
   transition: opacity 200ms ease, transform 200ms ease;
 }
 .bubbles li.latest { opacity: 1; transform: none; animation: bubble-in 220ms cubic-bezier(.2, 1.4, .4, 1); }
-/* Tail pointing back at the customer. */
+/* Tail pointing down at the customer. */
 .bubbles li.latest::before, .bubbles li.latest::after {
-  content: ''; position: absolute; clip-path: polygon(100% 0, 0 50%, 100% 100%);
+  content: ''; position: absolute; clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
-.bubbles li.latest::before { right: calc(100% + 3px); top: calc(50% - 9px); width: 11px; height: 18px; background: var(--ink); }
-.bubbles li.latest::after { right: calc(100% - 1px); top: calc(50% - 6px); width: 8px; height: 12px; background: var(--paper); }
-.bubbles .typing { display: flex; gap: 5px; padding: 10px 12px; }
-.bubbles .typing span { width: 6px; height: 6px; background: var(--ink); animation: typing 0.6s steps(2) infinite; }
+.bubbles li.latest::before { top: calc(100% + 2px); left: calc(50% - 7px); width: 14px; height: 8px; background: var(--ink); }
+.bubbles li.latest::after { top: calc(100% - 1px); left: calc(50% - 5px); width: 10px; height: 6px; background: var(--paper); }
+.bubbles .typing { display: flex; gap: 4px; padding: 6px 9px; }
+.bubbles .typing span { width: 5px; height: 5px; background: var(--ink); animation: typing 0.6s steps(2) infinite; }
 .bubbles .typing span:nth-child(2) { animation-delay: 0.15s; }
 .bubbles .typing span:nth-child(3) { animation-delay: 0.3s; }
+
+/* "Take a break": everything but the top bar fades out, along with the shading
+   and dimming, to show off the restaurant. Layout stays put, so the zoom
+   doesn't change when you come back. */
+.app main, .app .legend { transition: opacity 400ms ease, visibility 400ms; }
+.kitchen-bg::before, .kitchen-bg::after { transition: opacity 500ms ease; }
+.app.on-break main, .app.on-break .legend { opacity: 0; visibility: hidden; }
+.app.on-break .kitchen-bg::before, .app.on-break .kitchen-bg::after { opacity: 0; }
+.app.on-break .kitchen-bg canvas { filter: none; }
+/* The title needs a full outline to read over the bright, unshaded kitchen. */
+.app.on-break .brand h1 {
+  text-shadow: 3px 3px 0 var(--ink), -2px 0 0 var(--ink), 2px 0 0 var(--ink), 0 -2px 0 var(--ink), 0 2px 0 var(--ink);
+}
 
 /* ── Top bar ─────────────────────────────────────────── */
 .topbar {
@@ -211,7 +225,7 @@ button.icon.sound { background: var(--paper); }
   font-size: 0.8rem; color: var(--cream); border: 3px solid var(--cream);
   padding: 6px 12px; background: color-mix(in srgb, var(--bg) 70%, transparent); white-space: nowrap;
 }
-.topbar-actions { display: flex; gap: 14px; align-items: center; margin-left: auto; }
+.topbar-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-left: auto; }
 
 /* Ticket and input stay centred; the guesses hang on a rail underneath.
    useFitToViewport zooms the whole page out so it all fits on one screen. */
@@ -219,10 +233,10 @@ main {
   display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%;
   container: page / inline-size; --col: 580px;
 }
-main:has(> .order-col.over) { --col: 820px; }
+/* The result card is wider than the ticket, so its photo isn't a thin strip. */
+main:has(> .order-col.over) { --col: 760px; }
 main > * { width: min(100%, var(--col)); }
 main > .board-wrap { width: 100%; }
-/* The result card (.over) is wider than the ticket, so its text wraps less and it stays short. */
 .order-col { position: relative; display: flex; flex-direction: column; gap: 16px; }
 .loading { color: var(--cream-muted); text-align: center; padding: 48px 0; font-family: var(--font-display); }
 .error {
@@ -328,29 +342,39 @@ main > .board-wrap { width: 100%; }
 .plate.fresh .half-l, .plate.fresh .half-r { animation: break 380ms cubic-bezier(.3, 1.5, .5, 1); }
 
 /* ── Board: one small order ticket per guess ────────── */
-.board-wrap { position: relative; display: flex; flex-direction: column; align-items: center; gap: 12px; container-type: inline-size; }
+/* Tickets are always the same size, however many guesses there are: the
+   board reserves room for all its rows up front, so nothing reflows or
+   shrinks as guesses come in. */
+.board-wrap {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 12px; container-type: inline-size;
+  min-height: 258px;
+}
 .rail.small { width: 100%; padding-top: 14px; }
 .rail.small::after { display: none; }
 .board-empty { margin: 14px 0 0; color: var(--cream-muted); font: 0.75rem/1.4 var(--font-display); text-transform: uppercase; text-align: center; }
-/* Narrow screens: a sideways strip, newest first, so the latest guess is
-   always on screen. Padding leaves room for the clips and torn edges. */
+/* Phones: one row, newest first, so the latest guess is always on screen;
+   scroll sideways for older ones. Padding leaves room for the clips and
+   torn edges. */
 .board {
   list-style: none; margin: -12px 0 0; padding: 20px 4px 18px; width: 100%;
   display: flex; gap: 16px; overflow-x: auto; overflow-anchor: none; scroll-snap-type: x mandatory; scrollbar-width: thin;
 }
-.mini-ticket { flex: 0 0 min(86%, 330px); scroll-snap-align: start; }
-/* Wide screens: always two rows of four, laid out at a fixed width and
-   zoomed as a whole (by useFitToViewport) to fit the width and height left. */
+.mini-ticket { flex: 0 0 min(86%, 320px); min-height: 178px; scroll-snap-align: start; }
+/* Wider screens: a 3×3 grid across the whole play area, one slot per guess.
+   Tickets are half as tall as they are wide, and the board reserves all
+   three rows. (The board-wrap rule queries main, the others the board-wrap;
+   both are the same width.) */
 @container (min-width: 880px) {
+  .board-wrap { --ticket-h: calc((100cqw - 44px) / 3 * 0.5); min-height: calc(60px + 3 * (var(--ticket-h) + 22px)); }
   .board {
-    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 16px;
-    width: 1160px; max-width: none; overflow: visible; padding-bottom: 14px;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 18px;
+    overflow: visible; padding-bottom: 14px;
   }
-  .mini-ticket { flex: none; }
+  .mini-ticket { flex: none; min-height: calc((100cqw - 44px) / 3 * 0.5); }
 }
 .mini-ticket {
   position: relative; background: var(--paper); color: var(--text); container-type: inline-size;
-  padding: 16px 8px 6px; --tilt: -0.9deg; transform: rotate(var(--tilt)); transform-origin: 50% 0;
+  padding: 13px 7px 4px; --tilt: -0.9deg; transform: rotate(var(--tilt)); transform-origin: 50% 0;
   filter: drop-shadow(4px 6px 0 rgb(0 0 0 / 35%));
   animation: hang 320ms cubic-bezier(.2, 1.3, .4, 1) both;
 }
@@ -361,27 +385,19 @@ main > .board-wrap { width: 100%; }
   background: #4a4744; border: 3px solid var(--ink);
 }
 .mini-head {
-  display: flex; align-items: center; gap: 8px; padding-bottom: 6px;
+  display: flex; align-items: center; gap: 6px; padding-bottom: 4px;
   border-bottom: 2px dashed var(--paper-blank);
 }
 .mini-head .emoji { font-size: 1.1rem; }
-.mini-name { font: 23px/1 var(--font-mono); overflow-wrap: anywhere; }
+.mini-name { flex: 1; min-width: 0; font: clamp(20px, 6cqi, 30px)/0.95 var(--font-mono); overflow-wrap: anywhere; }
 .guess-no { font: 0.62rem/1 var(--font-display); color: var(--muted); }
 /* Columns grow to fit their longest word, so "Pescatarian" takes room from shorter neighbours instead of splitting. */
-.mini-tiles { display: grid; grid-template-columns: repeat(4, minmax(min-content, 1fr)); gap: 4px; margin: 6px 0; }
-.mini-tiles .tile { min-height: 32px; padding: 4px 2px; border: 2px solid var(--ink); box-shadow: inset -2px -2px 0 rgb(0 0 0 / 14%), 2px 2px 0 0 var(--ink); }
-.tile-label { font: 9px/1 var(--font-display); text-transform: uppercase; opacity: 0.75; }
-.tile-value { font: 500 13px/1.1 var(--font-body); max-width: 100%; overflow-wrap: break-word; }
-.tile-value.long { font-size: 10.5px; }
-@container (max-width: 270px) {
-  .tile-value { font-size: 11.5px; }
-  .tile-value.long { font-size: 9px; }
-}
-@container (min-width: 310px) {
-  .tile-label { font-size: 10px; }
-  .tile-value { font-size: 14px; }
-  .tile-value.long { font-size: 12px; }
-}
+.mini-tiles { display: grid; grid-template-columns: repeat(4, minmax(min-content, 1fr)); gap: 4px; margin: 5px 0 3px; }
+.mini-tiles .tile { min-height: 30px; padding: 3px 2px; border: 2px solid var(--ink); box-shadow: inset -2px -2px 0 rgb(0 0 0 / 14%), 2px 2px 0 0 var(--ink); }
+/* Sized by the ticket's width (cqi), so wider tickets get bigger text. */
+.tile-label { font: clamp(9px, 2.5cqi, 12px)/1 var(--font-display); text-transform: uppercase; opacity: 0.75; }
+.tile-value { font: 500 clamp(15px, 4.1cqi, 19px)/1.05 var(--font-body); max-width: 100%; overflow-wrap: break-word; }
+.tile-value.long { font-size: clamp(12px, 3.3cqi, 15px); }
 
 /* Help-modal tiles reuse the board colours at a larger size. */
 .cell {
@@ -403,14 +419,17 @@ main > .board-wrap { width: 100%; }
 .tile[title] { cursor: help; }
 .arrow { font-size: 0.75rem; opacity: 0.9; }
 
-.closeness { display: flex; align-items: center; gap: 10px; animation: fade 200ms ease-out both; animation-delay: var(--delay, 0ms); }
-.meter { flex: 1; height: 10px; background: var(--paper-blank); border: 2px solid var(--ink); }
+.closeness {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex: none;
+  animation: fade 200ms ease-out both; animation-delay: var(--delay, 0ms);
+}
+.meter { width: clamp(64px, 18cqi, 96px); height: 8px; background: var(--paper-blank); border: 2px solid var(--ink); }
 .meter span { display: block; height: 100%; background: var(--cold); animation: fill 450ms cubic-bezier(.2, .8, .3, 1) both; animation-delay: calc(var(--delay, 0ms) + 80ms); }
 .closeness.warm .meter span { background: var(--warm); }
 .closeness.hot .meter span { background: var(--hot); }
 .closeness.scorching .meter span { background: var(--scorching); }
 .closeness.exact .meter span { background: var(--exact); }
-.closeness-text { font: 18px/1 var(--font-mono); white-space: nowrap; }
+.closeness-text { font: clamp(16px, 4.6cqi, 22px)/1 var(--font-mono); white-space: nowrap; }
 
 .legend {
   position: fixed; left: 50%; bottom: 10px; z-index: 20; transform: translateX(-50%); max-width: calc(100% - 24px);
@@ -439,10 +458,12 @@ main > .board-wrap { width: 100%; }
 .result-body { padding: 14px 18px; display: flex; flex-direction: column; gap: 6px; }
 @media (min-width: 640px) {
   .result { flex-direction: row; }
-  .result-photo { width: 40%; aspect-ratio: auto; max-height: none; border-bottom: 0; border-right: 3px solid var(--ink); }
+  .result-photo { width: 45%; aspect-ratio: auto; max-height: none; border-bottom: 0; border-right: 3px solid var(--ink); }
   .result-body { flex: 1; min-width: 0; }
 }
 .result-body p { margin: 0; }
+/* Kept short so the result card fits where the ticket was. */
+.blurb { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; line-clamp: 4; overflow: hidden; }
 .result-kicker { font-size: 0.72rem; color: var(--red); }
 .result.won .result-kicker { color: #3f7a26; }
 .result-body h2 { font: 400 1.3rem/1.1 var(--font-body); }

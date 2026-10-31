@@ -1,6 +1,6 @@
 # Grubblio (prototype)
 
-Guess the dish from its ingredients. You start with three ingredients. Each wrong guess reveals another ingredient. You get 8 guesses. When the game ends, it shows the answer with a photo.
+Guess the dish from its ingredients. You start with three ingredients. Each wrong guess reveals another ingredient. You get 9 guesses. When the game ends, it shows the answer with a photo.
 
 Each guess is compared with the answer column by column, in the style of Royaledle:
 

@@ -3,30 +3,6 @@ import { useLayoutEffect, type RefObject } from 'react';
 // Below this the pixel fonts get too small to read; let the page scroll instead.
 const MIN_ZOOM = 0.7;
 
-// The guesses shrink first, down to this, before the whole page zooms out.
-const BOARD_MIN_ZOOM = 0.75;
-/** Width the four-across guess grid is laid out at (matches .board in styles.css). */
-const BOARD_WIDTH = 1160;
-
-/**
- * Keeps the guess grid four across by zooming it to the width available, then
- * shrinks it further if the page is still too tall. Only applies to the grid
- * layout; narrow screens use a sideways strip instead.
- */
-function fitBoard(stage: HTMLElement, avail: number) {
-  const board = stage.querySelector<HTMLElement>('.board');
-  if (!board) return;
-  board.style.zoom = '';
-  if (getComputedStyle(board).display !== 'grid') return;
-  let zoom = Math.min(1, board.parentElement!.clientWidth / BOARD_WIDTH);
-  board.style.zoom = zoom.toFixed(3);
-  const over = stage.getBoundingClientRect().height - avail;
-  if (over <= 0) return;
-  const height = board.getBoundingClientRect().height;
-  zoom = Math.max(BOARD_MIN_ZOOM, zoom * ((height - over) / height));
-  board.style.zoom = zoom.toFixed(3);
-}
-
 /**
  * Zooms `ref` out (like pressing Ctrl −) until it fits the viewport height,
  * so the ticket, input and every guess stay on one screen. CSS zoom reflows
@@ -42,7 +18,6 @@ export function useFitToViewport(ref: RefObject<HTMLElement | null>, bottomGap =
       // viewport and content, never on the previous zoom.
       el.style.zoom = '';
       const avail = window.innerHeight - bottomGap;
-      fitBoard(el, avail);
       let zoom = Math.max(MIN_ZOOM, Math.min(1, avail / el.getBoundingClientRect().height));
       // Zooming out widens the content, which can reflow it, so re-measure a
       // couple of times. Only ever zoom further out:
