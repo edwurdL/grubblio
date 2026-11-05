@@ -500,6 +500,16 @@ main > .board-wrap { width: 100%; }
   animation: modal-in 180ms cubic-bezier(.2, .9, .3, 1.15);
 }
 .modal h2 { margin-bottom: 12px; font: 700 1.6rem/1 var(--font-display); text-transform: uppercase; color: var(--red); }
+.modal { position: relative; }
+/* Keep the title clear of the × button. */
+.modal > h2:first-of-type { padding-right: 40px; }
+.modal-close {
+  position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; padding: 0;
+  display: grid; place-items: center; font: 700 22px/1 var(--font-body);
+  background: var(--paper-2); color: var(--text); box-shadow: 2px 2px 0 0 var(--ink);
+}
+.modal-close:not(:disabled):hover { background: var(--red); color: var(--red-ink); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 0 var(--ink); }
+.modal-close:not(:disabled):active { transform: translate(2px, 2px); box-shadow: 0 0 0 0 var(--ink); }
 .modal ul { padding-left: 1.2rem; }
 .modal li { margin-bottom: 4px; }
 .modal h3 { margin: 18px 0 6px; font: 700 0.8rem/1 var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; }
