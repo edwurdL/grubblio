@@ -28,7 +28,27 @@ npm run dev          # http://localhost:5173 — site + API Worker in one proces
 
 The API is a Cloudflare Worker ([server/index.ts](server/index.ts)). `npm run dev` runs it locally inside Vite via `@cloudflare/vite-plugin`, so no Cloudflare account is needed for development.
 
-The **test puzzle's** answer is French Fries. To test a different answer, create `.dev.vars` containing `ANSWER=<dish-id>` (ids are in `server/dishes.ts`). Use **New practice** in the header to play a random dish.
+Before starting, `npm run dev` sets up a local copy of the database in `.wrangler/`. The game opens on the **Daily dish**: the day's scheduled puzzle for your local date. Use **Rush hour** in the header to play a random dish.
+
+## Daily dish
+
+The daily answers are stored in a D1 (Cloudflare's SQLite) table, `puzzles (date → dish_id)`, defined in [migrations/](migrations/). They're kept out of the repo so nobody can read upcoming answers on GitHub. A puzzle's id is its date in the player's local time, as in Wordle. Past dates stay playable. The API refuses a date that hasn't started in any time zone yet. Without that check, anyone could replay nine wrong guesses on tomorrow's puzzle and see its answer early.
+
+**Each day's answer picks itself.** The first request for a date with no answer yet picks a random dish and stores it, so every later player gets the same one ([server/daily.ts](server/daily.ts)). Dishes that have never been an answer come first. Once every dish has had a turn, a dish can't come back within about four months. A newly added dish is picked soon after it's deployed. There's nothing to top up or schedule. Answers are only picked for dates that are "today" somewhere, so an old date with no answer stays empty.
+
+To choose answers yourself, use [scripts/schedule.ts](scripts/schedule.ts). It prints dates, never answers:
+
+```bash
+npm run schedule -- --remote --set 2026-12-25=gingerbread   # hand-pick a date (repeatable)
+npm run schedule -- --remote --days 30                      # pre-pick the next 30 days now
+```
+
+Leave out `--remote` to change the local dev database instead. `--set` replaces a date's dish, but only for dates that haven't started anywhere yet. Deploy a new dish before you hand-pick it, or that day's puzzle will name a dish the live site doesn't know.
+
+To try a specific answer locally, change today's row directly (`--set` won't touch a date that has started):
+`npx wrangler d1 execute grubblio --local --command "UPDATE puzzles SET dish_id = 'pad-thai' WHERE date = '2026-11-05'"`.
+
+The Worker caches each date's answer in memory. Each instance reads D1 at most once per date, which keeps D1 reads far under the free plan's 5 million a day.
 
 Production-style build: `npm run preview` builds, then serves the built site and Worker locally.
 
@@ -51,12 +71,13 @@ Game-over sound: [Glass](https://freesound.org/s/536763/) by [egomassive](https:
 One Worker serves everything: the built site and dish photos as static assets, and `/api/*` from [server/index.ts](server/index.ts). It's configured in [wrangler.jsonc](wrangler.jsonc), including the `grubbl.io` and `www.grubbl.io` custom domains. Cloudflare creates their DNS records and certificates on the first deploy.
 
 1. In Cloudflare → DNS for grubbl.io, **delete any existing records named `grubbl.io` (`@`) or `www`** (for example parking records). Custom domains can't be attached while they exist.
-2. Push the repo to GitHub. In the Cloudflare dashboard, go to **Workers & Pages → Create → Import a repository** and pick it.
-3. Set the build settings:
+2. Create the database once: `npx wrangler login`, then `npx wrangler d1 create grubblio`, and paste the `database_id` it prints into the `d1_databases` entry in [wrangler.jsonc](wrangler.jsonc). Then create the table: `npx wrangler d1 migrations apply grubblio --remote`.
+3. Push the repo to GitHub. In the Cloudflare dashboard, go to **Workers & Pages → Create → Import a repository** and pick it.
+4. Set the build settings:
    - **Build command:** `npm run fetch-images -- --restore && npm run build`
-   - **Deploy command:** `npx wrangler deploy` (the default)
+   - **Deploy command:** `npx wrangler d1 migrations apply grubblio --remote && npx wrangler deploy`. This applies any new migrations before each deploy.
    - **Build variable:** `PIXABAY_API_KEY`. The build restores the stock photos that aren't committed (see Photos above). Without it, those dishes show their emoji.
-4. After the first deploy, open the Worker's **Settings → Variables and Secrets** and add a **secret** named `PUZZLE_SECRET` set to a long random string (`openssl rand -base64 32`). It encrypts practice puzzle ids, so the answer can't be read out of them. Without it, the Worker falls back to a dev key that's public in this repo.
+5. After the first deploy, open the Worker's **Settings → Variables and Secrets** and add a **secret** named `PUZZLE_SECRET` set to a long random string (`openssl rand -base64 32`). It encrypts practice puzzle ids, so the answer can't be read out of them. Without it, the Worker falls back to a dev key that's public in this repo.
 
 Every push to the main branch then redeploys. To deploy from your machine instead: `npx wrangler login`, then `npm run deploy`.
 
@@ -69,19 +90,22 @@ shared/types.ts        API types shared by client + server
 server/dishes.ts       dish database (attributes + ordered ingredient lists)
 server/game.ts         comparison, closeness score, ingredient unlocks
 server/index.ts        API (Cloudflare Worker)
+server/daily.ts        daily puzzles: picking, D1 lookup, date checks, cache
 server/practice.ts     encrypted, stateless practice puzzle ids
+migrations/            D1 schema (the puzzles schedule)
+scripts/schedule.ts    hand-picks daily answers (optional)
 client/src/            React app (Vite)
 index.html             Vite entry page
 scripts/fetch-images.ts photo download / --restore
-wrangler.jsonc         Worker config: static assets, vars, custom domains
+wrangler.jsonc         Worker config: static assets, D1, custom domains
 ```
 
 The server is stateless per player. The client keeps its list of guessed dish ids in `localStorage`, and `POST /api/state` replays them to rebuild the board. The answer is sent only after the game ends.
 
 ## Not covered by this prototype (needed for production)
 
-- **Database.** Dishes and the puzzle schedule are currently in code. You'd want a database (on Cloudflare, D1) with `dishes`, `ingredients`, `puzzles (date → dish)`, and optionally `plays` for stats.
-- **Daily puzzle rotation.** A scheduler or date→dish mapping, plus time-zone handling.
+- **Dish data in a database.** Dishes are still in code (`server/dishes.ts`). That's fine while developers edit them; move them to D1 once non-developers need an editor. A `plays` table for stats would also go in D1.
+- **Reviewing upcoming answers.** Answers are picked on the day, so there's nothing to review ahead of time. A daily Cron Trigger running the `--days` logic would keep a month picked ahead for review.
 - **Anti-cheat.** Because the server is stateless, a client can replay invented guess lists to reach the reveal. Server-side sessions, or signed state tokens, would fix this.
 - **Image curation and hosting.** Someone should review each photo by eye, and production should serve them from a CDN. A paid library such as Adobe Stock needs a purchased licence for each image.
 - **Content.** A larger dish list (the prototype has about 230), editorial review of ingredient order and difficulty for each answer, and playtesting.

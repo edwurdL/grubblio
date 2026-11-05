@@ -5,10 +5,17 @@ import { heat } from './GuessBoard';
 
 const TILE = { exact: '🟩', partial: '🟨', miss: '🟥' } as const;
 
+/** "Nov 5" for a daily puzzle (its id is its date), so shared results say which day. */
+function dayOf(puzzleId: string): string | null {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(puzzleId)) return null;
+  return new Date(`${puzzleId}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+}
+
 function shareText(game: GameState): string {
   const score = game.status === 'won' ? game.guesses.length : 'X';
   const rows = game.guesses.map((g) => g.attributes.map((a) => TILE[a.match]).join('') + ` ${g.closeness}%`);
-  return [`Grubblio · ${game.label} · ${score}/${game.maxGuesses}`, ...rows].join('\n');
+  const title = ['Grubblio', game.label, dayOf(game.puzzleId), `${score}/${game.maxGuesses}`].filter(Boolean).join(' · ');
+  return [title, ...rows].join('\n');
 }
 
 export default function ResultCard({ game, onPractice }: { game: GameState; onPractice: () => void }) {

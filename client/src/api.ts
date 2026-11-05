@@ -15,8 +15,10 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
 
 export const resolveGuess = (q: string) => call<ResolveResponse>(`/api/resolve?q=${encodeURIComponent(q)}`);
 
-export const fetchPuzzle = (mode?: 'practice') =>
-  call<GameState>(mode ? `/api/puzzle?mode=${mode}` : '/api/puzzle');
+/** The daily puzzle for a YYYY-MM-DD date (the player's local date). */
+export const fetchDaily = (date: string) => call<GameState>(`/api/puzzle?date=${date}`);
+
+export const fetchPractice = () => call<GameState>('/api/puzzle?mode=practice');
 
 export const fetchState = (req: StateRequest) =>
   call<GameState>('/api/state', {

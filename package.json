@@ -4,12 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "npm run db:local",
     "dev": "vite",
     "build": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.server.json --noEmit && vite build",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.server.json --noEmit",
     "fetch-images": "tsx scripts/fetch-images.ts",
+    "schedule": "tsx scripts/schedule.ts",
+    "db:local": "wrangler d1 migrations apply grubblio --local",
     "preview": "npm run build && vite preview",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler d1 migrations apply grubblio --remote && wrangler deploy"
   },
   "dependencies": {
     "react": "^19.3.1",

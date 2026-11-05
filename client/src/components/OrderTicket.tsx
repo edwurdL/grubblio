@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, type CSSProperties } from 'react';
 import type { GameState } from '../../../shared/types';
 import { titleCase } from '../format';
 import { useSwing } from '../useSwing';
@@ -11,8 +11,12 @@ const BLANK_WIDTHS = [62, 46, 74, 54, 40, 66, 50, 58];
 export default function OrderTicket({ game }: { game: GameState }) {
   // Most a player can ever see before their last guess: the opening three
   // plus one per wrong guess.
-  const reachable = Math.min(game.totalIngredients, 3 + game.maxGuesses - 1);
+  const maxLines = 3 + game.maxGuesses - 1;
+  const reachable = Math.min(game.totalIngredients, maxLines);
   const locked = Math.max(0, reachable - game.ingredients.length);
+  // Room for the longest possible ticket, whatever this dish's ingredient
+  // count, so the ticket (and the page zoom) stays one size between puzzles.
+  const linesStyle = { '--rows': Math.ceil(maxLines / 2) } as CSSProperties;
   const id = hash(game.puzzleId);
   const ref = useRef<HTMLElement>(null);
   useSwing(ref);
@@ -26,12 +30,15 @@ export default function OrderTicket({ game }: { game: GameState }) {
         </span>
       </div>
       <hr />
-      <ol className="ticket-lines">
+      <ol className="ticket-lines" style={linesStyle}>
         {game.ingredients.map((ing, i) => (
           <li key={ing} className={i === game.ingredients.length - 1 && i >= 3 ? 'new' : ''}>
             <span className="line-num">{i + 1}</span>
             <IngredientIcon name={ing} />
-            <span className="line-name">{titleCase(ing)}</span>
+            {/* --len lets CSS shrink a long name to fit one line (the font is monospaced). */}
+            <span className="line-name" title={titleCase(ing)} style={{ '--len': ing.length } as CSSProperties}>
+              {titleCase(ing)}
+            </span>
           </li>
         ))}
         {Array.from({ length: locked }, (_, i) => (

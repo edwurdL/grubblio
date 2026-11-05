@@ -277,10 +277,24 @@ main > .board-wrap { width: 100%; }
 .ticket-title { display: flex; justify-content: space-between; align-items: baseline; font-size: 26px; }
 .ticket-title h2 { font: 700 1.15rem/1 var(--font-display); text-transform: uppercase; letter-spacing: 0.04em; }
 
-.ticket-lines { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 18px; }
-.ticket-lines li { display: grid; grid-template-columns: 18px 24px 1fr; align-items: center; gap: 8px; min-height: 30px; }
+/* A fixed grid (--rows set by OrderTicket) of one-line rows, so the ticket is
+   the same size for every dish and never grows as ingredients are revealed. */
+.ticket-lines {
+  list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 18px;
+  --line-h: 30px; --name-size: 24px; --line-chrome: 64px; /* number + icon + gaps + .new highlight padding */
+  grid-template-rows: repeat(var(--rows, 6), var(--line-h));
+}
+.ticket-lines li {
+  display: grid; grid-template-columns: 18px 24px minmax(0, 1fr); align-items: center; gap: 8px;
+  container-type: inline-size;
+}
 .line-num { color: var(--muted); }
-.line-name { font-size: 24px; line-height: 1; }
+/* VT323 glyphs are 0.4em wide, so a name of --len characters needs --len × 0.4em.
+   Shrink the font just enough to fit; the ellipsis is only a fallback. */
+.line-name {
+  font-size: min(var(--name-size), calc((100cqi - var(--line-chrome)) / (var(--len, 10) * 0.4)));
+  line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .ing-icon { width: 24px; height: 24px; }
 .ticket-lines .blank { display: block; height: 15px; background: var(--paper-blank); max-width: 100%; }
 .ticket-lines li.new { animation: stamp 280ms cubic-bezier(.2, .9, .3, 1.2) both; }
@@ -571,9 +585,9 @@ main > .board-wrap { width: 100%; }
   .ticket hr { margin: 8px 0; }
   .ticket-title { font-size: 22px; }
   .ticket-title h2 { font-size: 1rem; }
-  .ticket-lines { gap: 2px 12px; }
-  .ticket-lines li { grid-template-columns: 14px 20px 1fr; gap: 6px; min-height: 26px; }
-  .line-name { font-size: 20px; line-height: 0.95; }
+  .ticket-lines { gap: 2px 12px; --line-h: 26px; --name-size: 20px; --line-chrome: 52px; }
+  .ticket-lines li { grid-template-columns: 14px 20px minmax(0, 1fr); gap: 6px; }
+  .line-name { line-height: 0.95; }
   .ing-icon { width: 20px; height: 20px; }
   .ticket-lines .blank { height: 12px; }
 }

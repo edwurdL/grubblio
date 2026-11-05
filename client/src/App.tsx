@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import type { DishSummary, GameState } from '../../shared/types';
-import { ApiError, fetchPuzzle, fetchState } from './api';
+import { fetchDaily, fetchPractice, fetchState } from './api';
 import { celebrate, takeDamage } from './screenFx';
 import GuessBoard, { Legend } from './components/GuessBoard';
 import GuessInput from './components/GuessInput';
@@ -15,16 +15,31 @@ import ResultCard from './components/ResultCard';
 import { useFitToViewport } from './useFitToViewport';
 import { useSound } from './useSound';
 
+/** The game on screen, daily or practice. */
 const SAVE_KEY = 'grubblio:current';
+/** The latest daily puzzle's progress, kept apart so a practice game can't overwrite it. */
+const DAILY_KEY = 'grubblio:daily';
 
 interface Saved {
   puzzleId: string;
   guesses: string[];
+  /** Local date the game was last saved on. */
+  savedOn?: string;
 }
 
-function load(): Saved | null {
+/** Daily puzzle ids are dates; practice ids start with "practice-". */
+const isDaily = (puzzleId: string) => /^\d{4}-\d{2}-\d{2}$/.test(puzzleId);
+
+/** The player's local date as YYYY-MM-DD; it picks the daily puzzle. */
+function today(): string {
+  const d = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+function load(key: string): Saved | null {
   try {
-    return JSON.parse(localStorage.getItem(SAVE_KEY) ?? 'null');
+    return JSON.parse(localStorage.getItem(key) ?? 'null');
   } catch {
     return null;
   }
@@ -32,11 +47,21 @@ function load(): Saved | null {
 
 function save(state: GameState) {
   try {
-    const saved: Saved = { puzzleId: state.puzzleId, guesses: state.guesses.map((g) => g.dish.id) };
+    const saved: Saved = { puzzleId: state.puzzleId, guesses: state.guesses.map((g) => g.dish.id), savedOn: today() };
     localStorage.setItem(SAVE_KEY, JSON.stringify(saved));
+    if (isDaily(state.puzzleId)) localStorage.setItem(DAILY_KEY, JSON.stringify(saved));
   } catch {
     // Storage unavailable (private mode etc.) — progress just won't persist.
   }
+}
+
+/** Today's daily puzzle, with any guesses already made on it. */
+function openDaily(): Promise<GameState> {
+  const date = today();
+  const saved = load(DAILY_KEY);
+  return saved?.puzzleId === date
+    ? fetchState(saved).catch(() => fetchDaily(date))
+    : fetchDaily(date);
 }
 
 export default function App() {
@@ -62,11 +87,11 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const saved = load();
-    // Saved practice puzzles live in server memory and vanish on restart, so
-    // fall back to a fresh test puzzle if the server no longer knows the id.
-    (saved ? fetchState(saved) : Promise.reject(new ApiError(404, 'none')))
-      .catch(() => fetchPuzzle())
+    const saved = load(SAVE_KEY);
+    // Resume a practice game started today. Otherwise (first visit, or a new
+    // day) open today's daily puzzle.
+    const resume = saved && saved.savedOn === today() && !isDaily(saved.puzzleId) ? saved : null;
+    (resume ? fetchState(resume).catch(openDaily) : openDaily())
       .then(apply)
       .catch((e) => setError(e.message));
     if (!saved) setShowHelp(true);
@@ -93,11 +118,16 @@ export default function App() {
     }
   };
 
-  const newGame = async (mode?: 'practice') => {
+  /** A new practice game, or back to today's daily (keeping its guesses). */
+  const newGame = async (mode: 'practice' | 'daily') => {
+    // Picking a game from the top bar ends a break; no need for "Back to it" first.
+    setOnBreak(false);
+    // Already on today's Daily dish: leave the ticket hanging. (Rush hour
+    // always deals a new dish, so players can swap prompts.)
+    if (mode === 'daily' && game?.puzzleId === today()) return;
     setError(null);
     try {
-      const state = await fetchPuzzle(mode);
-      // Restarting the fixed test puzzle should clear previous guesses too.
+      const state = await (mode === 'practice' ? fetchPractice() : openDaily());
       apply(state);
       setRound((r) => r + 1);
       sound.play('pageTurn');
@@ -159,8 +189,8 @@ export default function App() {
           </div>
           {game && <span className="puzzle-label">{game.label}</span>}
           <nav className="topbar-actions">
-            <button className="ghost" onClick={() => newGame('practice')}>New order</button>
-            {game?.puzzleId !== 'test' && <button className="ghost" onClick={() => newGame()}>Test puzzle</button>}
+            <button className="ghost" onClick={() => newGame('daily')}>Daily dish</button>
+            <button className="ghost" onClick={() => newGame('practice')}>Rush hour</button>
             <button className="ghost" aria-pressed={onBreak} onClick={() => setOnBreak(!onBreak)}>
               {onBreak ? 'Back to it' : 'Take a break'}
             </button>
