@@ -238,10 +238,6 @@ main:has(> .order-col.over) { --col: 760px; }
 main > * { width: min(100%, var(--col)); }
 main > .board-wrap { width: 100%; }
 .order-col { position: relative; display: flex; flex-direction: column; gap: 16px; }
-.notice {
-  background: var(--partial); color: var(--partial-ink); font-weight: 500;
-  border: 3px solid var(--ink); box-shadow: var(--hard); padding: 10px 14px; margin: 0; text-align: center;
-}
 .loading { color: var(--cream-muted); text-align: center; padding: 48px 0; font-family: var(--font-display); }
 .error {
   background: var(--miss); color: var(--miss-ink); font-weight: 500;

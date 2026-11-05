@@ -9,9 +9,11 @@ interface Props {
   onGuess: (dish: DishSummary) => void;
   /** Shown on the right of the label row (the plates). */
   aside?: ReactNode;
+  /** A note from the game (e.g. "finish this order first"), shown in the hint line when there's no hint. */
+  notice?: string | null;
 }
 
-export default function GuessInput({ guessed, disabled, onGuess, aside }: Props) {
+export default function GuessInput({ guessed, disabled, onGuess, aside, notice }: Props) {
   const [text, setText] = useState('');
   const [checking, setChecking] = useState(false);
   const [shake, setShake] = useState(false);
@@ -158,7 +160,7 @@ export default function GuessInput({ guessed, disabled, onGuess, aside }: Props)
       </form>
 
       {/* Always rendered, so a message fills reserved space instead of pushing the page down. */}
-      <p className="input-message" role="status">{message}</p>
+      <p className="input-message" role="status">{message ?? notice}</p>
     </div>
   );
 }

@@ -23,7 +23,7 @@ const SAVE_KEY = 'grubblio:current';
 const DAILY_KEY = 'grubblio:daily';
 /** A Rush hour with at least one guess and no result yet. It must be finished before another is dealt. */
 const RUSH_KEY = 'grubblio:rush';
-const FINISH_FIRST = 'Finish this Rush hour order before taking a new one.';
+const FINISH_FIRST = 'Finish this order before taking a new one.';
 
 interface Saved {
   puzzleId: string;
@@ -100,7 +100,7 @@ function openDaily(): Promise<GameState> {
 export default function App() {
   const [game, setGame] = useState<GameState | null>(null);
   const [error, setError] = useState<string | null>(null);
-  /** A friendly heads-up, e.g. why Rush hour reopened an old order. */
+  /** A heads-up in the guess input's hint line, e.g. why Rush hour reopened an old order. */
   const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
@@ -288,7 +288,6 @@ export default function App() {
 
         <main>
           {error && <p className="error" role="alert">{error}</p>}
-          {notice && !error && <p className="notice" role="status">{notice}</p>}
           {!game ? (
             <p className="loading">Setting the table…</p>
           ) : (
@@ -307,6 +306,7 @@ export default function App() {
                     guessed={guessedIds}
                     disabled={busy}
                     onGuess={guess}
+                    notice={notice}
                     aside={
                       <span className="plates" role="img" aria-label={`${remaining} guesses left`}>
                         {Array.from({ length: game.maxGuesses }, (_, i) => (

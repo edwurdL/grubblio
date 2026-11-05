@@ -45,6 +45,18 @@ const QUERY: Record<string, string> = {
   'katsu-curry': 'katsu curry',
   'risotto-milanese': 'saffron risotto',
   'chicago-deep-dish': 'deep dish pizza',
+  'khao-soi': 'khao soi noodles',
+  tahdig: 'tahdig persian rice',
+  'hush-puppies': 'hush puppies fried cornmeal',
+  'tater-tots': 'tater tots potatoes',
+  'peri-peri-chicken': 'piri piri chicken',
+  'chili-crab': 'singapore chilli crab',
+  'corned-beef-hash': 'corned beef hash egg',
+  'scallion-pancakes': 'scallion pancake',
+  tourtiere: 'tourtière quebec meat pie',
+  'jamaican-beef-patty': 'jamaican patty',
+  carnitas: 'carnitas tacos',
+  'french-dip': 'french dip sandwich au jus',
 };
 
 // Photos checked by eye and found wrong or unclear, so they're skipped in
@@ -95,6 +107,20 @@ const REJECT = new Set([
   'https://pixabay.com/photos/food-sausage-grilled-sausage-10427/', // bratwurst
   'https://pixabay.com/photos/flesh-calf-veal-beef-ossobuco-2534580/', // osso-buco
   'https://pixabay.com/photos/food-dish-seafood-fried-shrimp-5911572/', // fried-calamari
+  'https://commons.wikimedia.org/wiki/File:Trimeresurus_vogeli%2C_Vogel\'s_pit_viper_-_Khao_Soi_Dao_Wildlife_Sanctuary_(46361404605).jpg', // khao-soi
+  'https://commons.wikimedia.org/wiki/File:Wuhan_crispy_rice_cakes.jpg', // tahdig
+  'https://commons.wikimedia.org/wiki/File:Hush_Puppy_shoe.jpg', // hush-puppies
+  'https://commons.wikimedia.org/wiki/File:Grigg_Tater_Tots_Truck.jpg', // tater-tots
+  'https://commons.wikimedia.org/wiki/File:Partial_menu_for_NFC_Peri_Peri_Chicken_(175_High_Street%2C_Northfleet%2C_Gravesend_DA11_9HG).jpg', // peri-peri-chicken
+  'https://commons.wikimedia.org/wiki/File:Chili_crab_pasta.jpg', // chili-crab
+  'https://commons.wikimedia.org/wiki/File:2174Armour_Corned_Beef_Hash_01.jpg', // corned-beef-hash
+  'https://commons.wikimedia.org/wiki/File:Braised_Lamb_Neck_%E2%80%93_Scallion_Pancakes%2C_Pickled_Vegetables.jpg', // scallion-pancakes
+  'https://commons.wikimedia.org/wiki/File:Tourti%C3%A8re_g%C3%A2teau_2.JPG', // tourtiere
+  'https://commons.wikimedia.org/wiki/File:Carnitas_in_Mexico.jpg', // carnitas
+  'https://commons.wikimedia.org/wiki/File:French_dip_sandwich_with_pickles_at_Circus_Circus_Reno_in_Reno%2C_Nevada.jpg', // french-dip
+  'https://commons.wikimedia.org/wiki/File:HK_TST_night_Nathan_Road_Park_Lane_Shopper\'s_Boulevard_Sept-2012_Hush_Puppies_shop.JPG', // hush-puppies
+  'https://commons.wikimedia.org/wiki/File:Wikipedia_Tater_Tot_Hotdish.jpg', // tater-tots
+  'https://commons.wikimedia.org/wiki/File:2174Armour_Corned_Beef_Hash_02.jpg', // corned-beef-hash
 ]);
 
 // Pixabay flags AI images (`isAiGenerated`) only when the uploader says so,

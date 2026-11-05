@@ -1730,5 +1730,1258 @@
     "creditUrl": "https://pixabay.com/photos/yakisoba-noodles-japanese-food-dish-6405452/",
     "source": "pixabay",
     "description": "yakisoba, noodles, japanese food, dish, stir fried, food, cuisine, meal, delicious, bowl, yakisoba, yakisoba, yakisoba, yakisoba, yakisoba"
+  },
+  "mushroom-risotto": {
+    "file": "mushroom-risotto.jpg",
+    "credit": "valtercirillo on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/rice-mushroom-risotto-1978552/",
+    "source": "pixabay",
+    "description": "rice, mushroom risotto, italian cuisine, mixed mushrooms, typical meal, to eat, foods, gastronomy, onion, white wine, broth, parmesan, pepper, mushroom risotto, mushroom risotto, mushroom risotto, mushroom risotto, mushroom risotto"
+  },
+  "kabsa": {
+    "file": "kabsa.jpg",
+    "credit": "khx199 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/kabsa-dish-food-meal-cuisine-5828416/",
+    "source": "pixabay",
+    "description": "kabsa, dish, food, meal, cuisine, camel meat, meat, rice, hashi, arabian, traditional, closeup, kabsa, kabsa, kabsa, kabsa, kabsa"
+  },
+  "plov": {
+    "file": "plov.jpg",
+    "credit": "sergey_kim1992 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/food-pilaf-rice-beef-nutrition-3589513/",
+    "source": "pixabay",
+    "description": "food, pilaf, rice, beef, nutrition, pilaf, pilaf, pilaf, pilaf, pilaf, beef"
+  },
+  "gallo-pinto": {
+    "file": "gallo-pinto.jpg",
+    "credit": "outsideclick on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/the-rice-and-beans-rice-bean-5325624/",
+    "source": "pixabay",
+    "description": "the rice and beans, rice, bean, brazilian, brazilian food, food, meal, healthy, dinner, vegetarian, dish, rice-and-bean, fine, lunch, beans, delicious, the bowl, vegan, traditional"
+  },
+  "nasi-lemak": {
+    "file": "nasi-lemak.jpg",
+    "credit": "Faixal on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/food-nasi-lemak-asia-malaysia-658715/",
+    "source": "pixabay",
+    "description": "food, nasi lemak, asia, malaysia, malay, dish, meal, spicy, sambal, nasi lemak, nasi lemak, nasi lemak, nasi lemak, nasi lemak"
+  },
+  "katsudon": {
+    "file": "katsudon.jpg",
+    "credit": "cegoh on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/japanese-pork-katsu-don-deep-fried-1004450/",
+    "source": "pixabay",
+    "description": "japanese, pork, katsu don, deep fried, egg, rice, bowl, restaurant, asian, delicious, onion, katsu don, katsu don, katsu don, katsu don, katsu don, deep fried"
+  },
+  "oyakodon": {
+    "file": "oyakodon.jpg",
+    "credit": "PublicDomainPictures on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/egg-bowl-of-rice-japanese-food-food-72285/",
+    "source": "pixabay",
+    "description": "egg, bowl of rice, japanese food, food, donburi, oyakodon, chicken, white back, donburi, donburi, donburi, donburi, oyakodon, oyakodon, oyakodon, oyakodon, oyakodon"
+  },
+  "omurice": {
+    "file": "omurice.jpg",
+    "credit": "takedahrs on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/egg-dish-omelette-rice-meal-1762236/",
+    "source": "pixabay",
+    "description": "egg dish, omelette rice, meal, restaurant, cooking, food, western food, gourmand, japan contest"
+  },
+  "kimbap": {
+    "file": "kimbap.jpg",
+    "credit": "junghoyoung4 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/dish-gimbap-korean-cuisine-food-7075619/",
+    "source": "pixabay",
+    "description": "dish, gimbap, korean cuisine, food, seaweed, republic of korea, korea, kimbab, pickled radish, chopsticks, snack bar, food photography, korean food, gimbap, gimbap, gimbap, gimbap, gimbap, seaweed, kimbab, pickled radish, korean food, korean food"
+  },
+  "chicken-korma": {
+    "file": "chicken-korma.jpg",
+    "credit": "quikish on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/hyderabadi-chicken-korma-chicken-6667608/",
+    "source": "pixabay",
+    "description": "hyderabadi chicken korma, chicken, dish, curry, meal, cuisine, food, meat, indian food, curry, indian food, indian food, indian food, indian food, indian food"
+  },
+  "fish-amok": {
+    "file": "fish-amok.jpg",
+    "credit": "sharonang on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/fish-amok-fish-rice-yummy-921926/",
+    "source": "pixabay",
+    "description": "fish amok, fish, rice, yummy, delicious, local, khmer food, food, lunch, desserts, cafe, siem reap, cambodia, fish amok, fish amok, fish amok, fish amok, fish amok, khmer food, khmer food"
+  },
+  "bigos": {
+    "file": "bigos.jpg",
+    "credit": "kalhh on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/bigos-herb-pot-meal-enjoy-the-meal-445017/",
+    "source": "pixabay",
+    "description": "bigos, herb pot, meal, enjoy the meal, yummy, healthy, food, vegetables, having lunch, dish, sausage, sauerkraut, main course, hearty, cooked, cook, main dish, bigos, bigos, bigos, bigos, bigos, sauerkraut"
+  },
+  "ropa-vieja": {
+    "file": "ropa-vieja.jpg",
+    "credit": "MoriartysDV on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/cuban-eggs-benedict-eggs-benedict-2169337/",
+    "source": "pixabay",
+    "description": "cuban eggs benedict, eggs benedict, cuban food, cuban cuisine, latin food, brunch, breakfast, poached eggs, hollandaise sauce, shredded beef, ropa vieja, cuban bread, sweet plantains, plantains, gourmet, restaurant, food photography, comfort food, delicious, breakfast sandwich, savory, homemade, meal, caribbean cuisine, culinary"
+  },
+  "galbi-jjim": {
+    "file": "galbi-jjim.jpg",
+    "credit": "zzilu063 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/rib-charcoal-republic-of-korea-3453216/",
+    "source": "pixabay",
+    "description": "rib, charcoal, republic of korea, grilled, meat, food, pork, bbq, fire, restaurant, camping, coal, hot, pork barbecue, spicy ribs, galbijjim, char-grilled, king ribs, korean food, rib stew, pig, grill"
+  },
+  "mercimek-corbasi": {
+    "file": "mercimek-corbasi.jpg",
+    "credit": "mygraphx on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/lentil-soup-lenses-stew-food-3738547/",
+    "source": "pixabay",
+    "description": "lentil soup, lenses, stew, food, carrots, healthy, legumes, tasty, celery, meals, onion, lentil soup, lentil soup, lentil soup, lentil soup, lentil soup, stew, stew, stew, stew, legumes"
+  },
+  "lobster-bisque": {
+    "file": "lobster-bisque.jpg",
+    "credit": "HeiJohnZ on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/lobster-soup-western-food-food-1752385/",
+    "source": "pixabay",
+    "description": "lobster soup, western food, food, hotel, lobster soup, lobster soup, lobster soup, lobster soup, food, food, hotel, hotel, hotel, hotel, hotel"
+  },
+  "kofta-kebab": {
+    "file": "kofta-kebab.jpg",
+    "credit": "Huss1907 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/meatballs-barbecue-summer-beer-5066263/",
+    "source": "pixabay",
+    "description": "meatballs, barbecue, summer, beer, meat, nature, burger, oil, grilled, food, dish, lunch, meal, ball, cuisine, turkish food, mangal, kofte, beef, brown meat, brown burger"
+  },
+  "paneer-tikka": {
+    "file": "paneer-tikka.jpg",
+    "credit": "firstclick8556877242 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/paneer-tikka-cheese-seek-kebab-4929034/",
+    "source": "pixabay",
+    "description": "paneer tikka, cheese, seek, kebab, asian food, firangi, dhaba, nurpur, easter brunch, paneer tikka, paneer tikka, paneer tikka, paneer tikka, paneer tikka"
+  },
+  "cevapi": {
+    "file": "cevapi.jpg",
+    "credit": "thoha on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/%C4%87evap%C4%8Di%C4%87i-%C4%87evapi-minced-meat-4546669/",
+    "source": "pixabay",
+    "description": "ćevapčići, ćevapi, minced meat, barbeque, meat, food, bbq, meal, onions, fat, grilling, party, minced ' meat, grill, asado, carne, beef, ćevapi, ćevapi, ćevapi, ćevapi, ćevapi"
+  },
+  "sunday-roast": {
+    "file": "sunday-roast.jpg",
+    "credit": "4666192 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/roast-pork-roast-crust-4582040/",
+    "source": "pixabay",
+    "description": "roast pork, roast crust, enjoy the meal, meal, bavarian, sunday dinner, sunday roast, pig, flesh, vegetables, roast pork, sunday roast, sunday roast, sunday roast, sunday roast, sunday roast"
+  },
+  "roast-turkey": {
+    "file": "roast-turkey.jpg",
+    "credit": "methodshop on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/turkey-chicken-wood-table-2961401/",
+    "source": "pixabay",
+    "description": "turkey, chicken, wood, table, thanksgiving turkey, floating, meat, poultry, cooked, food, livestock, thanksgiving dinner, store, brown meat, brown chicken, thanksgiving turkey, thanksgiving dinner, thanksgiving dinner, thanksgiving dinner, thanksgiving dinner, thanksgiving dinner"
+  },
+  "lechon": {
+    "file": "lechon.jpg",
+    "credit": "jonathanvalencia5 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/lechon-kawali-pork-exotic-food-2098029/",
+    "source": "pixabay",
+    "description": "lechon kawali, pork, exotic, food, philippines, meat, chopped, crispy, cuisine, cut, deep, knuckle, pata, philippino, plates, lechon kawali, lechon kawali, lechon kawali, lechon kawali, lechon kawali, philippines, philippines, philippines, philippines"
+  },
+  "sauerbraten": {
+    "file": "sauerbraten.jpg",
+    "credit": "Hans on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/sauerbraten-flesh-meat-dish-2512443/",
+    "source": "pixabay",
+    "description": "sauerbraten, flesh, meat dish, pot roast, braised roast, side dishes, spaetzle, meal, hearty, enjoy the meal, having lunch, tasty, plate, cutlery, cook, food, yummy, nourishment, main dish, traditional dish, german cuisine, suure mocke, sauerbraten, sauerbraten, sauerbraten, sauerbraten, sauerbraten"
+  },
+  "tonkatsu": {
+    "file": "tonkatsu.jpg",
+    "credit": "takedahrs on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/pork-tonkatsu-japanese-meal-1690696/",
+    "source": "pixabay",
+    "description": "pork, tonkatsu, japanese meal, japanese food, western food, gourmand, pork cutlet, fried food, japan contest"
+  },
+  "cordon-bleu": {
+    "file": "cordon-bleu.jpg",
+    "credit": "beetle04021969 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/cordon-bleu-meal-schnitzel-flesh-3489611/",
+    "source": "pixabay",
+    "description": "cordon bleu, meal, schnitzel, flesh, nourishment, food, pork, tasty, having lunch, restaurant, garnish, enjoy the meal, cook, restaurants, feed, lemon, cordon bleu, cordon bleu, cordon bleu, cordon bleu, cordon bleu"
+  },
+  "currywurst": {
+    "file": "currywurst.jpg",
+    "credit": "kgberlin on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/french-fries-fast-food-junk-food-250641/",
+    "source": "pixabay",
+    "description": "french fries, fast food, junk food, snack, currywurst, meal, french fries, french fries, french fries, french fries, french fries, fast food, fast food, fast food, junk food, junk food, junk food, junk food, currywurst"
+  },
+  "haggis": {
+    "file": "haggis.jpg",
+    "credit": "bennkhid on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/haggis-food-delicious-lunch-3094697/",
+    "source": "pixabay",
+    "description": "haggis, food, delicious, lunch, appetizer, haggis, haggis, haggis, haggis, haggis"
+  },
+  "karaage": {
+    "file": "karaage.jpg",
+    "credit": "jojomild on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/food-japanese-food-japan-rice-4921539/",
+    "source": "pixabay",
+    "description": "food, japanese food, japan, rice, chicken karaage, asia, rice, delicious"
+  },
+  "pad-kra-pao": {
+    "file": "pad-kra-pao.jpg",
+    "credit": "viarami on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/pad-kra-pao-thai-cuisine-6993984/",
+    "source": "pixabay",
+    "description": "pad kra pao, thai cuisine, holy basil chicken stir-fry, asian cuisine, meal, asian food"
+  },
+  "taquitos": {
+    "file": "taquitos.jpg",
+    "credit": "adoproducciones on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/rolled-tacos-mexican-food-rice-7217214/",
+    "source": "pixabay",
+    "description": "rolled tacos, mexican, food, rice, beans, dish, meal, cuisine, delicious, tasty, lunch, snack"
+  },
+  "chiles-rellenos": {
+    "file": "chiles-rellenos.jpg",
+    "credit": "JaimeAP on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/chile-relleno-food-mexican-pepper-4935580/",
+    "source": "pixabay",
+    "description": "chile relleno, food, mexican, pepper, vegetable, delicious, eat, poblano, spicy, hot, chile relleno, chile relleno, chile relleno, chile relleno, chile relleno"
+  },
+  "mozzarella-sticks": {
+    "file": "mozzarella-sticks.jpg",
+    "credit": "erikatanith on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/mozzarella-sticks-dip-food-4407742/",
+    "source": "pixabay",
+    "description": "mozzarella sticks, dip, food, vegetarian, snack, appetizer, delicious, eat, tasty, sauce, lunch, salsa, italian, fried, deep fried, greasy, dirty, mozzarella sticks, mozzarella sticks, mozzarella sticks, mozzarella sticks, mozzarella sticks"
+  },
+  "rosti": {
+    "file": "rosti.jpg",
+    "credit": "stux on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/zurich-shredded-hash-browns-r%C3%B6sti-945696/",
+    "source": "pixabay",
+    "description": "zurich shredded, hash browns, rösti, potato specialty, fried flatbread, meal, restaurant, food, table, wood, yummy, fresh, dish, plate, garnish, onion rings, lettuce leaves, mushrooms, zuchini, carrot, hash browns, rösti, rösti, rösti, rösti, rösti"
+  },
+  "pakora": {
+    "file": "pakora.jpg",
+    "credit": "balouriarajesh on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/pakoda-snack-food-delicious-tasty-4594716/",
+    "source": "pixabay",
+    "description": "pakoda, snack, food, delicious, tasty, fresh, meal, colorful, vegetarian, eat, breakfast, diet, fried, healthy, organic, brown diet, brown breakfast, pakoda, pakoda, pakoda, pakoda, pakoda"
+  },
+  "croquetas": {
+    "file": "croquetas.jpg",
+    "credit": "subarasikiai on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/croquettes-potato-meal-food-6384836/",
+    "source": "pixabay",
+    "description": "croquettes, potato, meal, food, japanese, croquettes, croquettes, croquettes, croquettes, croquettes"
+  },
+  "kibbeh": {
+    "file": "kibbeh.jpg",
+    "credit": "2SIF on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/kibbeh-platter-kibbeh-platter-7414533/",
+    "source": "pixabay",
+    "description": "kibbeh platter, kibbeh, platter, snacks, arabic food, meal, delicious, kibbeh, kibbeh, kibbeh, kibbeh, kibbeh, arabic food"
+  },
+  "coxinha": {
+    "file": "coxinha.jpg",
+    "credit": "riquebeze on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/coxinha-salted-party-food-chicken-4161592/",
+    "source": "pixabay",
+    "description": "coxinha, salted, party, food, chicken, meals, eat, goodies, coxinha, coxinha, coxinha, coxinha, coxinha"
+  },
+  "banh-xeo": {
+    "file": "banh-xeo.jpg",
+    "credit": "1900mmc on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/b%C3%A1nh-x%C3%A8o-food-dish-meal-cuisine-5602960/",
+    "source": "pixabay",
+    "description": "bánh xèo, food, dish, meal, cuisine, stuffed rice pancake, vietnamese food, bánh xèo, vietnamese food, vietnamese food, vietnamese food, vietnamese food, vietnamese food"
+  },
+  "blini": {
+    "file": "blini.jpg",
+    "credit": "NadinShlyueva on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/blini-salmon-breakfast-blinchiki-7029702/",
+    "source": "pixabay",
+    "description": "blini, salmon, breakfast, nature, blinchiki, food, pancakes, meal, fish, delicious"
+  },
+  "tamagoyaki": {
+    "file": "tamagoyaki.jpg",
+    "credit": "pen_ash on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/eggs-onsen-tamago-cooking-4820458/",
+    "source": "pixabay",
+    "description": "eggs, onsen tamago, cooking, traditional, nature, hot, japanese, japan, onsen, hot spring, slow cooked, water, soft boiled egg, poach, poached, shibu onsen, nagano, brown cooking, brown egg, brown eggs"
+  },
+  "menemen": {
+    "file": "menemen.jpg",
+    "credit": "Engin_Akyurt on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/menemen-egg-casserole-table-wooden-3771970/",
+    "source": "pixabay",
+    "description": "menemen, egg, casserole, table, wooden, gastronomy, fresh, kitchen, health, healthy, protein, food, delicious, omelet, pepper, cook, natural, vegetable, green, vegetarian, restaurant, vitamins, container, menemen, menemen, menemen, menemen, menemen"
+  },
+  "acai-bowl": {
+    "file": "acai-bowl.jpg",
+    "credit": "mrpizzamandc on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/acai-acai-bowl-acai-brazil-healthy-2709077/",
+    "source": "pixabay",
+    "description": "acai, acai bowl, acai brazil, healthy, food, bowl, smoothie, vegetarian, berry, top, table, energy, dessert, fruit, vegan, banana, organic, fresh, tropical, strawberry, exotic, vitamin, eating, freshness, summer, nature, nutrition, delicious, tasty, acai, acai, acai bowl, acai bowl, acai bowl, acai bowl, acai bowl, smoothie, smoothie"
+  },
+  "waldorf-salad": {
+    "file": "waldorf-salad.jpg",
+    "credit": "RitaE on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/waldorf-salad-celery-apple-3212344/",
+    "source": "pixabay",
+    "description": "waldorf salad, celery, apple, mayonaise, spices, salt, pepper, walnuts, food, connoisseur, enjoy the meal, vegetables, nature, healthy, leaf, salad, refreshment, dinner, close up, dish, hearty, lemon, orange, meal, yummy, vitamins, taste, fresh"
+  },
+  "panzanella": {
+    "file": "panzanella.jpg",
+    "credit": "RitaE on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/salad-bread-salad-loaf-baguette-4432168/",
+    "source": "pixabay",
+    "description": "salad, bread salad, loaf, baguette, tomatoes, rock, paprika, cucumber, dressing, food, starter, fresh, vegetarian, healthy, salad, salad, salad, salad, salad, bread salad"
+  },
+  "larb": {
+    "file": "larb.jpg",
+    "credit": "bns09 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/minced-pork-laab-isaan-food-plate-1791070/",
+    "source": "pixabay",
+    "description": "minced pork, laab, isaan food, plate, green, laab, laab, laab, laab, laab, isaan food"
+  },
+  "coleslaw": {
+    "file": "coleslaw.jpg",
+    "credit": "RitaE on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/roast-pork-dumplings-coleslaw-meal-6599697/",
+    "source": "pixabay",
+    "description": "roast pork, dumplings, coleslaw, meal, dish, cuisine, food, pork, meat, crust, sauce, lunch, sunday dinner, specialty, bavaria, germany, roast pork, roast pork, roast pork, dumplings, dumplings, pork, pork, pork, pork, pork, meat, sunday dinner, sunday dinner"
+  },
+  "olivier-salad": {
+    "file": "olivier-salad.jpg",
+    "credit": "Schnauzer on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/russian-salad-food-tapas-restaurant-1809277/",
+    "source": "pixabay",
+    "description": "russian salad, food, tapas, restaurant, gastronomy, bar, russian salad, russian salad, russian salad, russian salad, russian salad, tapas"
+  },
+  "tzatziki": {
+    "file": "tzatziki.jpg",
+    "credit": "kalhh on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/gyros-greek-food-meal-tzatziki-318624/",
+    "source": "pixabay",
+    "description": "gyros, greek food, meal, tzatziki, olive, food, fries, flesh, cook, gyros, gyros, gyros, gyros, greek food, greek food, greek food, greek food, greek food, tzatziki"
+  },
+  "sashimi": {
+    "file": "sashimi.jpg",
+    "credit": "Bokja on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/tuna-episode-fresh-food-fish-3637244/",
+    "source": "pixabay",
+    "description": "tuna, episode, fresh, food, fish, nature, sushi, tuna sashimi, japanese, delicious, tuna belly"
+  },
+  "lobster-thermidor": {
+    "file": "lobster-thermidor.jpg",
+    "credit": "araf60plus on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/lobster-thermidor-7576684/",
+    "source": "pixabay",
+    "description": "lobster thermidor, lobster thermidor recipe, lobster, thermidor, how to make lobster thermidor, lobster thermidore, lobster tail thermidor, lobster thermidor dish, lobster thermador, how to cook lobster thermidor, lobster recipe, how to cook lobster, thermidor lobster, termidor lobster, make lobster thermidor, lobster tails thermidor, how to lobster thermidor, lobster thermidor sauce, making lobster thermidor, oceans lobster thermidor, classic lobster thermidor, lobster thermidor, lobster thermidor, lobster thermidor, lobster thermidor, lobster thermidor"
+  },
+  "crawfish-boil": {
+    "file": "crawfish-boil.jpg",
+    "credit": "raggio5 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/food-market-desktop-basket-stock-3241999/",
+    "source": "pixabay",
+    "description": "food, market, desktop, basket, stock, freshness, supermarket, batch, box, season, full, vegetable, refreshment, bag, crawfish boil, crawfish, lemons, onions, potatoes, louisiana, cajan, cajun, seafood, ingredients, recipe, cook, gabriel raggio, crawfish boil, crawfish boil, crawfish, crawfish, cajun, cajun, cajun, cajun, cajun"
+  },
+  "gratin-dauphinois": {
+    "file": "gratin-dauphinois.jpg",
+    "credit": "RitaE on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/potato-casserole-potato-gratin-3586488/",
+    "source": "pixabay",
+    "description": "potato casserole, potato gratin, gratin, casserole, potatoes, yummy, tomatoes, enjoy the meal, cook, meal, vegetarian, kitchen, prepare, ingredients, potato gratin, potato gratin, potato gratin, potato gratin, potato gratin, gratin, gratin, gratin, gratin, gratin"
+  },
+  "toad-in-the-hole": {
+    "file": "toad-in-the-hole.jpg",
+    "credit": "drnight2 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/eggs-egg-basket-toad-in-hole-food-1694991/",
+    "source": "pixabay",
+    "description": "eggs, egg basket, toad in hole, food, homemade, cook, pan, fried eggs, meal, cooking, breakfast, skillet, kitchen, home, fry, pan, skillet, skillet, skillet, skillet, skillet, fry, fry"
+  },
+  "elote": {
+    "file": "elote.jpg",
+    "credit": "rickbella on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/food-elote-mexican-sweet-corn-4004711/",
+    "source": "pixabay",
+    "description": "food, elote, mexican, sweet corn, produce, sweet, yellow, agriculture, maize, vegetable, corn, nutrition, mexican street corn, brown vegetables, brown street, brown nutrition, elote, elote, elote, elote, elote"
+  },
+  "carrot-cake": {
+    "file": "carrot-cake.jpg",
+    "credit": "congerdesign on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/cake-carrot-cake-cake-stand-dessert-4890393/",
+    "source": "pixabay",
+    "description": "cake, carrot cake, cake stand, dessert, sweet, pastry, baked, homemade, homemade cake, delicious, eat, food, bake, sugar, frosting, food photography, cake, cake, cake, cake, cake"
+  },
+  "banana-bread": {
+    "file": "banana-bread.jpg",
+    "credit": "Neja_ on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/banana-bread-bread-baking-paper-bag-5237109/",
+    "source": "pixabay",
+    "description": "banana bread, bread, baking, paper bag, food, delicious, breakfast, healthy, nutrition, fresh, homemade, sweet, dessert, baked, tasty, meal, brown nutrition, brown banana, brown breakfast, banana bread, banana bread, banana bread, banana bread, banana bread"
+  },
+  "sachertorte": {
+    "file": "sachertorte.jpg",
+    "credit": "Suissgirl on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/sachertorte-vienna-cakes-cake-1280575/",
+    "source": "pixabay",
+    "description": "sachertorte, vienna, cakes, cake, pastry shop, sweets, coffee shop, nibble, austria, sacher, sacher cake, sachertorte, sachertorte, sachertorte, sachertorte, vienna, vienna, vienna, vienna, vienna, sacher, sacher"
+  },
+  "panna-cotta": {
+    "file": "panna-cotta.jpg",
+    "credit": "RitaE on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/panna-cotta-cream-dessert-yummy-2416749/",
+    "source": "pixabay",
+    "description": "panna cotta, cream, dessert, yummy, sweet dish, cute, enjoyment, fruit, food, sugar, meal, sweet, glass, strawberries, strawberry sauce, wild berries, panna cotta, panna cotta, panna cotta, panna cotta, panna cotta"
+  },
+  "chocolate-mousse": {
+    "file": "chocolate-mousse.jpg",
+    "credit": "RitaE on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/nougat-mousse-chocolate-mousse-3078581/",
+    "source": "pixabay",
+    "description": "nougat, mousse, chocolate mousse, dessert, food, nourishment, meal, sweet dish, enjoyment, nature, yummy, cream, cute, creamy, glass, chocolate, nuts, sugar, delicious, spring, tulips, still life, food photo, hazelnuts"
+  },
+  "flan": {
+    "file": "flan.jpg",
+    "credit": "Msobaidi on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/creme-caramel-sweet-dessert-custard-5130830/",
+    "source": "pixabay",
+    "description": "creme caramel, sweet, dessert, custard, caramel, plate, food, delicious, tasty, yummy, eat, pudding, french, creme, milk, custard, caramel, pudding, pudding, pudding, pudding, pudding"
+  },
+  "pumpkin-pie": {
+    "file": "pumpkin-pie.jpg",
+    "credit": "nutmarketca on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/pumpkin-pie-food-delicious-1323131/",
+    "source": "pixabay",
+    "description": "pumpkin, pie, food, delicious, seasonal, decoration, holiday, baked, dessert, cooked, autumn, pumpkin pie, table, gourmet, stuffing, organic, rustic, fall, traditional, pie, pumpkin pie, pumpkin pie, pumpkin pie, pumpkin pie, pumpkin pie"
+  },
+  "lemon-meringue-pie": {
+    "file": "lemon-meringue-pie.jpg",
+    "credit": "ShirleyHoy on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/lemon-meringue-pie-slice-tart-6097441/",
+    "source": "pixabay",
+    "description": "lemon, meringue, pie, slice, tart, sweet, delicious, food, dessert, homemade, eat, lemon meringue pie"
+  },
+  "profiteroles": {
+    "file": "profiteroles.jpg",
+    "credit": "RitaE on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/cream-puff-strawberries-cream-2092962/",
+    "source": "pixabay",
+    "description": "cream puff, strawberries, cream, whipped cream, dairy product, pastries, to bake, baked goods, yummy, choux, choux pastry donuts, cute, feasting, meal, dessert, cakes, food, sweet dish, sugar, eggs, butter, biscuits, snack, coffee time, sweetness, kitchen, enjoyment, flour, candy, fine baked goods, cream puff, cream puff, cream puff, cream, whipped cream, whipped cream, whipped cream, whipped cream, whipped cream, pastries, pastries, baked goods, choux, choux, dessert"
+  },
+  "eclairs": {
+    "file": "eclairs.jpg",
+    "credit": "blandinejoannic on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/eclair-chocolate-eclair-chocolate-5351840/",
+    "source": "pixabay",
+    "description": "eclair, chocolate eclair, chocolate, sweet, food, cream, bakery, pastries, delicious, french, french pastries, eggs, eclair, eclair, eclair, eclair, eclair, chocolate eclair"
+  },
+  "apple-strudel": {
+    "file": "apple-strudel.jpg",
+    "credit": "RitaE on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/swirl-apple-strudel-apple-fruit-3700359/",
+    "source": "pixabay",
+    "description": "swirl, apple strudel, apple, fruit, cream, dessert, sweetness, feasting, to bake, homemade, kitchen, food photo, sugar, enjoy, cute, coffee time, invitation, apple strudel, apple strudel, apple strudel, apple strudel, apple strudel, apple"
+  },
+  "gelato": {
+    "file": "gelato.jpg",
+    "credit": "kerdkanno on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/ice-cream-cones-scooper-5928048/",
+    "source": "pixabay",
+    "description": "ice cream, cones, scooper, ice cream scooper, ice cream cones, ice cream scoops, dessert, frozen, frozen desserts, cold, cold desserts, treats, sweets, waffle cones, ice cream flavors, creamy, dairy, food, gelato, nuts, ice cream, ice cream, ice cream, ice cream, ice cream"
+  },
+  "kulfi": {
+    "file": "kulfi.jpg",
+    "credit": "thecandidstroies on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/matka-kulfi-dessert-indian-food-6603510/",
+    "source": "pixabay",
+    "description": "matka kulfi, dessert, indian food, pot kulfi, indian ice cream, blueberry, food, dish, delicious, traditional, asian, india"
+  },
+  "bingsu": {
+    "file": "bingsu.jpg",
+    "credit": "kkam50 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/jung-woo-ne-very-bingsu-804659/",
+    "source": "pixabay",
+    "description": "jung woo-ne, very bingsu, red bean shaved ice, ice cream, nature, desert, food, strawberry, nuts"
+  },
+  "shortbread": {
+    "file": "shortbread.jpg",
+    "credit": "congerdesign on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/cookies-pastry-food-shortbread-547636/",
+    "source": "pixabay",
+    "description": "cookies, pastry, food, shortbread, biscuit, christmas cookies, sweets, assorted cookies, snack, dessert, treats, tasty, plate of cookies, food photography, cookies, cookies, cookies, cookies, cookies"
+  },
+  "alfajores": {
+    "file": "alfajores.jpg",
+    "credit": "titopasini on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/alfajor-chocolate-nut-cookies-nuts-4894324/",
+    "source": "pixabay",
+    "description": "alfajor, chocolate, nut, cookies, nuts, sweet, cookie, food, delicious, sugar, bake, pastries, dessert, eat, candy, brown candy, alfajor, alfajor, alfajor, alfajor, alfajor"
+  },
+  "beignets": {
+    "file": "beignets.jpg",
+    "credit": "raggio5 on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/coffee-breakfast-food-cup-dawn-3293499/",
+    "source": "pixabay",
+    "description": "coffee, breakfast, food, cup, dawn, drink, sugar, hot, milk, espresso, delicious, sweet, table, chocolate, epicure, caffeine, plate, refreshment, cappuccino, cafe olé coffee, ole, cafe, cafe au lait, beignets, donuts, spoon, new orleans, louisiana, café au laits, coffee cup, chicory coffee, chicory, french market, french chicory, gabriel raggio, gray food, gray coffee, gray sunset, gray news, gray table, gray chocolate, gray cup, gray new, gray market, gray breakfast"
+  },
+  "jalebi": {
+    "file": "jalebi.jpg",
+    "credit": "Vitamin on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/fresh-jalebi-indian-sweet-dessert-818316/",
+    "source": "pixabay",
+    "description": "fresh jalebi, indian sweet, dessert, indian, sweets, treats, food, snack, baked, pastry, celebration, delicious, tasty, indian sweet, indian sweet, indian sweet, indian sweet, indian sweet, indian"
+  },
+  "brigadeiros": {
+    "file": "brigadeiros.jpg",
+    "credit": "juliofrutuoso on Pixabay",
+    "creditUrl": "https://pixabay.com/photos/candy-brigadeiros-brigadier-3923528/",
+    "source": "pixabay",
+    "description": "candy, happy birthday, brigadeiros, brigadier, gastronomy, goodies, chocolate, sugarplum, granular, nutella, food, strawberry, dessert, cake, celebration, party"
+  },
+  "detroit-style-pizza": {
+    "file": "detroit-style-pizza.jpg",
+    "credit": "Renewableandalternativeenergy · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Detroit-style_pizza_corner.jpg",
+    "source": "commons",
+    "description": "Detroit-style pizza corner.jpg"
+  },
+  "manakish": {
+    "file": "manakish.jpg",
+    "credit": "Nsaum75 · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Israeli_zaatar_manakeesh.jpg",
+    "source": "commons",
+    "description": "Israeli zaatar manakeesh.jpg"
+  },
+  "garlic-knots": {
+    "file": "garlic-knots.jpg",
+    "credit": "Wayne Truong · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Garlic_knots.jpg",
+    "source": "commons",
+    "description": "Garlic knots.jpg"
+  },
+  "aloo-paratha": {
+    "file": "aloo-paratha.jpg",
+    "credit": "Gannu03 · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Aloo_Paratha_(96238).jpg",
+    "source": "commons",
+    "description": "Aloo Paratha (96238).jpg"
+  },
+  "po-boy": {
+    "file": "po-boy.jpg",
+    "credit": "Krista · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Frankie_%26_Johnny's_shrimp_po_boy_New_Orleans_2014.jpg",
+    "source": "commons",
+    "description": "Frankie & Johnny's shrimp po boy New Orleans 2014.jpg"
+  },
+  "muffuletta": {
+    "file": "muffuletta.jpg",
+    "credit": "rjv541 · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Muffuletta_centralgrocery_NOLA.jpg",
+    "source": "commons",
+    "description": "Muffuletta centralgrocery NOLA.jpg"
+  },
+  "meatball-sub": {
+    "file": "meatball-sub.jpg",
+    "credit": "PenPineapplePinniped · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Pizza_Meatball_sub%2C_Firehouse_Subs.jpg",
+    "source": "commons",
+    "description": "Pizza Meatball sub, Firehouse Subs.jpg"
+  },
+  "pastrami-on-rye": {
+    "file": "pastrami-on-rye.jpg",
+    "credit": "Arnold Gatilao · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Canter's_Pastrami_sandwich.jpg",
+    "source": "commons",
+    "description": "Canter's Pastrami sandwich.jpg"
+  },
+  "vada-pav": {
+    "file": "vada-pav.jpg",
+    "credit": "Sharvarism · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Crunchy_Crispy_Vada_pav.jpg",
+    "source": "commons",
+    "description": "Crunchy Crispy Vada pav.jpg"
+  },
+  "katsu-sando": {
+    "file": "katsu-sando.jpg",
+    "credit": "Kent Wang from London, United Kingdom · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Katsu_sando_(37686169334).jpg",
+    "source": "commons",
+    "description": "Katsu sando (37686169334).jpg"
+  },
+  "pasta-puttanesca": {
+    "file": "pasta-puttanesca.jpg",
+    "credit": "Popo le Chien · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Pasta_Puttanesca.jpg",
+    "source": "commons",
+    "description": "Pasta Puttanesca.jpg"
+  },
+  "linguine-alle-vongole": {
+    "file": "linguine-alle-vongole.jpg",
+    "credit": "Toniher · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Linguine-alle-vongole.jpg",
+    "source": "commons",
+    "description": "Linguine-alle-vongole.jpg"
+  },
+  "bucatini-allamatriciana": {
+    "file": "bucatini-allamatriciana.jpg",
+    "credit": "Rkolarsky · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Pasta_alla_amatriciana.jpg",
+    "source": "commons",
+    "description": "Pasta alla amatriciana.jpg"
+  },
+  "tortellini-in-brodo": {
+    "file": "tortellini-in-brodo.jpg",
+    "credit": "Nick.mon · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Tortellini_in_brodo_Bologna.jpg",
+    "source": "commons",
+    "description": "Tortellini in brodo Bologna.jpg"
+  },
+  "har-gow": {
+    "file": "har-gow.jpg",
+    "credit": "N509FZ · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Har_Gow_at_Canal_Luna_restaurant%2C_InterContinental_Guangzhou_Exhibition_Center_(20180923125523).jpg",
+    "source": "commons",
+    "description": "Har Gow at Canal Luna restaurant, InterContinental Guangzhou Exhibition Center (20180923125523).jpg"
+  },
+  "siu-mai": {
+    "file": "siu-mai.jpg",
+    "credit": "Andy Li · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Salt_and_Pepper_Siu_Mai_(8_pcs)_-_CK_Bistro_2025-03-04.jpg",
+    "source": "commons",
+    "description": "Salt and Pepper Siu Mai (8 pcs) - CK Bistro 2025-03-04.jpg"
+  },
+  "crab-rangoon": {
+    "file": "crab-rangoon.jpg",
+    "credit": "TheHungryDudes · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Crab_Rangoon_IMG_4105.jpg",
+    "source": "commons",
+    "description": "Crab Rangoon IMG 4105.jpg"
+  },
+  "singapore-noodles": {
+    "file": "singapore-noodles.jpg",
+    "credit": "Handrieu · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Singapore_Noodles.jpg",
+    "source": "commons",
+    "description": "Singapore Noodles.jpg"
+  },
+  "jajangmyeon": {
+    "file": "jajangmyeon.jpg",
+    "credit": "Emanuele Oddo · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Jajangmyeon_-_2019_-_Emanuele_Oddo.jpg",
+    "source": "commons",
+    "description": "Jajangmyeon - 2019 - Emanuele Oddo.jpg"
+  },
+  "bun-cha": {
+    "file": "bun-cha.jpg",
+    "credit": "Larry · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:B%C3%BAn_ch%E1%BA%A3_H%C3%A0ng_M%C3%A0nh.jpg",
+    "source": "commons",
+    "description": "Bún chả Hàng Mành.jpg"
+  },
+  "char-kway-teow": {
+    "file": "char-kway-teow.jpg",
+    "credit": "Wiki Farazi · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Char_kway_teow_(kuetiau_goreng)_of_Dann_Char_Kuey_Teow_at_Permatang_Tok_Jaya%2C_SPU_20240915_183329.jpg",
+    "source": "commons",
+    "description": "Char kway teow (kuetiau goreng) of Dann Char Kuey Teow at Permatang Tok Jaya, SPU 20240915 183329.jpg"
+  },
+  "drunken-noodles": {
+    "file": "drunken-noodles.jpg",
+    "credit": "Joy · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Drunken_noodles_(pad_kee_mao).jpg",
+    "source": "commons",
+    "description": "Drunken noodles (pad kee mao).jpg"
+  },
+  "mujaddara": {
+    "file": "mujaddara.jpg",
+    "credit": "Bazel · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Mujaddara.jpg",
+    "source": "commons",
+    "description": "Mujaddara.jpg"
+  },
+  "rice-and-peas": {
+    "file": "rice-and-peas.jpg",
+    "credit": "Xaymacan · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Jamaican_rice_and_peas_1.jpg",
+    "source": "commons",
+    "description": "Jamaican rice and peas 1.jpg"
+  },
+  "kedgeree": {
+    "file": "kedgeree.jpg",
+    "credit": "User:Justinc · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Kedgeree.jpg",
+    "source": "commons",
+    "description": "Kedgeree.jpg"
+  },
+  "loco-moco": {
+    "file": "loco-moco.jpg",
+    "credit": "California Cow from Seattle, USA · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Loco_moco_(32605169782).jpg",
+    "source": "commons",
+    "description": "Loco moco (32605169782).jpg"
+  },
+  "spam-musubi": {
+    "file": "spam-musubi.jpg",
+    "credit": "Ocdp · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Spam_musubi_001.jpg",
+    "source": "commons",
+    "description": "Spam musubi 001.jpg"
+  },
+  "aloo-gobi": {
+    "file": "aloo-gobi.jpg",
+    "credit": "Unknown · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Aloo_gobi.jpg",
+    "source": "commons",
+    "description": "Aloo gobi.jpg"
+  },
+  "malai-kofta": {
+    "file": "malai-kofta.jpg",
+    "credit": "Mrudit161187 · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Malai_Kofta_Curry.jpg",
+    "source": "commons",
+    "description": "Malai Kofta Curry.jpg"
+  },
+  "pav-bhaji": {
+    "file": "pav-bhaji.jpg",
+    "credit": "Solowomanwalks · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Pav_bhaji_SWW.jpg",
+    "source": "commons",
+    "description": "Pav bhaji SWW.jpg"
+  },
+  "goan-fish-curry": {
+    "file": "goan-fish-curry.jpg",
+    "credit": "Joegoaukfishcurry2 · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Goan_Fish_Curry_Rice.jpg",
+    "source": "commons",
+    "description": "Goan Fish Curry Rice.jpg"
+  },
+  "dal-makhani": {
+    "file": "dal-makhani.jpg",
+    "credit": "Barry Pousman from New York, NY · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Dal_Makhani_along_with_Naan.jpg",
+    "source": "commons",
+    "description": "Dal Makhani along with Naan.jpg"
+  },
+  "thai-red-curry": {
+    "file": "thai-red-curry.jpg",
+    "credit": "లలిత వూరకరణం · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Thai_Red_Curry_with_Rice.jpg",
+    "source": "commons",
+    "description": "Thai Red Curry with Rice.jpg"
+  },
+  "panang-curry": {
+    "file": "panang-curry.jpg",
+    "credit": "Takeaway · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Phanaeng_mu.jpg",
+    "source": "commons",
+    "description": "Phanaeng mu.jpg"
+  },
+  "bunny-chow": {
+    "file": "bunny-chow.jpg",
+    "credit": "Andy Li · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Bunny_Chow_with_Lamb_%26_Potato_-_African_Chow_2023-07-27.jpg",
+    "source": "commons",
+    "description": "Bunny Chow with Lamb & Potato - African Chow 2023-07-27.jpg"
+  },
+  "curry-goat": {
+    "file": "curry-goat.jpg",
+    "credit": "Leon Brocard from London, UK · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Curry_Goat_and_Rice.jpg",
+    "source": "commons",
+    "description": "Curry Goat and Rice.jpg"
+  },
+  "cassoulet": {
+    "file": "cassoulet.jpg",
+    "credit": "BrokenSphere · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Bowl_of_cassoulet.JPG",
+    "source": "commons",
+    "description": "Bowl of cassoulet.JPG"
+  },
+  "chicken-paprikash": {
+    "file": "chicken-paprikash.jpg",
+    "credit": "Hemant Bedekar · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Bratislava_-_Chicken_Paprikash.jpg",
+    "source": "commons",
+    "description": "Bratislava - Chicken Paprikash.jpg"
+  },
+  "cioppino": {
+    "file": "cioppino.jpg",
+    "credit": "Benoît Prieur · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Cioppino_from_Della_Terra_(Los_Angeles)%2C_July_2022_(1).jpg",
+    "source": "commons",
+    "description": "Cioppino from Della Terra (Los Angeles), July 2022 (1).jpg"
+  },
+  "chicken-cacciatore": {
+    "file": "chicken-cacciatore.jpg",
+    "credit": "Evan Joshua Swigart (TheCulinaryGeek) · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Chicken_cacciatore_(cropped).jpg",
+    "source": "commons",
+    "description": "Chicken cacciatore (cropped).jpg"
+  },
+  "sundubu-jjigae": {
+    "file": "sundubu-jjigae.jpg",
+    "credit": "by titanium22 · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Korean_stew-Sundubu_jjigae-05.jpg",
+    "source": "commons",
+    "description": "Korean stew-Sundubu jjigae-05.jpg"
+  },
+  "moqueca": {
+    "file": "moqueca.jpg",
+    "credit": "Melsj · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Moqueca_vegana.jpg",
+    "source": "commons",
+    "description": "Moqueca vegana.jpg"
+  },
+  "groundnut-stew": {
+    "file": "groundnut-stew.jpg",
+    "credit": "Aishablue · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Fish_in_groundnut_stew_plus_matooke_with_rice%2Csweetpotatoes_and_greens.jpg",
+    "source": "commons",
+    "description": "Fish in groundnut stew plus matooke with rice,sweetpotatoes and greens.jpg"
+  },
+  "caldo-verde": {
+    "file": "caldo-verde.jpg",
+    "credit": "Mateus Hidalgo · CC BY-SA 2.5 br · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Caldo_verde.jpg",
+    "source": "commons",
+    "description": "Caldo verde.jpg"
+  },
+  "avgolemono": {
+    "file": "avgolemono.jpg",
+    "credit": "Missvain · CC BY 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Avgolemono_-_Sarah_Stierch.jpg",
+    "source": "commons",
+    "description": "Avgolemono - Sarah Stierch.jpg"
+  },
+  "harira": {
+    "file": "harira.jpg",
+    "credit": "Miansari66 · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Harira..JPG",
+    "source": "commons",
+    "description": "Harira..JPG"
+  },
+  "ribollita": {
+    "file": "ribollita.jpg",
+    "credit": "Ithunn · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Ribollita_toscana.JPG",
+    "source": "commons",
+    "description": "Ribollita toscana.JPG"
+  },
+  "matzo-ball-soup": {
+    "file": "matzo-ball-soup.jpg",
+    "credit": "Andrevan · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Matzo_ball_soup_2.jpg",
+    "source": "commons",
+    "description": "Matzo ball soup 2.jpg"
+  },
+  "tortilla-soup": {
+    "file": "tortilla-soup.jpg",
+    "credit": "Wikiwrimo · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Tortilla_Soup.jpg",
+    "source": "commons",
+    "description": "Tortilla Soup.jpg"
+  },
+  "egusi-soup": {
+    "file": "egusi-soup.jpg",
+    "credit": "Okache Ruthie · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Egusi_Soup._Egusi_is_the_indegenious_soup_of_Nigerians._This_soup_is_named_after_the_thickener_-Egusi%3BEgusi_is_gotten_from_Fluted_Pumpkin_or_Melon_seeds..jpg",
+    "source": "commons",
+    "description": "Egusi Soup. Egusi is the indegenious soup of Nigerians. This soup is named after the thickener -Egusi;Egusi is gotten from Fluted Pumpkin or Melon seeds..jpg"
+  },
+  "picanha": {
+    "file": "picanha.jpg",
+    "credit": "\"Alexandre M. Plácido\" · Public domain · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Picanha.jpg",
+    "source": "commons",
+    "description": "Picanha.jpg"
+  },
+  "asado": {
+    "file": "asado.jpg",
+    "credit": "Maxd2 · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Asado_a.jpg",
+    "source": "commons",
+    "description": "Asado a.jpg"
+  },
+  "galbi": {
+    "file": "galbi.jpg",
+    "credit": "ayustety (a flickr user) · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Korean.food-Galbi-03.jpg",
+    "source": "commons",
+    "description": "Korean.food-Galbi-03.jpg"
+  },
+  "suya": {
+    "file": "suya.jpg",
+    "credit": "FischerFotos · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Suya_Seller.jpg",
+    "source": "commons",
+    "description": "Suya Seller.jpg"
+  },
+  "anticuchos": {
+    "file": "anticuchos.jpg",
+    "credit": "Ser Amantio di Nicolao · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Anticuchos_on_a_skewer%2C_Raices_Peruvian_Cuisine.jpg",
+    "source": "commons",
+    "description": "Anticuchos on a skewer, Raices Peruvian Cuisine.jpg"
+  },
+  "kebab-koobideh": {
+    "file": "kebab-koobideh.jpg",
+    "credit": "Amin · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Kebab_koobideh_persian.jpg",
+    "source": "commons",
+    "description": "Kebab koobideh persian.jpg"
+  },
+  "porchetta": {
+    "file": "porchetta.jpg",
+    "credit": "Andy Li · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Porchetta_-_One_Kitchen.jpg",
+    "source": "commons",
+    "description": "Porchetta - One Kitchen.jpg"
+  },
+  "chicken-kiev": {
+    "file": "chicken-kiev.jpg",
+    "credit": "Bev Sykes from Davis, CA, USA · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Chicken_Kiev_Flickr.jpg",
+    "source": "commons",
+    "description": "Chicken Kiev Flickr.jpg"
+  },
+  "milanesa": {
+    "file": "milanesa.jpg",
+    "credit": "Chris Woodrich · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Milanesa_de_pollo%2C_La_Hacienda%2C_Leamington%2C_Ontario%2C_2026-10-24_04.jpg",
+    "source": "commons",
+    "description": "Milanesa de pollo, La Hacienda, Leamington, Ontario, 2026-10-24 04.jpg"
+  },
+  "chicken-marsala": {
+    "file": "chicken-marsala.jpg",
+    "credit": "Evan Joshua Swigart (TheCulinaryGeek) from Chicago, Illinois, USA; hometown of Ames, Iowa, USA · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Flickr_preppybyday_4843102799--Chicken_marsala.jpg",
+    "source": "commons",
+    "description": "Flickr preppybyday 4843102799--Chicken marsala.jpg"
+  },
+  "nashville-hot-chicken": {
+    "file": "nashville-hot-chicken.jpg",
+    "credit": "Myspiritanimalisamanatee · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Nashville_Hot_Chicken_Drumsticks.jpg",
+    "source": "commons",
+    "description": "Nashville Hot Chicken Drumsticks.jpg"
+  },
+  "mongolian-beef": {
+    "file": "mongolian-beef.jpg",
+    "credit": "Craig Dugas from Bozeman, Montana, USA · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Mongolian_Beef_with_rice_and_noodles.jpg",
+    "source": "commons",
+    "description": "Mongolian Beef with rice and noodles.jpg"
+  },
+  "shaking-beef": {
+    "file": "shaking-beef.jpg",
+    "credit": "Alexandersingh9 · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Sachko_lok_lak_-_beef_lok_lak_th%E1%BB%8Bt_b%C3%B2_l%C3%BAc_l%E1%BA%AFc_Khmer_food.jpg",
+    "source": "commons",
+    "description": "Sachko lok lak - beef lok lak thịt bò lúc lắc Khmer food.jpg"
+  },
+  "birria-tacos": {
+    "file": "birria-tacos.jpg",
+    "credit": "T.Tseng · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Birria_tacos_at_Teddy's_Red_Tacos_in_Venice%2C_California.jpg",
+    "source": "commons",
+    "description": "Birria tacos at Teddy's Red Tacos in Venice, California.jpg"
+  },
+  "carne-asada-tacos": {
+    "file": "carne-asada-tacos.jpg",
+    "credit": "T.Tseng · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Carne_asada_taco.jpg",
+    "source": "commons",
+    "description": "Carne asada taco.jpg"
+  },
+  "chimichanga": {
+    "file": "chimichanga.jpg",
+    "credit": "jeffreyw · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Chimichangas.jpg",
+    "source": "commons",
+    "description": "Chimichangas.jpg"
+  },
+  "breakfast-burrito": {
+    "file": "breakfast-burrito.jpg",
+    "credit": "Cajsa Lilliehook from Portland · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Bacon_Kale_Breakfast_Burrito_(8429773809).jpg",
+    "source": "commons",
+    "description": "Bacon Kale Breakfast Burrito (8429773809).jpg"
+  },
+  "tostadas": {
+    "file": "tostadas.jpg",
+    "credit": "Dahyana Yasada R. R. · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Tostadas_de_Frijol.jpg",
+    "source": "commons",
+    "description": "Tostadas de Frijol.jpg"
+  },
+  "pupusas": {
+    "file": "pupusas.jpg",
+    "credit": "Ll1324 · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Pupusas_olocuilta_el_salvador_2012.jpg",
+    "source": "commons",
+    "description": "Pupusas olocuilta el salvador 2012.jpg"
+  },
+  "jalapeno-poppers": {
+    "file": "jalapeno-poppers.jpg",
+    "credit": "Drpoulette from Mexico City, Mexico · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Jalape%C3%B1o_poppers.jpg",
+    "source": "commons",
+    "description": "Jalapeño poppers.jpg"
+  },
+  "coconut-shrimp": {
+    "file": "coconut-shrimp.jpg",
+    "credit": "Stephanie Richard · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Coconut_shrimp_with_a_sweet_chili_sauce.jpg",
+    "source": "commons",
+    "description": "Coconut shrimp with a sweet chili sauce.jpg"
+  },
+  "jianbing": {
+    "file": "jianbing.jpg",
+    "credit": "Alwaleed Khaled · CC BY 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Jianbing_on_plate.jpg",
+    "source": "commons",
+    "description": "Jianbing on plate.jpg"
+  },
+  "haemul-pajeon": {
+    "file": "haemul-pajeon.jpg",
+    "credit": "USAG- Humphreys · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Haemul-pajeon_making.jpg",
+    "source": "commons",
+    "description": "Haemul-pajeon making.jpg"
+  },
+  "dutch-baby": {
+    "file": "dutch-baby.jpg",
+    "credit": "Taylorderek · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Cast_iron_dutch_baby_on_oven_mitts.jpg",
+    "source": "commons",
+    "description": "Cast iron dutch baby on oven mitts.jpg"
+  },
+  "frittata": {
+    "file": "frittata.jpg",
+    "credit": "Andy Li · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Frittata_-_Bam's_Kitchen_2024-04-02.jpg",
+    "source": "commons",
+    "description": "Frittata - Bam's Kitchen 2024-04-02.jpg"
+  },
+  "egg-foo-young": {
+    "file": "egg-foo-young.jpg",
+    "credit": "Ceeseven · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Egg_Foo_Young_in_Hong_Kong.jpg",
+    "source": "commons",
+    "description": "Egg Foo Young in Hong Kong.jpg"
+  },
+  "nicoise-salad": {
+    "file": "nicoise-salad.jpg",
+    "credit": "cyclonebill from Copenhagen, Denmark · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Salade_ni%C3%A7oise_(7545098258).jpg",
+    "source": "commons",
+    "description": "Salade niçoise (7545098258).jpg"
+  },
+  "fattoush": {
+    "file": "fattoush.jpg",
+    "credit": "Unknown · Public domain · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Fattoush.JPG",
+    "source": "commons",
+    "description": "Fattoush.JPG"
+  },
+  "pico-de-gallo": {
+    "file": "pico-de-gallo.jpg",
+    "credit": "Lord Laitinen · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Pico_de_Gallo_Homemade_2014.JPG",
+    "source": "commons",
+    "description": "Pico de Gallo Homemade 2014.JPG"
+  },
+  "steak-tartare": {
+    "file": "steak-tartare.jpg",
+    "credit": "Dr. Bernd Gross · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Steak_Tartare_in_Dresden.jpg",
+    "source": "commons",
+    "description": "Steak Tartare in Dresden.jpg"
+  },
+  "gambas-al-ajillo": {
+    "file": "gambas-al-ajillo.jpg",
+    "credit": "Juan Emilio Prades Bel · CC BY 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Gambas_al_ajillo%2C_2024.jpg",
+    "source": "commons",
+    "description": "Gambas al ajillo, 2024.jpg"
+  },
+  "sole-meuniere": {
+    "file": "sole-meuniere.jpg",
+    "credit": "Jay Cross from Berkeley, California, US · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Sole_meuniere_(4689490702).jpg",
+    "source": "commons",
+    "description": "Sole meuniere (4689490702).jpg"
+  },
+  "steak-and-kidney-pie": {
+    "file": "steak-and-kidney-pie.jpg",
+    "credit": "Hellahulla (Hellahulla) · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Round_steak_and_kidney_pie_-_3.JPG",
+    "source": "commons",
+    "description": "Round steak and kidney pie - 3.JPG"
+  },
+  "fish-pie": {
+    "file": "fish-pie.jpg",
+    "credit": "Andy Li · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Bill's_Fish_Pie_-_Bill's%2C_Lewes_2026-07-03.jpg",
+    "source": "commons",
+    "description": "Bill's Fish Pie - Bill's, Lewes 2026-07-03.jpg"
+  },
+  "green-bean-casserole": {
+    "file": "green-bean-casserole.jpg",
+    "credit": "Rick Kimpel from Spring, TX, USA · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Green_bean_casserole.jpg",
+    "source": "commons",
+    "description": "Green bean casserole.jpg"
+  },
+  "pastitsio": {
+    "file": "pastitsio.jpg",
+    "credit": "Sam Bailey · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Pastitsio_homemade.jpg",
+    "source": "commons",
+    "description": "Pastitsio homemade.jpg"
+  },
+  "mofongo": {
+    "file": "mofongo.jpg",
+    "credit": "Diane · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Mofongo.jpg",
+    "source": "commons",
+    "description": "Mofongo.jpg"
+  },
+  "colcannon": {
+    "file": "colcannon.jpg",
+    "credit": "TheCulinaryGeek from Chicago, USA · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Colcannon_(4438873634)_(2).jpg",
+    "source": "commons",
+    "description": "Colcannon (4438873634) (2).jpg"
+  },
+  "imam-bayildi": {
+    "file": "imam-bayildi.jpg",
+    "credit": "AlexanderVanLoon · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:%C4%B0mam_bay%C4%B1ld%C4%B1_AvL.JPG",
+    "source": "commons",
+    "description": "İmam bayıldı AvL.JPG"
+  },
+  "red-velvet-cake": {
+    "file": "red-velvet-cake.jpg",
+    "credit": "Hennem08 · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Red_Velvet_Cake_Waldorf_Astoria.jpg",
+    "source": "commons",
+    "description": "Red Velvet Cake Waldorf Astoria.jpg"
+  },
+  "lamingtons": {
+    "file": "lamingtons.jpg",
+    "credit": "jules · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Lamingtons-2.jpg",
+    "source": "commons",
+    "description": "Lamingtons-2.jpg"
+  },
+  "chocolate-lava-cake": {
+    "file": "chocolate-lava-cake.jpg",
+    "credit": "sanctumsolitude · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Chocolate_lava_cake.jpg",
+    "source": "commons",
+    "description": "Chocolate lava cake.jpg"
+  },
+  "sticky-toffee-pudding": {
+    "file": "sticky-toffee-pudding.jpg",
+    "credit": "Andy Li · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Sticky_Toffee_Pudding_-_The_Roundhill_Pub_2023-09-24.jpg",
+    "source": "commons",
+    "description": "Sticky Toffee Pudding - The Roundhill Pub 2023-09-24.jpg"
+  },
+  "trifle": {
+    "file": "trifle.jpg",
+    "credit": "--Ben 18:33, 25 March 2006 (UTC) · Public domain · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Trifle.jpg",
+    "source": "commons",
+    "description": "Trifle.jpg"
+  },
+  "pecan-pie": {
+    "file": "pecan-pie.jpg",
+    "credit": "Joe Hakim · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Pecan_pie%2C_November_2010.jpg",
+    "source": "commons",
+    "description": "Pecan pie, November 2010.jpg"
+  },
+  "tarte-tatin": {
+    "file": "tarte-tatin.jpg",
+    "credit": "Franck Chicot from Nantes, France · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Closeup_of_tarte_tatin_(13513714244).jpg",
+    "source": "commons",
+    "description": "Closeup of tarte tatin (13513714244).jpg"
+  },
+  "halo-halo": {
+    "file": "halo-halo.jpg",
+    "credit": "bingbing from Quezon City, Philippines · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Halo_halo1.jpg",
+    "source": "commons",
+    "description": "Halo halo1.jpg"
+  },
+  "dorayaki": {
+    "file": "dorayaki.jpg",
+    "credit": "Ocdp · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Dorayaki_001_(3).jpg",
+    "source": "commons",
+    "description": "Dorayaki 001 (3).jpg"
+  },
+  "scallion-pancakes": {
+    "file": "scallion-pancakes.jpg",
+    "credit": "Fumikas Sagisavas · CC0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Scallion_pancakes.jpg",
+    "source": "commons",
+    "description": "Scallion pancakes.jpg"
+  },
+  "khao-soi": {
+    "file": "khao-soi.jpg",
+    "credit": "Takeaway · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Khao_soi_Chiang_Mai.jpg",
+    "source": "commons",
+    "description": "Khao soi Chiang Mai.jpg"
+  },
+  "tahdig": {
+    "file": "tahdig.jpg",
+    "credit": "Nizzan Cohen · CC BY 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Tahdig_rice_with_B2_picture.jpg",
+    "source": "commons",
+    "description": "Tahdig rice with B2 picture.jpg"
+  },
+  "peri-peri-chicken": {
+    "file": "peri-peri-chicken.jpg",
+    "credit": "CNEcija12345 · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Peri-Peri_Chicken_dish.jpg",
+    "source": "commons",
+    "description": "Peri-Peri Chicken dish.jpg"
+  },
+  "chili-crab": {
+    "file": "chili-crab.jpg",
+    "credit": "Dekcuf · CC BY-SA 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Chilli_crab-01.jpg",
+    "source": "commons",
+    "description": "Chilli crab-01.jpg"
+  },
+  "tourtiere": {
+    "file": "tourtiere.jpg",
+    "credit": "George Showman · CC BY 2.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Tourtiere_table.jpg",
+    "source": "commons",
+    "description": "Tourtiere table.jpg"
+  },
+  "carnitas": {
+    "file": "carnitas.jpg",
+    "credit": "Photo.MarioVG · CC BY-SA 4.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Tacos_de_Carnitas_con_nopales.jpg",
+    "source": "commons",
+    "description": "Tacos de Carnitas con nopales.jpg"
+  },
+  "french-dip": {
+    "file": "french-dip.jpg",
+    "credit": "Vranak · CC BY-SA 3.0 · Wikimedia Commons",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Roast_Beef_Dip_lunch.JPG",
+    "source": "commons",
+    "description": "Roast Beef Dip lunch.JPG"
   }
 }
