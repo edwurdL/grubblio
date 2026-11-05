@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
-import type { DishSummary, GameState } from '../../shared/types';
+import type { AccountInfo, DishSummary, GameState } from '../../shared/types';
+import { getAccount, maybeSignedIn } from './account';
 import { fetchDaily, fetchPractice, fetchState } from './api';
+import AccountModal from './components/AccountModal';
 import { celebrate, takeDamage } from './screenFx';
 import GuessBoard, { Legend } from './components/GuessBoard';
 import GuessInput from './components/GuessInput';
@@ -70,6 +72,24 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showCredits, setShowCredits] = useState(false);
+  const [showAccount, setShowAccount] = useState(false);
+  /** The signed-in player, or null when signed out. */
+  const [account, setAccount] = useState<AccountInfo | null>(null);
+  useEffect(() => {
+    // Only browsers that have signed in before ask the server.
+    if (maybeSignedIn()) getAccount().then(setAccount, () => {});
+  }, []);
+
+  /** Signing in or out from the account dialog. */
+  const onAccount = (next: AccountInfo | null) => {
+    // Just signed in: replay the games already on this device so they're
+    // saved to the account (the server records any game sent by a signed-in player).
+    if (next && !account) {
+      const games = [load(DAILY_KEY), load(SAVE_KEY)].filter((s) => s?.guesses.length) as Saved[];
+      for (const s of games) fetchState(s).catch(() => {});
+    }
+    setAccount(next);
+  };
   /** "Take a break": everything but the top bar fades away to show the restaurant. */
   const [onBreak, setOnBreak] = useState(false);
   useEffect(() => {
@@ -174,6 +194,10 @@ export default function App() {
     setShowCredits(true);
     sound.play('pageTurn');
   };
+  const openAccount = () => {
+    setShowAccount(true);
+    sound.play('pageTurn');
+  };
 
   const guessedIds = new Set(game?.guesses.map((g) => g.dish.id));
   const remaining = game ? game.maxGuesses - game.guesses.length : 0;
@@ -194,6 +218,7 @@ export default function App() {
             <button className="ghost" aria-pressed={onBreak} onClick={() => setOnBreak(!onBreak)}>
               {onBreak ? 'Back to it' : 'Take a break'}
             </button>
+            <button className="ghost" onClick={openAccount}>{account ? 'My games' : 'Sign in'}</button>
             <button className="ghost credits-btn" onClick={openCredits}>Credits</button>
             {/* Click to mute; hover (or focus) for a volume slider. */}
             <div className="sound-control">
@@ -262,6 +287,9 @@ export default function App() {
       <div className="damage-flash" ref={flashRef} aria-hidden />
       {showHelp && <HelpModal onClose={() => setShowHelp(false)} onCredits={openCredits} />}
       {showCredits && <CreditsModal onClose={() => setShowCredits(false)} />}
+      {showAccount && (
+        <AccountModal account={account} today={today()} onAccount={onAccount} onClose={() => setShowAccount(false)} />
+      )}
     </div>
   );
 }

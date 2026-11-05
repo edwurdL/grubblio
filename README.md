@@ -66,6 +66,36 @@ Right-answer sound: [Bite (Cartoon Style)](https://freesound.org/s/353067/) by [
 
 Game-over sound: [Glass](https://freesound.org/s/536763/) by [egomassive](https://freesound.org/people/egomassive/), released under [CC0](https://creativecommons.org/publicdomain/zero/1.0/). It plays when the last guess is wrong, and is also listed in the in-game Credits.
 
+## Accounts
+
+Players can make an account to keep their game history, split into **Daily dish** (with streaks) and **Rush hour**. Playing doesn't need one. Accounts use [Better Auth](https://better-auth.com) inside the Worker ([server/auth.ts](server/auth.ts)). Users, sessions and login codes live in the same D1 database ([migrations/0002_auth.sql](migrations/0002_auth.sql)), and games in `plays` ([server/plays.ts](server/plays.ts)).
+
+- **Sign up:** name + email → we email a 6-digit code → the account is created only when the code is entered → the player picks a password. Better Auth's plain email-and-password sign-up is switched off, because it would create the account before the email is proven.
+- **Sign in** with email + password. **Forgot password** emails a code that sets a new one.
+- **History:** every guess a signed-in player makes records that game. A recorded game can only gain guesses, and a won or lost game never changes, so a loss can't be overwritten after seeing the answer. On sign-in, games already played on that device are saved to the account too.
+- **Limits:** code emails and sign-in attempts are rate-limited per IP, counted in D1. Codes expire after 10 minutes and allow 5 tries.
+
+In local dev, codes are printed in the `npm run dev` terminal instead of emailed (look for `[dev] Grubblio sign-in code`).
+
+### Setting up the code emails (Resend)
+
+Codes are sent with [Resend](https://resend.com) ([server/email.ts](server/email.ts)). Its free plan (about 3,000 emails a month, 100 a day; check their pricing page) is plenty to start.
+
+1. Sign up at resend.com, then go to **Domains → Add domain** and enter `grubbl.io`.
+2. Resend lists a few DNS records (a DKIM `TXT`, plus `MX` and `TXT` records for SPF on a `send` subdomain). Add them in **Cloudflare → DNS** for grubbl.io, set to **DNS only** (grey cloud). If Resend offers to add them to Cloudflare for you, that works too.
+3. Recommended: also add a DMARC record: `TXT` named `_dmarc` with value `v=DMARC1; p=none;`. It improves inbox delivery.
+4. Click **Verify** in Resend and wait for the domain to show *Verified* (usually minutes).
+5. **API keys → Create API key** with *Sending access*, limited to grubbl.io. Then store it and an auth secret in the Worker:
+   ```bash
+   npx wrangler secret put RESEND_API_KEY      # paste the key
+   npx wrangler secret put BETTER_AUTH_SECRET  # paste the output of: openssl rand -base64 32
+   ```
+6. Emails come from `EMAIL_FROM` in [wrangler.jsonc](wrangler.jsonc) (`Grubblio <login@grubbl.io>`). No mailbox is needed for that address.
+
+The Worker won't serve sign-in without `BETTER_AUTH_SECRET` in production. To test real emails locally, put `RESEND_API_KEY=…` in `.dev.vars`.
+
+After upgrading `better-auth` or changing its settings, run `npm run auth:schema`. If it prints SQL, save it as the next migration (`migrations/000N_….sql`).
+
 ## Deploy (Cloudflare Workers)
 
 One Worker serves everything: the built site and dish photos as static assets, and `/api/*` from [server/index.ts](server/index.ts). It's configured in [wrangler.jsonc](wrangler.jsonc), including the `grubbl.io` and `www.grubbl.io` custom domains. Cloudflare creates their DNS records and certificates on the first deploy.
@@ -77,7 +107,7 @@ One Worker serves everything: the built site and dish photos as static assets, a
    - **Build command:** `npm run fetch-images -- --restore && npm run build`
    - **Deploy command:** `npx wrangler d1 migrations apply grubblio --remote && npx wrangler deploy`. This applies any new migrations before each deploy.
    - **Build variable:** `PIXABAY_API_KEY`. The build restores the stock photos that aren't committed (see Photos above). Without it, those dishes show their emoji.
-5. After the first deploy, open the Worker's **Settings → Variables and Secrets** and add a **secret** named `PUZZLE_SECRET` set to a long random string (`openssl rand -base64 32`). It encrypts practice puzzle ids, so the answer can't be read out of them. Without it, the Worker falls back to a dev key that's public in this repo.
+5. After the first deploy, open the Worker's **Settings → Variables and Secrets** and add a **secret** named `PUZZLE_SECRET` set to a long random string (`openssl rand -base64 32`). It encrypts practice puzzle ids, so the answer can't be read out of them. Without it, the Worker falls back to a dev key that's public in this repo. Add `BETTER_AUTH_SECRET` and `RESEND_API_KEY` the same way (see [Accounts](#accounts)).
 
 Every push to the main branch then redeploys. To deploy from your machine instead: `npx wrangler login`, then `npm run deploy`.
 
@@ -92,8 +122,12 @@ server/game.ts         comparison, closeness score, ingredient unlocks
 server/index.ts        API (Cloudflare Worker)
 server/daily.ts        daily puzzles: picking, D1 lookup, date checks, cache
 server/practice.ts     encrypted, stateless practice puzzle ids
-migrations/            D1 schema (the puzzles schedule)
+server/auth.ts         accounts (Better Auth): sign-up by emailed code, passwords
+server/email.ts        sends login codes through Resend
+server/plays.ts        signed-in players' game history and stats
+migrations/            D1 schema: puzzles, accounts, game history
 scripts/schedule.ts    hand-picks daily answers (optional)
+scripts/auth-schema.ts SQL for Better Auth's tables (npm run auth:schema)
 client/src/            React app (Vite)
 index.html             Vite entry page
 scripts/fetch-images.ts photo download / --restore
@@ -104,9 +138,12 @@ The server is stateless per player. The client keeps its list of guessed dish id
 
 ## Not covered by this prototype (needed for production)
 
-- **Dish data in a database.** Dishes are still in code (`server/dishes.ts`). That's fine while developers edit them; move them to D1 once non-developers need an editor. A `plays` table for stats would also go in D1.
+- **Dish data in a database.** Dishes are still in code (`server/dishes.ts`). That's fine while developers edit them; move them to D1 once non-developers need an editor. 
 - **Reviewing upcoming answers.** Answers are picked on the day, so there's nothing to review ahead of time. A daily Cron Trigger running the `--days` logic would keep a month picked ahead for review.
 - **Anti-cheat.** Because the server is stateless, a client can replay invented guess lists to reach the reveal. Server-side sessions, or signed state tokens, would fix this.
 - **Image curation and hosting.** Someone should review each photo by eye, and production should serve them from a CDN. A paid library such as Adobe Stock needs a purchased licence for each image.
 - **Content.** A larger dish list (the prototype has about 230), editorial review of ingredient order and difficulty for each answer, and playtesting.
-- **Accounts and stats** (streaks, guess distribution), if wanted.
+- **Social sign-in** (Google, Apple, Facebook). Better Auth supports them under `socialProviders` in server/auth.ts. Each needs a developer app with that company and a privacy policy page; Apple needs a paid developer account.
+- **Bot protection on sign-up.** Code emails are rate-limited per IP, but a captcha such as Cloudflare Turnstile (Better Auth's `captcha` plugin) would stop scripted sign-ups from using up the email quota.
+- **Account settings.** Changing name, email or password while signed in, and deleting an account, aren't in the UI yet.
+- **Privacy policy.** Needed now that the site stores emails, and required by every social sign-in provider.

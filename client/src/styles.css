@@ -511,6 +511,53 @@ main > .board-wrap { width: 100%; }
 .credit-list li:first-child { border-top: 0; }
 .credit-use { display: block; font: 0.62rem/1.6 var(--font-display); text-transform: uppercase; color: var(--muted); }
 .modal > .primary:last-child { margin-top: 18px; }
+
+/* ── Account dialog ──────────────────────────────────── */
+.auth-form { display: grid; gap: 14px; margin-top: 14px; }
+.auth-form > .primary { justify-self: start; }
+.auth-field { display: grid; gap: 6px; }
+.auth-field > span { font: 700 0.7rem/1 var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.auth-field input {
+  min-width: 0; font: 24px/1 var(--font-mono); padding: 8px 12px;
+  border: 3px solid var(--ink); border-radius: 0; background: var(--paper-2); color: var(--text); box-shadow: var(--hard);
+}
+.auth-field input:focus { outline: none; box-shadow: 4px 4px 0 0 var(--yellow); }
+.auth-field .code-input { font-size: 34px; letter-spacing: 0.3em; max-width: 12ch; }
+.auth-error, .auth-info { margin: 0 !important; }
+.auth-error { color: var(--red); font-weight: 500; }
+.auth-info { color: var(--muted); }
+.auth-links { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 16px; }
+button.link {
+  background: none; border: 0; box-shadow: none; padding: 0; color: inherit;
+  font-size: 15px; text-decoration: underline; text-underline-offset: 3px;
+}
+button.link:not(:disabled):hover, button.link:not(:disabled):active { transform: none; box-shadow: none; color: var(--red); }
+
+.tabs { display: flex; gap: 10px; margin: 16px 0 14px; }
+.tabs button { flex: 1; padding: 7px 10px; font-size: 15px; }
+.tabs button[aria-selected='true'] { background: var(--yellow); color: var(--yellow-ink); }
+
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 8px; text-align: center; }
+.stat { display: grid; gap: 2px; padding: 8px 4px; background: var(--paper-2); border: 3px solid var(--ink); }
+.stat-num { font: 700 1.5rem/1 var(--font-display); }
+.stat-label { font: 0.6rem/1.4 var(--font-display); text-transform: uppercase; color: var(--muted); }
+
+.dist { display: grid; gap: 4px; }
+.dist-row { display: grid; grid-template-columns: 14px 1fr; gap: 8px; align-items: center; font: 20px/1 var(--font-mono); }
+.dist-bar {
+  justify-self: start; text-align: right; padding: 1px 6px;
+  background: var(--paper-blank); color: var(--text);
+}
+.dist-bar.some { background: var(--exact); color: var(--exact-ink); }
+
+.game-list { list-style: none; padding: 0 !important; margin: 0; }
+.game-list li {
+  display: grid; grid-template-columns: 4.5em 1fr auto; gap: 10px; align-items: center;
+  padding: 6px 0; border-top: 2px dashed var(--paper-blank); margin: 0 !important;
+}
+.game-when { font: 20px/1 var(--font-mono); color: var(--muted); }
+.game-dish { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.game-result { padding: 3px 8px; font-size: 13px; white-space: nowrap; }
 .help-tiles { display: grid; grid-template-columns: 120px 1fr; gap: 12px 14px; align-items: center; margin: 14px 0; }
 .help-tiles .cell { min-height: 40px; animation: none; flex-direction: row; gap: 4px; }
 

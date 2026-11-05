@@ -3,6 +3,8 @@
   "name": "grubblio",
   "main": "server/index.ts",
   "compatibility_date": "2026-10-23",
+  // Better Auth uses node:async_hooks.
+  "compatibility_flags": ["nodejs_compat"],
   // The built client and /images/* are static assets; only the API runs the Worker.
   "assets": {
     "binding": "ASSETS",
@@ -18,7 +20,12 @@
       "migrations_dir": "migrations"
     }
   ],
-  // PUZZLE_SECRET is a secret: `npx wrangler secret put PUZZLE_SECRET`.
+  "vars": {
+    // Sender for login codes; grubbl.io must be verified in Resend.
+    "EMAIL_FROM": "Grubblio <login@grubbl.io>"
+  },
+  // Secrets (`npx wrangler secret put <NAME>`): PUZZLE_SECRET, BETTER_AUTH_SECRET,
+  // RESEND_API_KEY. Locally, put them in .dev.vars (or leave them out in dev).
   "routes": [
     { "pattern": "grubbl.io", "custom_domain": true },
     { "pattern": "www.grubbl.io", "custom_domain": true }

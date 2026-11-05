@@ -71,3 +71,51 @@ export interface StateRequest {
   puzzleId: string;
   guesses: string[];
 }
+
+// ── Accounts and game history ────────────────────────────
+
+/** The signed-in player, from GET /api/account. */
+export interface AccountInfo {
+  name: string;
+  email: string;
+  /** False until the player sets a password after signing up with a code. */
+  hasPassword: boolean;
+}
+
+export type PlayMode = 'daily' | 'rush';
+
+export interface HistoryGame {
+  /** A date (YYYY-MM-DD) for a Daily dish; an opaque id for Rush hour. */
+  puzzleId: string;
+  status: GameStatus;
+  guesses: number;
+  /** ms since epoch. */
+  startedAt: number;
+  /** Only for finished games. */
+  answer: DishSummary | null;
+}
+
+export interface ModeStats {
+  /** Finished games. */
+  played: number;
+  won: number;
+  /** 0–100. */
+  winRate: number;
+  /** Wins by guess count: index 0 = solved in 1 guess. */
+  distribution: number[];
+  /** Daily dish only: consecutive days won. */
+  currentStreak?: number;
+  maxStreak?: number;
+}
+
+export interface ModeHistory {
+  stats: ModeStats;
+  /** Newest first. */
+  games: HistoryGame[];
+}
+
+/** GET /api/history */
+export interface GameHistory {
+  daily: ModeHistory;
+  rush: ModeHistory;
+}
