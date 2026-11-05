@@ -21,6 +21,9 @@ import { useSound } from './useSound';
 const SAVE_KEY = 'grubblio:current';
 /** The latest daily puzzle's progress, kept apart so a practice game can't overwrite it. */
 const DAILY_KEY = 'grubblio:daily';
+/** A Rush hour with at least one guess and no result yet. It must be finished before another is dealt. */
+const RUSH_KEY = 'grubblio:rush';
+const FINISH_FIRST = 'Finish this Rush hour order before taking a new one.';
 
 interface Saved {
   puzzleId: string;
@@ -51,10 +54,38 @@ function save(state: GameState) {
   try {
     const saved: Saved = { puzzleId: state.puzzleId, guesses: state.guesses.map((g) => g.dish.id), savedOn: today() };
     localStorage.setItem(SAVE_KEY, JSON.stringify(saved));
-    if (isDaily(state.puzzleId)) localStorage.setItem(DAILY_KEY, JSON.stringify(saved));
+    if (isDaily(state.puzzleId)) {
+      localStorage.setItem(DAILY_KEY, JSON.stringify(saved));
+    } else if (state.status === 'playing' && state.guesses.length) {
+      localStorage.setItem(RUSH_KEY, JSON.stringify(saved));
+    } else if (state.status !== 'playing' && load(RUSH_KEY)?.puzzleId === state.puzzleId) {
+      localStorage.removeItem(RUSH_KEY);
+    }
   } catch {
     // Storage unavailable (private mode etc.) — progress just won't persist.
   }
+}
+
+/**
+ * Rush hour: the unfinished one if there is one, otherwise a new dish. For a
+ * signed-in player the server also hands back an unfinished game from another
+ * device before dealing a new one.
+ */
+function openRush(): Promise<GameState> {
+  const saved = load(RUSH_KEY);
+  if (!saved) return fetchPractice();
+  return fetchState(saved)
+    .then((state) => {
+      if (state.status === 'playing') return state;
+      // Finished elsewhere in the meantime: forget it and deal a new one.
+      localStorage.removeItem(RUSH_KEY);
+      return fetchPractice();
+    })
+    .catch(() => {
+      // The id no longer opens (e.g. the server's secret changed): start over.
+      localStorage.removeItem(RUSH_KEY);
+      return fetchPractice();
+    });
 }
 
 /** Today's daily puzzle, with any guesses already made on it. */
@@ -69,6 +100,8 @@ function openDaily(): Promise<GameState> {
 export default function App() {
   const [game, setGame] = useState<GameState | null>(null);
   const [error, setError] = useState<string | null>(null);
+  /** A friendly heads-up, e.g. why Rush hour reopened an old order. */
+  const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showCredits, setShowCredits] = useState(false);
@@ -121,6 +154,7 @@ export default function App() {
     if (!game || busy) return;
     setBusy(true);
     setError(null);
+    setNotice(null);
     try {
       const next = await fetchState({ puzzleId: game.puzzleId, guesses: [...game.guesses.map((g) => g.dish.id), dish.id] });
       apply(next);
@@ -138,16 +172,23 @@ export default function App() {
     }
   };
 
-  /** A new practice game, or back to today's daily (keeping its guesses). */
+  /** A Rush hour (resuming an unfinished one first), or back to today's daily (keeping its guesses). */
   const newGame = async (mode: 'practice' | 'daily') => {
     // Picking a game from the top bar ends a break; no need for "Back to it" first.
     setOnBreak(false);
-    // Already on today's Daily dish: leave the ticket hanging. (Rush hour
-    // always deals a new dish, so players can swap prompts.)
-    if (mode === 'daily' && game?.puzzleId === today()) return;
     setError(null);
+    setNotice(null);
+    // Already on today's Daily dish: leave the ticket hanging.
+    if (mode === 'daily' && game?.puzzleId === today()) return;
+    // A Rush hour that's been guessed at must be finished before another is dealt.
+    const onUnfinishedRush = game && !isDaily(game.puzzleId) && game.status === 'playing' && game.guesses.length > 0;
+    if (mode === 'practice' && onUnfinishedRush) {
+      setNotice(FINISH_FIRST);
+      return;
+    }
     try {
-      const state = await (mode === 'practice' ? fetchPractice() : openDaily());
+      const state = await (mode === 'practice' ? openRush() : openDaily());
+      if (mode === 'practice' && state.guesses.length) setNotice(FINISH_FIRST);
       apply(state);
       setRound((r) => r + 1);
       sound.play('pageTurn');
@@ -247,6 +288,7 @@ export default function App() {
 
         <main>
           {error && <p className="error" role="alert">{error}</p>}
+          {notice && !error && <p className="notice" role="status">{notice}</p>}
           {!game ? (
             <p className="loading">Setting the table…</p>
           ) : (

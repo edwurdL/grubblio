@@ -6,7 +6,7 @@ import { createAuth, type Auth, type AuthEnv } from './auth';
 import { dailyAnswerId, isDailyId, isReleased, isoDate } from './daily';
 import { DISHES, DISH_BY_ID, type Dish } from './dishes';
 import { buildState, GuessError, MAX_GUESSES, summarize } from './game';
-import { loadHistory, recordPlay } from './plays';
+import { loadHistory, recordPlay, unfinishedRush } from './plays';
 import { openPracticeId, sealPracticeId } from './practice';
 import { resolve } from './resolve';
 
@@ -80,6 +80,13 @@ async function api(request: Request, url: URL, env: Env, ctx: Ctx): Promise<Resp
 
   if (route === 'GET /api/puzzle') {
     if (url.searchParams.get('mode') === 'practice') {
+      // A signed-in player gets back their oldest unfinished Rush hour (from
+      // any device) before a new dish is dealt.
+      const user = await getUser();
+      const open = user && (await unfinishedRush(env.DB, user.id));
+      const openDish = open && DISH_BY_ID.get(open.dishId);
+      if (open && openDish) return json(buildState(open.puzzleId, PRACTICE_LABEL, openDish, open.guesses));
+
       const answer = DISHES[Math.floor(Math.random() * DISHES.length)];
       const id = await sealPracticeId(answer.id, env.PUZZLE_SECRET ?? DEV_SECRET);
       return json(buildState(id, PRACTICE_LABEL, answer, []));

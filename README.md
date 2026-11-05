@@ -142,7 +142,7 @@ The server is stateless per player. The client keeps its list of guessed dish id
 - **Reviewing upcoming answers.** Answers are picked on the day, so there's nothing to review ahead of time. A daily Cron Trigger running the `--days` logic would keep a month picked ahead for review.
 - **Anti-cheat.** Because the server is stateless, a client can replay invented guess lists to reach the reveal. Server-side sessions, or signed state tokens, would fix this.
 - **Image curation and hosting.** Someone should review each photo by eye, and production should serve them from a CDN. A paid library such as Adobe Stock needs a purchased licence for each image.
-- **Content.** A larger dish list (the prototype has about 230), editorial review of ingredient order and difficulty for each answer, and playtesting.
+- **Content.** More dishes (there are about 430), editorial review of ingredient order and difficulty for each answer, and playtesting.
 - **Social sign-in** (Google, Apple, Facebook). Better Auth supports them under `socialProviders` in server/auth.ts. Each needs a developer app with that company and a privacy policy page; Apple needs a paid developer account.
 - **Bot protection on sign-up.** Code emails are rate-limited per IP, but a captcha such as Cloudflare Turnstile (Better Auth's `captcha` plugin) would stop scripted sign-ups from using up the email quota.
 - **Account settings.** Changing name, email or password while signed in, and deleting an account, aren't in the UI yet.

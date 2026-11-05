@@ -29,6 +29,19 @@ export async function recordPlay(db: D1Database, userId: string, mode: PlayMode,
   ).bind(userId, state.puzzleId, mode, dishId, guesses, state.guesses.length, state.status, now).run();
 }
 
+/**
+ * The player's oldest Rush hour that has guesses but no result. Rush hours must
+ * be finished in order, so a new one is only dealt once this returns null.
+ */
+export async function unfinishedRush(db: D1Database, userId: string) {
+  const row = await db.prepare(
+    `SELECT puzzle_id, dish_id, guesses FROM plays
+     WHERE user_id = ? AND mode = 'rush' AND status = 'playing'
+     ORDER BY started_at ASC LIMIT 1`,
+  ).bind(userId).first<{ puzzle_id: string; dish_id: string; guesses: string }>();
+  return row && { puzzleId: row.puzzle_id, dishId: row.dish_id, guesses: JSON.parse(row.guesses) as string[] };
+}
+
 interface PlayRow {
   puzzle_id: string;
   mode: PlayMode;
