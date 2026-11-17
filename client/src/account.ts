@@ -42,12 +42,20 @@ const MESSAGES: Record<string, string> = {
   PASSWORD_TOO_SHORT: 'Use at least 8 characters.',
   PASSWORD_TOO_LONG: 'Use at most 128 characters.',
   EMAIL_NOT_VERIFIED: 'Verify your email first.',
+  INVALID_PASSWORD: 'Wrong password.',
+  SESSION_EXPIRED: 'For safety, sign out and back in, then try again.',
+  SESSION_NOT_FRESH: 'For safety, sign out and back in, then try again.',
+  VERIFICATION_FAILED: "The bot check didn't pass. Try again.",
+  MISSING_RESPONSE: 'Wait for the bot check to finish, then try again.',
 };
 
-async function call<T>(path: string, body?: unknown): Promise<T> {
+async function call<T>(path: string, body?: unknown, captchaToken?: string | null): Promise<T> {
   const res = await fetch(path, body === undefined ? undefined : {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(captchaToken && { 'x-captcha-response': captchaToken }),
+    },
     body: JSON.stringify(body),
   });
   const data = await res.json().catch(() => ({}));
@@ -75,9 +83,20 @@ export async function getAccount(): Promise<AccountInfo | null> {
   }
 }
 
+let config: Promise<{ turnstileSiteKey: string | null }> | null = null;
+
+/** Site settings for the account screens; the Turnstile key is null when bot protection is off. */
+export function getConfig() {
+  config ??= call<{ turnstileSiteKey: string | null }>('/api/config').catch(() => {
+    config = null;
+    return { turnstileSiteKey: null };
+  });
+  return config;
+}
+
 /** Emails a code that signs in, creating the account if the email is new. */
-export const sendSignInCode = (email: string) =>
-  call('/api/auth/email-otp/send-verification-otp', { email, type: 'sign-in' });
+export const sendSignInCode = (email: string, captchaToken?: string | null) =>
+  call('/api/auth/email-otp/send-verification-otp', { email, type: 'sign-in' }, captchaToken);
 
 export async function signInWithCode(email: string, otp: string, name?: string) {
   await call('/api/auth/sign-in/email-otp', { email, otp, ...(name && { name }) });
@@ -92,13 +111,26 @@ export async function signInWithPassword(email: string, password: string) {
 /** First password, for an account made with a code. */
 export const setPassword = (password: string) => call('/api/account/password', { password });
 
-export const sendResetCode = (email: string) => call('/api/auth/email-otp/request-password-reset', { email });
+export const sendResetCode = (email: string, captchaToken?: string | null) =>
+  call('/api/auth/email-otp/request-password-reset', { email }, captchaToken);
 
 export const resetPassword = (email: string, otp: string, password: string) =>
   call('/api/auth/email-otp/reset-password', { email, otp, password });
 
 export async function signOut() {
   await call('/api/auth/sign-out', {}).catch(() => {});
+  setSignedIn(false);
+}
+
+export const updateName = (name: string) => call('/api/auth/update-user', { name });
+
+/** Signs out every other device, too. */
+export const changePassword = (currentPassword: string, newPassword: string) =>
+  call('/api/auth/change-password', { currentPassword, newPassword, revokeOtherSessions: true });
+
+/** Deletes the account and its game history. `password` is required when the account has one. */
+export async function deleteAccount(password?: string) {
+  await call('/api/auth/delete-user', password ? { password } : {});
   setSignedIn(false);
 }
 

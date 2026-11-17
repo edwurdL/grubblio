@@ -68,6 +68,11 @@ export default function CreditsModal({ onClose }: { onClose: () => void }) {
         ))}
       </ul>
 
+      <h3>Privacy</h3>
+      <p className="credit">
+        No ads or tracking. See the <a href="/privacy.html" target="_blank" rel="noopener">privacy policy</a> for what an account stores.
+      </p>
+
       <button className="primary" onClick={onClose} autoFocus>Back to the kitchen</button>
     </Modal>
   );

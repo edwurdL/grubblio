@@ -525,7 +525,7 @@ main > .board-wrap { width: 100%; }
 
 /* ── Account dialog ──────────────────────────────────── */
 .auth-form { display: grid; gap: 14px; margin-top: 14px; }
-.auth-form > .primary { justify-self: start; }
+.auth-form > button { justify-self: start; }
 .auth-field { display: grid; gap: 6px; }
 .auth-field > span { font: 700 0.7rem/1 var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
 .auth-field input {
@@ -538,6 +538,11 @@ main > .board-wrap { width: 100%; }
 .auth-error { color: var(--red); font-weight: 500; }
 .auth-info { color: var(--muted); }
 .auth-links { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 16px; }
+.auth-form.tight { margin-top: 6px; gap: 10px; }
+.auth-fine { margin: 0 !important; font-size: 14px; color: var(--muted); }
+.turnstile:empty { display: none; }
+button.danger { background: var(--miss); color: var(--miss-ink); justify-self: start; }
+a.link { font-size: 15px; text-decoration: underline; text-underline-offset: 3px; }
 button.link {
   background: none; border: 0; box-shadow: none; padding: 0; color: inherit;
   font-size: 15px; text-decoration: underline; text-underline-offset: 3px;

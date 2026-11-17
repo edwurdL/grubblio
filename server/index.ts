@@ -2,7 +2,7 @@
 // (/images/*) are Workers static assets; only /api/* reaches this code
 // (run_worker_first in wrangler.jsonc).
 import type { AccountInfo, ResolveResponse, StateRequest } from '../shared/types';
-import { createAuth, type Auth, type AuthEnv } from './auth';
+import { createAuth, turnstileSiteKey, type Auth, type AuthEnv } from './auth';
 import { dailyAnswerId, isDailyId, isReleased, isoDate } from './daily';
 import { DISHES, DISH_BY_ID, type Dish } from './dishes';
 import { buildState, GuessError, MAX_GUESSES, summarize } from './game';
@@ -71,6 +71,9 @@ async function api(request: Request, url: URL, env: Env, ctx: Ctx): Promise<Resp
     hasSessionCookie(request) ? ((await getAuth().api.getSession({ headers: request.headers }))?.user ?? null) : null;
 
   if (url.pathname.startsWith('/api/auth/')) return getAuth().handler(request);
+
+  // Settings the account screens need before anyone is signed in.
+  if (route === 'GET /api/config') return json({ turnstileSiteKey: turnstileSiteKey(env) });
 
   if (route === 'GET /api/resolve') {
     const { exact, suggestions } = resolve(url.searchParams.get('q') ?? '');

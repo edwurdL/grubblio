@@ -1,12 +1,18 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import type { AccountInfo, GameHistory, HistoryGame, ModeHistory, PlayMode } from '../../../shared/types';
 import {
-  getAccount, getHistory, resetPassword, sendResetCode, sendSignInCode, setPassword, signInWithCode,
-  signInWithPassword, signOut,
+  changePassword, deleteAccount, getAccount, getConfig, getHistory, resetPassword, sendResetCode, sendSignInCode,
+  setPassword, signInWithCode, signInWithPassword, signOut, updateName,
 } from '../account';
 import Modal from './Modal';
+import Turnstile from './Turnstile';
 
-type View = 'sign-in' | 'sign-up' | 'code' | 'password' | 'forgot' | 'reset' | 'games';
+type View = 'sign-in' | 'sign-up' | 'code' | 'password' | 'forgot' | 'reset' | 'games' | 'settings';
+
+/** Which settings section a message belongs to, so it shows next to the right form. */
+type Section = 'name' | 'password' | 'delete';
+
+const PRIVACY_URL = '/privacy.html';
 
 interface Props {
   account: AccountInfo | null;
@@ -32,23 +38,51 @@ export default function AccountModal({ account, today, onAccount, onClose }: Pro
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
+  const [statusAt, setStatusAt] = useState<Section | null>(null);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [deletePassword, setDeletePassword] = useState('');
+  const [newName, setNewName] = useState(account?.name ?? '');
+
+  // Bot check for the forms that send an email: on only when the server has a
+  // Turnstile key. A token works once, so the widget is remounted after each use.
+  const [siteKey, setSiteKey] = useState<string | null>(null);
+  const [captcha, setCaptcha] = useState<string | null>(null);
+  const [captchaRound, setCaptchaRound] = useState(0);
+  useEffect(() => {
+    if (!account) getConfig().then((c) => setSiteKey(c.turnstileSiteKey));
+  }, [account]);
+  const waitingForCheck = !!siteKey && !captcha;
+  const botCheck = siteKey && <Turnstile key={captchaRound} siteKey={siteKey} onToken={setCaptcha} />;
+  /** Calls an email-sending endpoint with the current token, then fetches a fresh one. */
+  const withCaptcha = async (send: (token: string | null) => Promise<unknown>) => {
+    try {
+      await send(captcha);
+    } finally {
+      setCaptcha(null);
+      setCaptchaRound((r) => r + 1);
+    }
+  };
 
   const go = (next: View) => {
     setView(next);
     setError(null);
     setInfo(null);
+    setStatusAt(null);
     setCode('');
     setPasswordText('');
     setConfirm('');
+    setCurrentPassword('');
+    setDeletePassword('');
   };
 
-  /** Runs a form action with a busy state and friendly errors. */
-  const run = (action: () => Promise<void>) => async (e?: FormEvent) => {
+  /** Runs a form action with a busy state and friendly errors, shown under `at` on the settings page. */
+  const run = (action: () => Promise<void>, at: Section | null = null) => async (e?: FormEvent) => {
     e?.preventDefault();
     if (busy) return;
     setBusy(true);
     setError(null);
     setInfo(null);
+    setStatusAt(at);
     try {
       await action();
     } catch (err) {
@@ -99,13 +133,17 @@ export default function AccountModal({ account, today, onAccount, onClose }: Pro
         <h2 id={titleId}>Create an account</h2>
         <p className="muted">We'll email you a 6-digit code to check the address is yours. Your account is made once you enter it.</p>
         <form className="auth-form" onSubmit={run(async () => {
-          await sendSignInCode(email.trim());
+          await withCaptcha((token) => sendSignInCode(email.trim(), token));
           go('code');
         })}>
           <Field label="Name" value={name} onChange={setName} autoComplete="nickname" maxLength={40} autoFocus />
           <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" />
+          {botCheck}
           <Status error={error} info={info} />
-          <button className="primary" disabled={busy || !email || !name.trim()}>Email me a code</button>
+          <button className="primary" disabled={busy || waitingForCheck || !email || !name.trim()}>Email me a code</button>
+          <p className="auth-fine">
+            Your account stores your name, email and game history. See the <a href={PRIVACY_URL} target="_blank" rel="noopener">privacy policy</a>.
+          </p>
         </form>
         <div className="auth-links">
           <button className="link" onClick={() => go('sign-in')}>I already have an account</button>
@@ -125,9 +163,10 @@ export default function AccountModal({ account, today, onAccount, onClose }: Pro
           <Status error={error} info={info} />
           <button className="primary" disabled={busy || code.length !== 6}>Verify</button>
         </form>
+        {botCheck}
         <div className="auth-links">
-          <button className="link" disabled={busy} onClick={run(async () => {
-            await sendSignInCode(email.trim());
+          <button className="link" disabled={busy || waitingForCheck} onClick={run(async () => {
+            await withCaptcha((token) => sendSignInCode(email.trim(), token));
             setInfo('New code sent.');
           })}>Send a new code</button>
           <button className="link" onClick={() => go('sign-up')}>Use a different email</button>
@@ -158,12 +197,13 @@ export default function AccountModal({ account, today, onAccount, onClose }: Pro
         <h2 id={titleId}>Reset password</h2>
         <p className="muted">We'll email you a code to set a new one.</p>
         <form className="auth-form" onSubmit={run(async () => {
-          await sendResetCode(email.trim());
+          await withCaptcha((token) => sendResetCode(email.trim(), token));
           go('reset');
         })}>
           <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" autoFocus />
+          {botCheck}
           <Status error={error} info={info} />
-          <button className="primary" disabled={busy || !email}>Email me a code</button>
+          <button className="primary" disabled={busy || waitingForCheck || !email}>Email me a code</button>
         </form>
         <div className="auth-links">
           <button className="link" onClick={() => go('sign-in')}>Back to sign in</button>
@@ -187,12 +227,75 @@ export default function AccountModal({ account, today, onAccount, onClose }: Pro
           <Status error={error} info={info} />
           <button className="primary" disabled={busy || code.length !== 6 || !password || !confirm}>Set password</button>
         </form>
+        {botCheck}
         <div className="auth-links">
-          <button className="link" disabled={busy} onClick={run(async () => {
-            await sendResetCode(email.trim());
+          <button className="link" disabled={busy || waitingForCheck} onClick={run(async () => {
+            await withCaptcha((token) => sendResetCode(email.trim(), token));
             setInfo('New code sent.');
           })}>Send a new code</button>
           <button className="link" onClick={() => go('sign-in')}>Back to sign in</button>
+        </div>
+      </>
+    );
+  } else if (view === 'settings' && account) {
+    const here = (s: Section) => statusAt === s && <Status error={error} info={info} />;
+    body = (
+      <>
+        <h2 id={titleId}>Account</h2>
+        <p className="muted">{account.email}</p>
+
+        <h3>Name</h3>
+        <form className="auth-form tight" onSubmit={run(async () => {
+          const trimmed = newName.trim();
+          if (!trimmed) throw new Error('Enter a name.');
+          await updateName(trimmed);
+          onAccount({ ...account, name: trimmed });
+          setInfo('Saved.');
+        }, 'name')}>
+          <Field label="Name" value={newName} onChange={setNewName} autoComplete="nickname" maxLength={40} />
+          {here('name')}
+          <button className="ghost" disabled={busy || !newName.trim() || newName.trim() === account.name}>Save name</button>
+        </form>
+
+        <h3>Password</h3>
+        {account.hasPassword ? (
+          <form className="auth-form tight" onSubmit={run(async () => {
+            checkNewPassword();
+            await changePassword(currentPassword, password);
+            setCurrentPassword('');
+            setPasswordText('');
+            setConfirm('');
+            setInfo('Password changed. Your other devices were signed out.');
+          }, 'password')}>
+            <Field label="Current password" type="password" value={currentPassword} onChange={setCurrentPassword} autoComplete="current-password" />
+            <Field label="New password (8+ characters)" type="password" value={password} onChange={setPasswordText} autoComplete="new-password" />
+            <Field label="Same again" type="password" value={confirm} onChange={setConfirm} autoComplete="new-password" />
+            {here('password')}
+            <button className="ghost" disabled={busy || !currentPassword || !password || !confirm}>Change password</button>
+          </form>
+        ) : (
+          <button className="ghost" onClick={() => go('password')}>Choose a password</button>
+        )}
+
+        <h3>Delete account</h3>
+        <form className="auth-form tight" onSubmit={run(async () => {
+          if (!window.confirm('Delete your account and all your game history? This can’t be undone.')) return;
+          await deleteAccount(account.hasPassword ? deletePassword : undefined);
+          onAccount(null);
+          go('sign-in');
+          setInfo('Your account and game history were deleted.');
+        }, 'delete')}>
+          <p className="auth-fine">This permanently deletes your account and every game saved to it.</p>
+          {account.hasPassword && (
+            <Field label="Password" type="password" value={deletePassword} onChange={setDeletePassword} autoComplete="current-password" />
+          )}
+          {here('delete')}
+          <button className="danger" disabled={busy || (account.hasPassword && !deletePassword)}>Delete my account</button>
+        </form>
+
+        <div className="auth-links">
+          <button className="link" onClick={() => go('games')}>Back to My games</button>
+          <a className="link" href={PRIVACY_URL} target="_blank" rel="noopener">Privacy policy</a>
         </div>
       </>
     );
@@ -202,6 +305,10 @@ export default function AccountModal({ account, today, onAccount, onClose }: Pro
         titleId={titleId}
         account={account}
         today={today}
+        onSettings={() => {
+          setNewName(account?.name ?? '');
+          go('settings');
+        }}
         onSignOut={async () => {
           await signOut();
           onAccount(null);
@@ -259,8 +366,9 @@ function Status({ error, info }: { error: string | null; info: string | null }) 
 
 const MODE_LABEL: Record<PlayMode, string> = { daily: 'Daily dish', rush: 'Rush hour' };
 
-function MyGames({ titleId, account, today, onSignOut }: {
+function MyGames({ titleId, account, today, onSettings, onSignOut }: {
   titleId: string;
+  onSettings: () => void;
   account: AccountInfo | null;
   today: string;
   onSignOut: () => Promise<void>;
@@ -288,6 +396,7 @@ function MyGames({ titleId, account, today, onSignOut }: {
       {!history && !error && <p className="muted">Fetching your orders…</p>}
       {history && <ModePanel mode={mode} history={history[mode]} today={today} />}
       <div className="modal-actions">
+        <button className="ghost" onClick={onSettings}>Account settings</button>
         <button className="ghost" onClick={onSignOut}>Sign out</button>
       </div>
     </>

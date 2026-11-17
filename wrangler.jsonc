@@ -23,9 +23,13 @@
   "vars": {
     // Sender for login codes; grubbl.io must be verified in Resend.
     "EMAIL_FROM": "Grubblio <login@grubbl.io>"
+    // Turnstile bot check (README → Bot protection): add the widget's public
+    // site key here, e.g. "TURNSTILE_SITE_KEY": "0x4AAAA…", and store its
+    // secret with `wrangler secret put TURNSTILE_SECRET_KEY`.
   },
   // Secrets (`npx wrangler secret put <NAME>`): PUZZLE_SECRET, BETTER_AUTH_SECRET,
-  // RESEND_API_KEY. Locally, put them in .dev.vars (or leave them out in dev).
+  // RESEND_API_KEY, TURNSTILE_SECRET_KEY (optional). Locally, put them in
+  // .dev.vars (or leave them out in dev).
   "routes": [
     { "pattern": "grubbl.io", "custom_domain": true },
     { "pattern": "www.grubbl.io", "custom_domain": true }

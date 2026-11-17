@@ -7,9 +7,14 @@
 // (POST /api/account/password). The plain email + password sign-up endpoint is
 // switched off, since it would create the account before the email is checked.
 //
-// Social logins (Google, Apple, Facebook…) can be added later under
-// `socialProviders`; their emails come already verified.
+// Players can rename themselves, change their password and delete their
+// account (which deletes their game history too) from My games → Account.
+//
+// Bot protection: with TURNSTILE_SECRET_KEY set, the two endpoints that send
+// emails need a Cloudflare Turnstile token, so scripts can't burn through the
+// email quota. Without it they're only rate-limited.
 import { betterAuth, type BetterAuthOptions } from 'better-auth';
+import { captcha } from 'better-auth/plugins/captcha';
 import { emailOTP } from 'better-auth/plugins/email-otp';
 import type { D1Database } from './daily';
 import { CODE_TTL_MINUTES, sendCode, type EmailEnv } from './email';
@@ -18,7 +23,14 @@ export interface AuthEnv extends EmailEnv {
   DB: D1Database;
   /** Signs session cookies. Set in production with `wrangler secret put BETTER_AUTH_SECRET`. */
   BETTER_AUTH_SECRET?: string;
+  /** Turnstile widget's secret key (`wrangler secret put TURNSTILE_SECRET_KEY`). Turns bot protection on. */
+  TURNSTILE_SECRET_KEY?: string;
+  /** Turnstile widget's public site key (a var in wrangler.jsonc); sent to the browser. */
+  TURNSTILE_SITE_KEY?: string;
 }
+
+/** Endpoints that send an email, and so need a Turnstile token when bot protection is on. */
+export const CAPTCHA_ENDPOINTS = ['/email-otp/send-verification-otp', '/email-otp/request-password-reset'];
 
 // Local dev only; production refuses to start without BETTER_AUTH_SECRET, since
 // anyone could forge session cookies with this public value.
@@ -36,6 +48,7 @@ export function authOptions(
   secret: string,
   send: (to: string, code: string, type: Parameters<typeof sendCode>[4]) => Promise<void>,
   waitUntil?: (p: Promise<unknown>) => void,
+  turnstileSecret?: string,
 ) {
   return {
     appName: 'Grubblio',
@@ -51,6 +64,17 @@ export function authOptions(
       minPasswordLength: 8,
       maxPasswordLength: 128,
       revokeSessionsOnPasswordReset: true,
+    },
+    user: {
+      deleteUser: {
+        // Needs the password, or a session from the last day for code-only accounts.
+        enabled: true,
+        // Game history goes too. (The foreign key would cascade anyway; this
+        // doesn't rely on D1 enforcing it.)
+        beforeDelete: async (user) => {
+          await (db as D1Database).prepare('DELETE FROM plays WHERE user_id = ?').bind(user.id).run();
+        },
+      },
     },
     session: {
       expiresIn: 60 * 60 * 24 * 60, // 60 days…
@@ -82,6 +106,16 @@ export function authOptions(
           else await sending;
         },
       }),
+      ...(turnstileSecret
+        ? [captcha({
+          provider: 'cloudflare-turnstile',
+          secretKey: turnstileSecret,
+          endpoints: CAPTCHA_ENDPOINTS,
+          // Tokens issued for another site (or a copied widget) are refused. Not
+          // in local dev: Cloudflare's test keys report the hostname example.com.
+          ...(!isLocal(origin) && { allowedHostnames: [new URL(origin).hostname, 'grubbl.io', 'www.grubbl.io'] }),
+        })]
+        : []),
     ],
   } satisfies BetterAuthOptions;
 }
@@ -91,7 +125,11 @@ export function createAuth(env: AuthEnv, origin: string, waitUntil: (p: Promise<
   const secret = env.BETTER_AUTH_SECRET ?? (dev ? DEV_SECRET : undefined);
   if (!secret) throw new Error('BETTER_AUTH_SECRET is not set: npx wrangler secret put BETTER_AUTH_SECRET');
   const send = (to: string, code: string, type: Parameters<typeof sendCode>[4]) => sendCode(env, dev, to, code, type);
-  return betterAuth(authOptions(env.DB, origin, secret, send, waitUntil));
+  return betterAuth(authOptions(env.DB, origin, secret, send, waitUntil, env.TURNSTILE_SECRET_KEY));
 }
+
+/** The Turnstile site key the browser should use, or null when bot protection is off. */
+export const turnstileSiteKey = (env: AuthEnv) =>
+  env.TURNSTILE_SECRET_KEY && env.TURNSTILE_SITE_KEY ? env.TURNSTILE_SITE_KEY : null;
 
 export type Auth = ReturnType<typeof createAuth>;

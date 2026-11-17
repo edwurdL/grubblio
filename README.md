@@ -101,7 +101,10 @@ Players can make an account to keep their game history, split into **Daily dish*
 - **Sign up:** name + email → we email a 6-digit code → the account is created only when the code is entered → the player picks a password. Better Auth's plain email-and-password sign-up is switched off, because it would create the account before the email is proven.
 - **Sign in** with email + password. **Forgot password** emails a code that sets a new one.
 - **History:** every guess a signed-in player makes records that game. A recorded game can only gain guesses, and a won or lost game never changes, so a loss can't be overwritten after seeing the answer. On sign-in, games already played on that device are saved to the account too. Answers are shown only for finished games.
+- **Account settings** (*My games → Account settings*): change name; change password, which signs out other devices; and **delete account**. Deleting needs the password, and removes the account, its sessions and its game history at once.
 - **Limits:** code emails and sign-in attempts are rate-limited per IP, counted in D1. Codes expire after 10 minutes and allow 5 tries.
+- **Bot protection:** with Turnstile keys set ([below](#bot-protection-cloudflare-turnstile)), the forms that send an email also need a Cloudflare Turnstile check.
+- **Privacy policy:** [public/privacy.html](public/privacy.html), served at `/privacy.html` and linked from sign-up, Account settings and Credits ([below](#privacy-policy)).
 
 Anonymous visitors never call the account API: the page only asks "who am I?" if this browser has signed in before.
 
@@ -121,6 +124,21 @@ Codes are sent with [Resend](https://resend.com) ([server/email.ts](server/email
 6. Emails come from `EMAIL_FROM` in [wrangler.jsonc](wrangler.jsonc) (`Grubblio <login@grubbl.io>`). No mailbox is needed for that address.
 
 The Worker won't serve sign-in without `BETTER_AUTH_SECRET` in production; anonymous play still works. Keep the secret the same once live, because changing it signs everyone out. To test real emails locally, put `RESEND_API_KEY=…` in `.dev.vars`.
+
+### Bot protection (Cloudflare Turnstile)
+
+Code emails are rate-limited per IP, but a script spread over many IPs could still use up Resend's daily quota. Turnstile stops that. It's off until both keys are set, and then applies only to the two endpoints that send email (sign-up codes and password-reset codes). For most visitors it's invisible; Cloudflare only shows a checkbox when it's unsure.
+
+1. In the Cloudflare dashboard, open **Turnstile → Add widget**. Name it `Grubblio`, add the hostnames `grubbl.io` and `www.grubbl.io`, and keep the **Managed** mode.
+2. Put the **site key** (public) in [wrangler.jsonc](wrangler.jsonc) under `vars` as `TURNSTILE_SITE_KEY`.
+3. Store the **secret key**: `npx wrangler secret put TURNSTILE_SECRET_KEY`.
+4. Deploy. `GET /api/config` then hands the site key to the browser, and the account forms load the check.
+
+To try it locally, put Cloudflare's always-pass test keys in `.dev.vars`: `TURNSTILE_SITE_KEY=1x00000000000000000000AA` and `TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA`. The hostname check is skipped on localhost, because the test keys report `example.com`.
+
+### Privacy policy
+
+The policy is a static page, [public/privacy.html](public/privacy.html). It describes exactly what the site stores and who processes it: Cloudflare, Resend, Google Fonts, and Turnstile when it's on. Update it, and its date, whenever that changes, for example if you add analytics, ads or social sign-in. It gives `privacy@grubbl.io` as the contact address. To receive that mail, open **Cloudflare → grubbl.io → Email → Email Routing**, enable it, and forward `privacy@` to your inbox. This adds root `MX` records, which don't clash with Resend's records on `send`. It's plain-language and not legal advice; have it reviewed if the site grows or makes money.
 
 ## Photos and sounds
 
@@ -167,13 +185,14 @@ One Worker serves everything: the built site and dish photos as static assets, a
    - **Build variable:** `PIXABAY_API_KEY`. The build restores the stock photos that aren't committed (see [Photos and sounds](#photos-and-sounds)). Without it, those dishes show their emoji.
 5. Commit new Commons photos in `assets/dishes/` along with `credits.json`.
 
-Either way, the Worker needs three **secrets** (`npx wrangler secret put <NAME>`, or the Worker's **Settings → Variables and Secrets**), each a long random string from `openssl rand -base64 32` except the Resend key:
+Either way, the Worker needs these **secrets** (`npx wrangler secret put <NAME>`, or the Worker's **Settings → Variables and Secrets**). `PUZZLE_SECRET` and `BETTER_AUTH_SECRET` are long random strings from `openssl rand -base64 32`:
 
 | Secret | Purpose | If missing |
 |---|---|---|
 | `PUZZLE_SECRET` | Encrypts Rush hour puzzle ids, so the answer can't be read out of them | Falls back to a dev key that's public in this repo |
 | `BETTER_AUTH_SECRET` | Signs login sessions | Sign-in fails (anonymous play still works) |
 | `RESEND_API_KEY` | Sends login codes ([Resend setup](#setting-up-the-code-emails-resend)) | No code emails, so nobody can sign up |
+| `TURNSTILE_SECRET_KEY` | Bot check on code emails ([Turnstile setup](#bot-protection-cloudflare-turnstile)); pairs with the `TURNSTILE_SITE_KEY` var | Bot protection is off; code emails are only rate-limited |
 
 ## Layout
 
@@ -185,13 +204,14 @@ server/game.ts          comparison, closeness score, ingredient unlocks
 server/resolve.ts       typed text → dish (names and aliases only)
 server/daily.ts         Daily dish: picking, D1 lookup, date checks, cache
 server/practice.ts      encrypted, stateless Rush hour puzzle ids
-server/auth.ts          accounts (Better Auth): sign-up by emailed code, passwords
+server/auth.ts          accounts (Better Auth): sign-up by emailed code, passwords, deletion, Turnstile
 server/email.ts         sends login codes through Resend
 server/plays.ts         signed-in players' game history, stats, unfinished Rush hours
 migrations/             D1 schema: puzzles, accounts, game history
 client/src/App.tsx      game screen, modes, local saves
 client/src/account.ts   account API calls
-client/src/components/  ticket, guess input, board, result card, menus (AccountModal = sign-in + My games)
+client/src/components/  ticket, guess input, board, result card, menus (AccountModal = sign-in, My games, Account settings; Turnstile = bot check)
+public/privacy.html     privacy policy, served at /privacy.html
 scripts/fetch-images.ts photo download / --restore
 scripts/schedule.ts     hand-picks Daily dish answers (optional)
 scripts/auth-schema.ts  SQL for Better Auth's tables (npm run auth:schema)
@@ -207,14 +227,12 @@ The game itself is replayed, not stored: the client keeps the list of guessed di
 - **On the server**, only for signed-in players: each guess also updates their `plays` row. Game history and the Rush hour rule across devices come from there.
 - **Rush hour ids** carry their answer, AES-GCM encrypted ([server/practice.ts](server/practice.ts)), so they survive deploys and need no table of their own.
 
-## Not covered by this prototype (needed for production)
+## Not covered yet
 
-- **Dish data in a database.** Dishes are still in code (`server/dishes.ts`). That's fine while developers edit them; move them to D1 once non-developers need an editor.
-- **Reviewing upcoming answers.** Answers are picked on the day, so there's nothing to review ahead of time. A daily Cron Trigger running the `--days` logic would keep a month picked ahead for review.
 - **Anti-cheat.** Because games are replayed from the client's guess list, anyone can send invented guesses to reach the reveal. Signed-in history can't be rewritten after a loss, but an answer seen in a private window can still be "guessed" on the account. Server-side game sessions, or signed state tokens, would fix this.
-- **Image curation and hosting.** About 100 newer Commons photos were checked by file name only; someone should review every photo by eye. Production should serve them from a CDN. A paid library such as Adobe Stock needs a purchased licence for each image.
-- **Content.** Editorial review of ingredient order and difficulty for each answer, and playtesting.
-- **Social sign-in** (Google, Apple, Facebook). Better Auth supports them under `socialProviders` in server/auth.ts. Each needs a developer app with that company and a privacy policy page; Apple needs a paid developer account.
-- **Bot protection on sign-up.** Code emails are rate-limited per IP, but a captcha such as Cloudflare Turnstile (Better Auth's `captcha` plugin) would stop scripted sign-ups from using up the email quota.
-- **Account settings.** Changing name, email or password while signed in, and deleting an account, aren't in the UI yet.
-- **Privacy policy.** Needed now that the site stores emails, and required by every social sign-in provider.
+- **Photo review.** About 100 newer Wikimedia Commons photos were checked by file name only; someone should look at every photo. Four dishes have no photo yet ([Photos and sounds](#photos-and-sounds)).
+- **Difficulty and playtesting.** With 5 guesses, players see at most 7 ingredients before their last guess, and most dishes have more. Ingredient order and difficulty need review and playtesting; revealing more per miss, or starting with more, are easy levers in `server/game.ts`.
+- **Changing email address.** Account settings covers name, password and deletion, but not a new email. Better Auth's email-OTP plugin has a change-email flow (`changeEmail`) that could be switched on.
+- **Turnstile keys.** Bot protection is built but stays off until the keys are set ([setup](#bot-protection-cloudflare-turnstile)).
+- **Privacy contact inbox.** `privacy@grubbl.io` needs Email Routing set up before it receives mail ([Privacy policy](#privacy-policy)).
+- **Reviewing upcoming answers** (optional). Answers are picked on the day, so there's nothing to review ahead of time. A daily Cron Trigger running the `--days` logic would keep a month picked ahead for review.
