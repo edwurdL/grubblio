@@ -1,8 +1,8 @@
-// Types shared between the Express API and the React client.
+// Types shared between the API Worker and the React client.
 
 export type Match = 'exact' | 'partial' | 'miss';
 
-/** Public info about a dish — safe to send to the client for autocomplete. */
+/** Public info about a dish: what the client shows for a guess or a "did you mean" option. */
 export interface DishSummary {
   id: string;
   name: string;
