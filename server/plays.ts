@@ -4,7 +4,7 @@
 // game only moves forward: an update must extend the stored guesses, and a
 // won or lost game never changes again. That stops a player from replacing a
 // loss by replaying a different guess list once they've seen the answer.
-import type { GameHistory, GameState, HistoryGame, ModeHistory, PlayMode } from '../shared/types';
+import { MAX_GUESSES, type GameHistory, type GameState, type HistoryGame, type ModeHistory, type PlayMode } from '../shared/types';
 import type { D1Database } from './daily';
 import { DISH_BY_ID } from './dishes';
 import { summarize } from './game';
@@ -36,9 +36,9 @@ export async function recordPlay(db: D1Database, userId: string, mode: PlayMode,
 export async function unfinishedRush(db: D1Database, userId: string) {
   const row = await db.prepare(
     `SELECT puzzle_id, dish_id, guesses FROM plays
-     WHERE user_id = ? AND mode = 'rush' AND status = 'playing'
+     WHERE user_id = ? AND mode = 'rush' AND status = 'playing' AND guess_count < ?
      ORDER BY started_at ASC LIMIT 1`,
-  ).bind(userId).first<{ puzzle_id: string; dish_id: string; guesses: string }>();
+  ).bind(userId, MAX_GUESSES).first<{ puzzle_id: string; dish_id: string; guesses: string }>();
   return row && { puzzleId: row.puzzle_id, dishId: row.dish_id, guesses: JSON.parse(row.guesses) as string[] };
 }
 
@@ -58,7 +58,9 @@ const nextDay = (date: string) => new Date(Date.parse(date) + DAY_MS).toISOStrin
 function summarizeMode(rows: PlayRow[], maxGuesses: number, today: string | null): ModeHistory {
   const finished = rows.filter((r) => r.status !== 'playing');
   const won = finished.filter((r) => r.status === 'won');
-  const distribution = Array.from({ length: maxGuesses }, (_, i) => won.filter((r) => r.guess_count === i + 1).length);
+  // Wide enough for older wins from when games allowed more guesses.
+  const bars = Math.max(maxGuesses, ...won.map((r) => r.guess_count));
+  const distribution = Array.from({ length: bars }, (_, i) => won.filter((r) => r.guess_count === i + 1).length);
 
   const history: ModeHistory = {
     stats: {

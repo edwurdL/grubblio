@@ -1,5 +1,8 @@
 // Types shared between the API Worker and the React client.
 
+/** Guesses per game; a plate breaks on each miss. */
+export const MAX_GUESSES = 5;
+
 export type Match = 'exact' | 'partial' | 'miss';
 
 /** Public info about a dish: what the client shows for a guess or a "did you mean" option. */

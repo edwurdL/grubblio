@@ -374,17 +374,18 @@ main > .board-wrap { width: 100%; }
   display: flex; gap: 16px; overflow-x: auto; overflow-anchor: none; scroll-snap-type: x mandatory; scrollbar-width: thin;
 }
 .mini-ticket { flex: 0 0 min(86%, 320px); min-height: 178px; scroll-snap-align: start; }
-/* Wider screens: a 3×3 grid across the whole play area, one slot per guess.
-   Tickets are half as tall as they are wide, and the board reserves all
-   three rows. (The board-wrap rule queries main, the others the board-wrap;
-   both are the same width.) */
+/* Wider screens: rows of three across the whole play area (5 guesses: 3 on
+   top, 2 below), each row centred, so a part-full row sits in the middle.
+   Tickets are half as tall as they are wide, and the board reserves all its
+   rows (--rows, set by GuessBoard). (The board-wrap rule queries main, the
+   others the board-wrap; both are the same width.) */
 @container (min-width: 880px) {
-  .board-wrap { --ticket-h: calc((100cqw - 44px) / 3 * 0.5); min-height: calc(60px + 3 * (var(--ticket-h) + 22px)); }
+  .board-wrap { --ticket-h: calc((100cqw - 44px) / 3 * 0.5); min-height: calc(60px + var(--rows, 2) * (var(--ticket-h) + 22px)); }
   .board {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 18px;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 22px 18px;
     overflow: visible; padding-bottom: 14px;
   }
-  .mini-ticket { flex: none; min-height: calc((100cqw - 44px) / 3 * 0.5); }
+  .mini-ticket { flex: 0 0 calc((100% - 2 * 18px) / 3); min-width: 0; min-height: var(--ticket-h); }
 }
 .mini-ticket {
   position: relative; background: var(--paper); color: var(--text); container-type: inline-size;

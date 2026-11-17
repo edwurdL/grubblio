@@ -1,10 +1,12 @@
-import type { AnswerReveal, AttributeResult, DishSummary, GameState, GuessResult, Match } from '../shared/types';
+import {
+  MAX_GUESSES, type AnswerReveal, type AttributeResult, type DishSummary, type GameState, type GuessResult, type Match,
+} from '../shared/types';
 import {
   COURSE_GROUP, DIET_SCALE, DISH_BY_ID, FAMILY_GROUP, METHOD_GROUP, REGION_OF, SPICE_LABELS, type Dish,
 } from './dishes';
 import { imageFor } from './images';
 
-export const MAX_GUESSES = 9;
+export { MAX_GUESSES };
 export const INITIAL_INGREDIENTS = 3;
 
 export function summarize(d: Dish): DishSummary {

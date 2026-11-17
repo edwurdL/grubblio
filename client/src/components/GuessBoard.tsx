@@ -1,5 +1,5 @@
 import { useEffect, useRef, type CSSProperties } from 'react';
-import type { AttributeKey, GuessResult } from '../../../shared/types';
+import { MAX_GUESSES, type AttributeKey, type GuessResult } from '../../../shared/types';
 import { useSwing } from '../useSwing';
 
 const COLUMNS: { key: AttributeKey; label: string }[] = [
@@ -98,7 +98,8 @@ export default function GuessBoard({ guesses }: { guesses: GuessResult[] }) {
   }, [hasBoard]);
 
   return (
-    <section className="board-wrap" aria-label="Your guesses">
+    // Room for every guess up front: rows of three on wide screens.
+    <section className="board-wrap" aria-label="Your guesses" style={{ '--rows': Math.ceil(MAX_GUESSES / 3) } as CSSProperties}>
       <div className="rail small" />
       {!guesses.length && <p className="board-empty">Your guesses will hang here.</p>}
       {guesses.length > 0 && (

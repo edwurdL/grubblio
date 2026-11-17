@@ -9,7 +9,7 @@
 // A daily puzzle's id is its date (YYYY-MM-DD), the player's local date, as in
 // Wordle. Past puzzles stay playable. A date that hasn't started in any time
 // zone yet is refused: the server is stateless, so anyone could otherwise
-// replay nine wrong guesses on tomorrow's puzzle to see its answer a day early.
+// replay a full set of wrong guesses on tomorrow's puzzle to see its answer a day early.
 
 /** The slice of Cloudflare's D1 binding that this module uses. */
 export interface D1Database {

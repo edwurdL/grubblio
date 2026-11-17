@@ -1,10 +1,11 @@
+import { MAX_GUESSES } from '../../../shared/types';
 import Modal from './Modal';
 
 export default function HelpModal({ onClose, onCredits }: { onClose: () => void; onCredits: () => void }) {
   return (
     <Modal titleId="help-title" onClose={onClose}>
       <h2 id="help-title">How to play</h2>
-      <p>Name the dish before you run out of <strong>9 plates</strong>. Every miss breaks one.</p>
+      <p>Name the dish before you run out of <strong>{MAX_GUESSES} plates</strong>. Every miss breaks one.</p>
       <ul>
         <li>You start with <strong>3 ingredients</strong>. Every wrong guess reveals another, from vague to giveaway.</li>
         <li>Every guess is compared with the answer, column by column:</li>
